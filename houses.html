@@ -8,9 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap">
 <style>
-/* After the Lorsch Gospels (Codex Aureus of Lorsch, c. 810). Nothing is imitated in CSS: the entry page shows a
-   real page of the manuscript, and the colours here are measured from that page: its vellum, the brown-gold of
-   its letters, the minium orange and the dark blue of its frame. The type is Cardo, a face made for medievalists
+/* After the Lorsch Gospels (Codex Aureus of Lorsch, c. 810). The colours are measured from its pages: the vellum,
+   the brown-gold of the letters, the minium orange and the dark blue of the frames. The entry page is built on
+   the plan of its "Incipit argumentum" page: two columns between painted pillars. The type is Cardo, a face made for medievalists
    and classicists; controls and figures stay in a plain sans. */
 :root {
   --paper: #e9dec4; --panel: #f3ead5; --ink: #2a2018; --muted: #6c5d48; --rule: #cdbd9b;
@@ -203,12 +203,14 @@ const DE = {
   "Hospitaller commandery in Westphalia, outside Lower Saxony. Named as mother house in three rows, spelled three ways.": "Johanniterkommende in Westfalen, außerhalb Niedersachsens. In drei Zeilen als Mutterhaus genannt, in drei Schreibweisen.",
   "Carmelite house in Hesse, outside Lower Saxony.": "Karmeliterkloster in Hessen, außerhalb Niedersachsens.",
   // blocks, by key
-  "home.plate": "Der Beginn des Lukasevangeliums im Lorscher Evangeliar, um 810 in Gold geschrieben. Biblioteca Apostolica Vaticana, Pal. lat. 50. Die Farben dieser Seiten und das Band unter dem Titel sind ihm entnommen. Bild: Wikimedia Commons, gemeinfrei.",
+  "home.plate": "Der Aufbau dieser Seite folgt der Seite „Incipit argumentum“ des Lorscher Evangeliars (um 810; Biblioteca Apostolica Vaticana, Pal. lat. 50): zwei Textspalten zwischen gemalten Säulen.",
+  "home.intro2": "Ein Verzeichnis der Häuser der Johanniter, der Templer, des Deutschen Ordens und der Karmeliten in Niedersachsen, von den ersten Kommenden der 1170er Jahre bis zu den letzten Aufhebungen um 1820, erarbeitet aus dem <i>Niedersächsischen Klosterbuch</i>.",
+  "home.source2": "Die Einträge wurden aus dem <i>Klosterbuch</i> (Dolle 2012) zusammengestellt und mit Wikidata und der Germania Sacra verknüpft. Dies ist ein Prototyp; Daten und Lagen werden noch geprüft.",
   "home.rubric": "Hier beginnt das Verzeichnis der Häuser der vier Orden in Niedersachsen.",
   "home.intro": '<span class="initial" aria-hidden="true">E</span><span style="position:absolute;left:-9999px">E</span>in Verzeichnis der Häuser der Johanniter, der Templer, des Deutschen Ordens und der Karmeliten in Niedersachsen, von den ersten Kommenden der 1170er Jahre bis zu den letzten Aufhebungen um 1820, erarbeitet aus dem <i>Niedersächsischen Klosterbuch</i>.',
   "home.use": '<span class="pil" aria-hidden="true">¶</span>Die Karte zeigt, wo jedes Haus stand und wie sich die Orden über die Jahrhunderte ausbreiteten und zurückzogen. <span class="pil b" aria-hidden="true">¶</span>Unter den Häusern findet sich jeder Eintrag: seine Geschichte, seine Amtsträger, seine Mutter- und Tochterhäuser und seine Nachweise.',
   "home.source": '<span class="pil" aria-hidden="true">¶</span>Die Einträge wurden aus dem <i>Klosterbuch</i> (Dolle 2012) zusammengestellt und mit Wikidata und der Germania Sacra verknüpft. Dies ist ein Prototyp; Daten und Lagen werden noch geprüft.',
-  "home.facts": '<span class="pil b" aria-hidden="true">¶</span>Es umfasst {0} Häuser von vier Orden, gegründet und aufgehoben zwischen {1} und {2}. <span class="pil" aria-hidden="true">¶</span>{3} Amtsträger sind genannt und {4} Filiationen zwischen Mutter- und Tochterhäusern verzeichnet.',
+  "home.facts": 'Es umfasst {0} Häuser von vier Orden, gegründet und aufgehoben zwischen {1} und {2}. {3} Amtsträger sind genannt und {4} Filiationen zwischen Mutter- und Tochterhäusern verzeichnet.',
   "home.houses": "Alle {0} Einträge, mit Suche nach Ort oder Person.",
 };
 // Phrases inside composed lines (never applied to the sheet's own texts).
