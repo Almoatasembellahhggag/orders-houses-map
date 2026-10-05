@@ -175,6 +175,10 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .maplibregl-ctrl-top-right .maplibregl-ctrl { margin: 10px 10px 0 0; }
 #map { position: absolute; inset: 0; background: var(--sea); }
 .maplibregl-map { font: 13px var(--body); }
+/* the map uses the page's cursors too: the quill over the map, the manicule over its buttons */
+.maplibregl-map .maplibregl-canvas-container.maplibregl-interactive, .maplibregl-map .maplibregl-canvas { cursor: var(--quill); }
+.maplibregl-map .maplibregl-canvas-container.maplibregl-interactive:active { cursor: grabbing; }
+.maplibregl-map .maplibregl-ctrl button, .maplibregl-map .maplibregl-popup-close-button, .maplibregl-map .maplibregl-ctrl-attrib-button { cursor: var(--hand); }
 .maplibregl-ctrl-group { background: var(--panel) !important; border: 1px solid var(--rule); box-shadow: var(--shadow) !important; }
 .maplibregl-ctrl-group button + button { border-top-color: var(--rule) !important; }
 .maplibregl-ctrl-icon { filter: var(--ctrl-filter); }
@@ -834,7 +838,7 @@ function addOverlayLayers() {
     paint: { "line-color": ["get", "color"], "line-width": width, "line-opacity": .9, "line-dasharray": [.2, 2.2] } });
   // An invisible wide band makes a thin line easy to point at.
   map.addLayer({ id: "links-hit", type: "line", source: "links", paint: { "line-color": "#000", "line-width": 14, "line-opacity": 0 } });
-  map.on("mousemove", "links-hit", e => { map.getCanvas().style.cursor = "default"; showTip(e.lngLat, e.features[0].properties.tip); });
+  map.on("mousemove", "links-hit", e => { showTip(e.lngLat, e.features[0].properties.tip); });
   map.on("mouseleave", "links-hit", hideTip);
   map.on("zoom", placeArrows);
   map.on("zoomend", render);               // groups depend on the zoom level
