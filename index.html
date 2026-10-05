@@ -98,7 +98,15 @@ h1 { margin: 0; font: 600 25px/1.1 var(--display); text-wrap: balance; }
 /* time */
 .year-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
 .year { font: 600 30px/1 var(--display); font-variant-numeric: tabular-nums; }
-.year small { font: 500 13px var(--body); color: var(--muted); margin-left: 6px; }
+.year-ctl { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.year-ctl small { font: 500 13px var(--body); color: var(--muted); margin-left: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+input.year { width: 3.1em; padding: 2px 0; border: 0; border-bottom: 1.5px dashed var(--rule); border-radius: 0; background: transparent; color: var(--ink); text-align: center; }
+input.year:placeholder-shown { width: 4.6em; }
+input.year::placeholder { color: var(--ink); opacity: 1; }
+input.year:hover, input.year:focus-visible { border-bottom-color: var(--accent); outline: none; }
+input.year:focus::placeholder { opacity: .35; }
+.step { width: 26px; height: 26px; flex: none; border: 1px solid var(--rule); border-radius: 50%; background: var(--paper); color: var(--ink); font: 600 16px/1 var(--body); cursor: pointer; display: grid; place-items: center; padding: 0 0 1px; }
+.step:hover { border-color: var(--accent); color: var(--accent); }
 .hist { display: block; width: 100%; height: 46px; }
 .hist rect { fill: var(--rule); }
 .hist rect.on { fill: var(--accent); }
@@ -184,6 +192,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
   background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--rule); border-radius: 8px; box-shadow: var(--shadow);
   padding: 10px 14px 10px; display: grid; gap: 5px; border-radius: 10px; }
 .timebar .year { font-size: 22px; }
+.timebar .year-row { align-items: center; }
 .timebar .hist { height: 38px; }
 .play { font-weight: 600; min-width: 132px; justify-content: center; }
 .play svg { width: 11px; height: 11px; fill: currentColor; }
@@ -247,7 +256,11 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
       <div class="search-hint" id="hint" hidden>Spelling-tolerant: try <button class="linkbtn" data-try="Kruzen">Kruzen</button>, <button class="linkbtn" data-try="Süpplingenburg">Süpplingenburg</button> or <button class="linkbtn" data-try="Burgsteinfurt">Burgsteinfurt</button>.</div>
     </div>
     <section class="timebar" id="timebar" aria-label="Time">
-      <div class="year-row"><div class="year" id="yearOut">1300<small id="yearSub"></small></div>
+      <div class="year-row"><div class="year-ctl">
+          <button class="step" id="yearMinus" type="button" aria-label="One year earlier" title="One year earlier (Shift: ten years)">−</button>
+          <input class="year" id="yearInput" type="text" inputmode="numeric" maxlength="4" placeholder="All years" aria-label="Year" title="Type a year between 1150 and 1820" autocomplete="off">
+          <button class="step" id="yearPlus" type="button" aria-label="One year later" title="One year later (Shift: ten years)">+</button>
+          <small id="yearSub"></small></div>
         <div class="time-ctrl"><label class="toggle" for="useYear"><input type="checkbox" id="useYear"> Show one year</label>
           <button class="btn play" id="play" aria-pressed="false" title="Step through the years and watch houses appear when they are founded and disappear when they are dissolved"><svg viewBox="0 0 12 12" aria-hidden="true" id="playIcon"></svg><span id="playLabel"></span></button></div></div>
       <svg class="hist" id="hist" viewBox="0 0 520 46" preserveAspectRatio="none" aria-label="Houses active per decade"></svg>
@@ -759,7 +772,7 @@ function renderHist() {
 const EVENTS = [[1307, 1314, "Templar order suppressed (1307–1312)"], [1525, 1580, "Reformation"], [1803, 1811, "Secularisation"]];
 const eventAt = y => (EVENTS.find(([a, b]) => y >= a && y <= b) || [])[2] || "";
 function setYearLabel() {
-  $("#yearOut").firstChild.nodeValue = state.useYear ? state.year : "All years";
+  $("#yearInput").value = state.useYear ? state.year : "";
   $("#yearSub").textContent = state.useYear ? eventAt(state.year) : "";
   setPlayUi();
 }
@@ -878,7 +891,32 @@ $("#q").onkeydown = e => {
 $("#results").onmousedown = e => { const b = e.target.closest("[data-id]"); if (b) { e.preventDefault(); select(b.dataset.id); $("#results").hidden = true; } };
 document.querySelectorAll("[data-try]").forEach(b => b.onmousedown = e => { e.preventDefault(); $("#q").value = state.q = b.dataset.try; resultIdx = -1; render(); renderResults(); });
 $("#useYear").onchange = e => { state.useYear = e.target.checked; if (!state.useYear && playT) clearInterval(playT), playT = null; setYearLabel(); render(); };
-$("#year").oninput = e => { if (playT) clearInterval(playT), playT = null; state.year = +e.target.value; state.useYear = $("#useYear").checked = true; setYearLabel(); render(); };
+// One way to set the year, shared by the slider, the typed year and the − / + buttons.
+function setYear(y) {
+  if (playT) clearInterval(playT), playT = null;
+  state.year = Math.min(MAX_Y, Math.max(MIN_Y, Math.round(y)));
+  state.useYear = $("#useYear").checked = true;
+  $("#year").value = state.year;
+  setYearLabel(); render();
+}
+$("#year").oninput = e => setYear(+e.target.value);
+const stepYear = (dir, e) => setYear((state.useYear ? state.year : dir > 0 ? MIN_Y - 1 : MAX_Y + 1) + dir * (e.shiftKey ? 10 : 1));
+$("#yearMinus").onclick = e => stepYear(-1, e);
+$("#yearPlus").onclick = e => stepYear(1, e);
+const yearInput = $("#yearInput");
+function commitYear() {
+  const v = yearInput.value.trim();
+  if (/^\d{3,4}$/.test(v)) setYear(+v);
+  else setYearLabel();                     // not a year: put back what was there
+}
+yearInput.onfocus = () => { if (playT) stopPlay(); yearInput.select(); };
+yearInput.oninput = () => { yearInput.value = yearInput.value.replace(/\D/g, ""); if (yearInput.value.length === 4) commitYear(); };
+yearInput.onchange = commitYear;
+yearInput.onkeydown = e => {
+  if (e.key === "Enter") { commitYear(); yearInput.blur(); }
+  else if (e.key === "ArrowUp" || e.key === "ArrowDown") { e.preventDefault(); stepYear(e.key === "ArrowUp" ? 1 : -1, e); }
+  else if (e.key === "Escape") { e.stopPropagation(); setYearLabel(); yearInput.blur(); }
+};
 $("#onlyAccurate").onchange = e => { state.accurate = e.target.checked; render(); };
 $("#showExcluded").onchange = e => { state.excluded = e.target.checked; render(); };
 $("#list").onclick = e => { const li = e.target.closest("[data-id]"); if (li) select(li.dataset.id); };
