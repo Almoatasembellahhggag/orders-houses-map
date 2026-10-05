@@ -116,11 +116,11 @@ button, input, select { font: inherit; color: inherit; }
 /* ---------- finding aid ---------- */
 .aid { position: absolute; z-index: 700; top: var(--aid-gap); left: var(--aid-gap); width: var(--aid-w); max-height: calc(100% - 2 * var(--aid-gap));
   display: flex; flex-direction: column; min-height: 0; overflow: hidden;
-  background: color-mix(in srgb, var(--panel) 80%, transparent); backdrop-filter: blur(20px) saturate(1.3); -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  background: var(--panel);
   border: 1px solid color-mix(in srgb, var(--rule) 80%, transparent); border-radius: 4px; box-shadow: var(--shadow); }
 .head-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: -4px; }
 .aid-head { padding: 16px 18px 13px; border-bottom: 1px solid var(--rule); display: grid; gap: 10px; }
-h1 { margin: 0; font: 400 23px/1.1 var(--title); text-wrap: balance; }
+h1 { margin: 0; font: 400 18.5px/1.3 var(--display); letter-spacing: .09em; text-transform: uppercase; text-wrap: balance; color: var(--gold); }
 .tally { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--muted); }
 .tally b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
 /* Centred on the page; on a narrow window they slide right just far enough to clear the floating panel. */
@@ -143,7 +143,7 @@ h1 { margin: 0; font: 400 23px/1.1 var(--title); text-wrap: balance; }
 .aid-body { overflow-y: auto; min-height: 0; flex: 0 1 auto; }
 .block { padding: 13px 18px; border-bottom: 1px solid var(--rule); display: grid; gap: 10px; }
 .block-title { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.block-title h2 { margin: 0; font: 400 15.5px/1.15 var(--display); color: var(--rubric); }
+.block-title h2 { margin: 0; font: 400 13.5px/1.15 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
 .orders { display: grid; gap: 4px; }
 .order { display: grid; grid-template-columns: 22px 1fr auto; align-items: center; gap: 8px; padding: 5px 8px; border: 1px solid transparent; border-radius: 3px; background: none; cursor: var(--hand); text-align: left; }
 .order:hover { border-color: var(--rule); }
@@ -184,7 +184,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .listbox > summary::before { content: ""; width: 7px; height: 7px; border-right: 1.6px solid var(--muted); border-bottom: 1.6px solid var(--muted); rotate: -45deg; transition: rotate .15s; margin-right: 2px; }
 .listbox[open] > summary::before { rotate: 45deg; }
 .listbox > summary:hover .lb-hint { color: var(--accent); }
-.lb-title { font: 400 15.5px/1.15 var(--display); color: var(--rubric); }
+.lb-title { font: 400 13.5px/1.15 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
 .lb-count { font: 500 12px var(--mono); color: var(--ink); background: var(--accent-soft); border-radius: 3px; padding: 1px 8px; font-variant-numeric: tabular-nums; }
 .lb-hint { margin-left: auto; font-size: 13px; color: var(--muted); }
 .listbox[open] .lb-hint { visibility: hidden; }
@@ -199,6 +199,14 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .aid-foot { padding: 10px 18px; border-top: 1px solid var(--rule); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13px; color: var(--muted); }
 .aid-foot .sp { flex: 1; }
 
+/* The panels are dressed like the entry page: each is a plate in a thin double frame, and the main panel
+   carries the painted beam of the arcade across its top. */
+.aid, .searchbar, .timebar, .key, .maplibregl-ctrl-group, .maplibregl-popup-content { border: 1px solid var(--region-edge) !important; outline: 1px solid var(--region-edge); outline-offset: 2px; border-radius: 0 !important; }
+.aid { overflow: visible; }
+.aid::before { content: ""; flex: none; height: 9px; margin: -1px -7px 0; background: #c8642a; border: 1px solid #2a2018; box-shadow: inset 0 3px 0 #ecc66a, inset 0 -2px 0 #8e3f18; }
+.aid-body { overflow-x: hidden; }
+.maplibregl-popup-content { outline-offset: 2px; }
+.maplibregl-ctrl-group { overflow: visible !important; }
 /* ---------- map ---------- */
 .mapwrap { position: absolute; inset: 0; }
 .maplibregl-ctrl-top-right .maplibregl-ctrl { margin: 10px 10px 0 0; }
@@ -254,7 +262,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .card .maplibregl-popup-content { padding: 14px 16px 14px; border-radius: 4px; width: 270px; display: grid; gap: 8px; }
 .card .maplibregl-popup-close-button { font-size: 20px; width: 28px; height: 28px; right: 4px; top: 4px; color: var(--muted); border-radius: 3px; }
 .card .maplibregl-popup-close-button:hover { background: var(--accent-soft); }
-.card h3 { margin: 0; font: 400 21px/1.1 var(--display); padding-right: 22px; text-wrap: balance; }
+.card h3 { margin: 0; font: 400 19px/1.2 var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--gold); padding-right: 22px; text-wrap: balance; }
 .card .periods { display: grid; gap: 3px; font-size: 13.5px; }
 .card .periods div { display: flex; gap: 7px; align-items: center; }
 .card .periods .yrs { font: 12px var(--mono); color: var(--muted); margin-left: auto; }
@@ -319,7 +327,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
       </details>
     </div>
     <div class="aid-foot"><span>Export</span><span class="sp"></span>
-      <button class="btn" id="copyCsv">Copy CSV</button><button class="btn" id="copyMd">Copy Markdown</button></div>
+      <button class="btn" id="copyCsv">Download CSV</button><button class="btn" id="copyMd">Download Markdown</button></div>
   </aside>
   <main class="mapwrap">
     <div id="map" role="application" aria-label="Map of order houses"></div>
@@ -387,7 +395,7 @@ const DE = {
   "Where each house stood, by order and by year.": "Wo jedes Haus stand, nach Orden und nach Jahr.",
   // map: panel
   "Orders": "Orden", "Show all": "Alle zeigen", "House type": "Art des Hauses", "Only exact locations": "Nur genaue Lagen", "Show excluded entries": "Ausgeschlossene Einträge zeigen",
-  "Browse the list": "Liste öffnen", "Export": "Export", "Copy CSV": "CSV kopieren", "Copy Markdown": "Markdown kopieren", "Hide filters": "Filter ausblenden", "Show filters": "Filter einblenden",
+  "Browse the list": "Liste öffnen", "Export": "Export", "Download CSV": "CSV herunterladen", "Download Markdown": "Markdown herunterladen", "Hide filters": "Filter ausblenden", "Show filters": "Filter einblenden",
   "houses shown": "Häuser angezeigt", "orders": "Orden", "people in several houses": "Personen in mehreren Häusern",
   // map: search
   "Search a place, alias or office holder": "Ort, Namensform oder Amtsträger suchen", "Spelling-tolerant: try": "Schreibweisen-tolerant, z. B.", "or": "oder",
@@ -443,6 +451,7 @@ const DE_PHRASES = [
   [/^As written in the sheet · row /, "Wie in der Tabelle eingetragen · Zeile "], [/^merged from rows /, "vereint aus den Zeilen "],
   [/^Klosterbuch dating: /, "Datierung im Klosterbuch: "], [/, pp\. /, ", S. "], [/^Image (\d+)$/, "Bild $1"],
   [/^Play (\d+)–(\d+)$/, "Abspielen $1–$2"], [/^Pause at (\d+)$/, "Pause bei $1"], [/^Play on from (\d+)$/, "Weiter ab $1"], [/^Replay from (\d+)$/, "Neu ab $1"],
+  [/^(\d+) houses as (CSV|Markdown) downloaded$/, "$1 Häuser als $2 heruntergeladen"],
   [/^No house matches “(.*)”\.$/, "Kein Haus passt zu “$1”."], [/^No (.+) house in (\d+)$/, "Kein Haus ($1) im Jahr $2"],
   [/^(\d+) houses: (.*)\. Zoom in\.$/, "$1 Häuser: $2. Vergrößern."], [/^Lower Saxony with the (\d+) houses marked$/, "Niedersachsen mit den $1 Häusern"],
   [/^(.*) · Order Houses of Lower Saxony$/, "$1 · Ordenshäuser in Niedersachsen"],
@@ -722,6 +731,9 @@ function applyBasemapTheme(night) {
   const P = night ? NIGHT : DAY;
   for (const layer of map.getStyle().layers) {
     if (layer.id === HILLSHADE) { for (const [k, v] of Object.entries(reliefPaint(night))) map.setPaintProperty(HILLSHADE, k, v); continue; }
+    if (layer.id === WAVES) { map.updateImage(WAVES, wavesImage()); continue; }
+    if (layer.id === "home-wash") { map.setPaintProperty(layer.id, "line-color", css("--rubric")); continue; }
+    if (layer.id === "home-edge") { map.setPaintProperty(layer.id, "line-color", css("--region-edge")); continue; }
     if (hiddenIds.has(layer.id) || !isBasemapLayer(layer)) continue;
     if (layer.type === "symbol") { map.setPaintProperty(layer.id, "text-color", labelColor(layer.id, P)); map.setPaintProperty(layer.id, "text-halo-color", P.labelHalo); }
     else {
@@ -752,6 +764,24 @@ function addBasemapExtras() {
   map.addSource("dem", { type: "raster-dem", tiles: [DEM_TILES], tileSize: 256, encoding: "terrarium", maxzoom: 12, attribution: "Relief: Mapzen terrain tiles" });
   // Above the land and woods, below water, borders and names.
   map.addLayer({ id: HILLSHADE, type: "hillshade", source: "dem", layout: { visibility: "none" }, paint: reliefPaint(isDark()) }, layers.find(l => /^water/.test(l.id))?.id);
+  // As on the entry page's map: fine wave lines over the sea, and the region's border washed with colour inside.
+  const firstName = layers.find(l => l.type === "symbol")?.id, water = layers.find(l => l["source-layer"] === "water" && l.type === "fill");
+  if (water) {
+    map.addImage(WAVES, wavesImage(), { pixelRatio: 2 });
+    map.addLayer({ id: WAVES, type: "fill", source: water.source, "source-layer": "water", paint: { "fill-pattern": WAVES, "fill-opacity": .7 } }, firstName);
+  }
+  const home = BASE.states.filter(st => st.id === "DE-NI" || st.id === "DE-HB").map(st => ({ type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: st.ring } }));
+  map.addSource("home", { type: "geojson", data: fc(home) });
+  map.addLayer({ id: "home-wash", type: "line", source: "home", layout: { "line-join": "round" }, paint: { "line-color": css("--rubric"), "line-width": ["interpolate", ["linear"], ["zoom"], 5, 4, 9, 12], "line-opacity": .2, "line-offset": ["interpolate", ["linear"], ["zoom"], 5, HOME_SIDE * 2, 9, HOME_SIDE * 6] } }, firstName);
+  map.addLayer({ id: "home-edge", type: "line", source: "home", layout: { "line-join": "round" }, paint: { "line-color": css("--region-edge"), "line-width": 1.3 } }, firstName);
+}
+const WAVES = "sea-waves", HOME_SIDE = 1;
+function wavesImage() {
+  const cv = document.createElement("canvas"); cv.width = 44; cv.height = 14;
+  const g = cv.getContext("2d");
+  g.strokeStyle = css("--river"); g.lineWidth = 1.5; g.lineCap = "round";
+  g.beginPath(); g.moveTo(0, 8); g.quadraticCurveTo(5.5, 1, 11, 8); g.quadraticCurveTo(16.5, 15, 22, 8); g.quadraticCurveTo(27.5, 1, 33, 8); g.quadraticCurveTo(38.5, 15, 44, 8); g.stroke();
+  return g.getImageData(0, 0, 44, 14);
 }
 function setBasemap(mode) {
   basemap = mode;
@@ -763,6 +793,7 @@ function setBasemap(mode) {
     const show = mode === "satellite" ? l.type === "symbol" : mode === "landscape" ? !isModern(l) : true;
     map.setLayoutProperty(l.id, "visibility", show ? "visible" : "none");
   }
+  for (const id of ["home-wash", "home-edge"]) map.setLayoutProperty(id, "visibility", mode === "satellite" ? "none" : "visible");
   document.querySelectorAll(".bm-seg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.bm === mode));
 }
 
@@ -1171,24 +1202,36 @@ function select(id, pan = true, scroll = true) {
   if (pan) map.flyTo({ center: at, zoom: Math.max(map.getZoom(), 8), offset: [insetLeft() / 2, 90], duration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700 });
 }
 
-// ---------- export (clipboard; the viewer blocks file downloads) ----------
+// ---------- export ----------
 function rowsForExport() {
   return houses.filter(h => !h.external && visible(h).ok).map(h => ({
     id: h.id, place: h.place, type: h.type, orders: h.periods.map(p => `${DATA.orders[p.order]}${p.uncertain ? " (?)" : ""} ${p.start ?? "?"}-${p.end ?? "?"}`).join("; "),
     latitude: h.loc.lat, longitude: h.loc.lon, location_exact: h.loc.accurate ? "yes" : "no",
     wikidata: h.wikidata || "", germania_sacra: h.gsn || "", status: h.status }));
 }
-async function copy(text, label) {
-  try { await navigator.clipboard.writeText(text); toast(label + " copied to the clipboard"); }
-  catch { toast("Copying is blocked here. Select the text in the record instead."); }
+// Export is a file download. Inside an embedded preview (where the browser blocks downloads started by a page)
+// the same text is copied to the clipboard instead, and the message says so.
+const embedded = (() => { try { return window.self !== window.top; } catch { return true; } })();
+async function save(text, name, type, label) {
+  if (!embedded) {
+    const url = URL.createObjectURL(new Blob([text], { type: type + ";charset=utf-8" }));
+    const a = Object.assign(document.createElement("a"), { href: url, download: name });
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    return toast(label + " downloaded");
+  }
+  try { await navigator.clipboard.writeText(text); toast(label + " copied to the clipboard (downloads are blocked in this preview)"); }
+  catch { toast("Downloads are blocked in this preview. Open the site itself to download."); }
 }
+const FILE = "order-houses-lower-saxony";
 $("#copyCsv").onclick = () => {
   const r = rowsForExport(), cols = Object.keys(r[0] || { id: 1 });
-  copy([cols.join(","), ...r.map(o => cols.map(c => /[",;\n]/.test(o[c]) ? `"${String(o[c]).replace(/"/g, '""')}"` : o[c]).join(","))].join("\n"), `${r.length} houses as CSV`);
+  // The byte-order mark makes Excel read the umlauts correctly.
+  save("\ufeff" + [cols.join(","), ...r.map(o => cols.map(c => /[",;\n]/.test(o[c]) ? `"${String(o[c]).replace(/"/g, '""')}"` : o[c]).join(","))].join("\r\n"), FILE + ".csv", "text/csv", `${r.length} houses as CSV`);
 };
 $("#copyMd").onclick = () => {
   const r = rowsForExport(), cols = ["id", "place", "type", "orders", "latitude", "longitude", "wikidata"];
-  copy([`| ${cols.join(" | ")} |`, `|${cols.map(() => " --- ").join("|")}|`, ...r.map(o => `| ${cols.map(c => o[c]).join(" | ")} |`)].join("\n"), `${r.length} houses as Markdown`);
+  save([`| ${cols.join(" | ")} |`, `|${cols.map(() => " --- ").join("|")}|`, ...r.map(o => `| ${cols.map(c => o[c]).join(" | ")} |`)].join("\n") + "\n", FILE + ".md", "text/markdown", `${r.length} houses as Markdown`);
 };
 let toastT;
 function toast(t) { const el = $("#toast"); el.textContent = t; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => el.hidden = true, 2600); }
