@@ -64,6 +64,11 @@ button, input, select { font: inherit; color: inherit; }
 .crumbs a { color: var(--accent); text-decoration: none; }
 .crumbs a:hover { color: var(--accent); }
 .crumbs a[aria-current] { color: var(--ink); }
+.lang { display: inline-flex; flex: none; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; }
+.lang button { border: 0; background: var(--paper); color: var(--muted); padding: 5px 8px; font: 600 12px/1 var(--body); letter-spacing: .04em; cursor: pointer; }
+.lang button + button { border-left: 1px solid var(--rule); }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--panel); }
+.crumbs { margin-right: auto; }
 
 /* Layout: one leaf, after a page of the Gutenberg Bible. A running head in alternating red and blue capitals,
    the opening rubric in red, the text in two justified columns that begin with a large blue initial, paragraph
@@ -71,8 +76,8 @@ button, input, select { font: inherit; color: inherit; }
    two columns continue. */
 body { min-height: 100%; }
 .home { max-width: 980px; margin: 0 auto; padding-inline: 20px; padding-block: 16px 56px; display: grid; gap: 14px; }
-.top { display: grid; grid-template-columns: 30px 1fr 30px; align-items: center; }
-.running { grid-column: 2; text-align: center; font: 400 17px/1 var(--initial); letter-spacing: .32em; text-transform: uppercase; }
+.top { display: flex; justify-content: flex-end; align-items: center; gap: 8px; position: relative; min-height: 30px; }
+.running { position: absolute; left: 50%; translate: -50% 0; white-space: nowrap; font: 400 17px/1 var(--initial); letter-spacing: .32em; text-transform: uppercase; }
 .running i { font-style: normal; color: var(--rubric); }
 .running i:nth-child(even) { color: var(--accent); }
 .sheet { background: var(--panel); border: 1px solid var(--rule); box-shadow: var(--shadow); padding: clamp(22px, 6vw, 62px) clamp(18px, 8vw, 86px) clamp(26px, 6vw, 60px); display: grid; gap: 26px; }
@@ -107,6 +112,7 @@ h1 { margin: 4px 0 0; font: 700 clamp(40px, 7.4vw, 70px)/.98 var(--title); text-
 .ord b { font: 600 18px/1.1 var(--display); }
 .ord span { font-size: 13px; color: var(--muted); }
 @media (max-width: 720px) {
+  .top { flex-wrap: wrap; } .running { position: static; translate: none; margin-right: auto; }
   .cols { columns: 1; font-size: 17.5px; }
   .doors { grid-template-columns: minmax(0, 1fr); }
   .orders { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -119,14 +125,14 @@ h1 { margin: 4px 0 0; font: 700 clamp(40px, 7.4vw, 70px)/.98 var(--title); text-
   <div class="top"><div class="running" id="running" aria-label="Klosterbuch, sheet thirteen">Klosterbuch XIII</div><button class="theme-btn" id="themeBtn" type="button"></button></div>
   <article class="sheet">
     <header>
-      <p class="rubric">Here begins the register of the houses of the four orders in Lower Saxony.</p>
+      <p class="rubric" data-t="home.rubric">Here begins the register of the houses of the four orders in Lower Saxony.</p>
       <h1>Order Houses of Lower Saxony</h1>
     </header>
     <div class="cols" lang="en">
-      <p><span class="initial" aria-hidden="true">A</span><span style="position:absolute;left:-9999px">A</span> register of the houses of the Hospitallers, the Templars, the Teutonic Order and the Carmelites in Lower Saxony, from the first commanderies of the 1170s to the last dissolutions around 1820, drawn from the <i>Niedersächsisches Klosterbuch</i>.</p>
+      <p data-t="home.intro"><span class="initial" aria-hidden="true">A</span><span style="position:absolute;left:-9999px">A</span> register of the houses of the Hospitallers, the Templars, the Teutonic Order and the Carmelites in Lower Saxony, from the first commanderies of the 1170s to the last dissolutions around 1820, drawn from the <i>Niedersächsisches Klosterbuch</i>.</p>
       <p id="facts"></p>
-      <p><span class="pil" aria-hidden="true">¶</span>Open the map to see where each house stood and how the orders spread and withdrew over the centuries. <span class="pil b" aria-hidden="true">¶</span>Open the houses to read each record: its history, its office holders, its mother and daughter houses, and its sources.</p>
-      <p><span class="pil" aria-hidden="true">¶</span>The entries were compiled from the <i>Klosterbuch</i> (Dolle 2012) and are linked to Wikidata and Germania Sacra. This is a prototype; dates and locations are still being checked.</p>
+      <p data-t="home.use"><span class="pil" aria-hidden="true">¶</span>Open the map to see where each house stood and how the orders spread and withdrew over the centuries. <span class="pil b" aria-hidden="true">¶</span>Open the houses to read each record: its history, its office holders, its mother and daughter houses, and its sources.</p>
+      <p data-t="home.source"><span class="pil" aria-hidden="true">¶</span>The entries were compiled from the <i>Klosterbuch</i> (Dolle 2012) and are linked to Wikidata and Germania Sacra. This is a prototype; dates and locations are still being checked.</p>
     </div>
     <nav class="doors" aria-label="Start">
       <a class="door" href="map.html">
@@ -149,6 +155,161 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const oc = k => css("--o-" + k);
+// ---------- German / English ----------
+// The interface is written in English in the pages; in German mode it is translated in place. Fixed labels are
+// looked up by their English wording (DE), phrases inside composed lines by pattern (DE_PHRASES), and whole
+// blocks by key (data-t="..."). The reader's choice is kept in this browser; the first visit follows the
+// browser's language. Texts that come from the research sheet (histories, architecture, names) are shown as
+// they were entered, in English.
+const LANG_KEY = "orders-map:lang";
+let LANG = "en";
+try { const s = localStorage.getItem(LANG_KEY); LANG = s === "de" || s === "en" ? s : (navigator.language || "").toLowerCase().startsWith("de") ? "de" : "en"; } catch {}
+document.documentElement.lang = LANG;
+const DE = {
+  // names and vocabulary
+  "Order Houses of Lower Saxony": "Ordenshäuser in Niedersachsen", "Houses · Order Houses of Lower Saxony": "Häuser · Ordenshäuser in Niedersachsen",
+  "Hospitallers": "Johanniter", "Templars": "Templer", "Teutonic Order": "Deutscher Orden", "Carmelites": "Karmeliten",
+  "commandery": "Kommende", "double commandery": "Doppelkommende", "friary": "Kloster", "chapel": "Kapelle",
+  "male": "Männerkonvent", "double (brothers and sisters)": "Doppelkonvent (Brüder und Schwestern)",
+  "commander": "Komtur", "prior": "Prior", "provost": "Propst", "office holder": "Amtsträger", "Templar commander": "Templerkomtur",
+  "Hospitaller commander": "Johanniterkomtur", "commander or prior": "Komtur oder Prior", "head (chaplain)": "Vorsteher (Kaplan)",
+  "head of the farm": "Hofmeister", "secular cleric": "Weltgeistlicher",
+  "white eight-pointed cross on black": "weißes achtspitziges Kreuz auf Schwarz", "red cross pattée on white": "rotes Tatzenkreuz auf Weiß",
+  "black cross on white, gold rim": "schwarzes Kreuz auf Weiß, goldener Rand", "Mount Carmel with a cross": "Berg Karmel mit Kreuz",
+  // navigation
+  "Home": "Start", "All houses": "Alle Häuser", "← All houses": "← Alle Häuser", "← Home": "← Start", "Open the map": "Zur Karte", "Show on the map": "Auf der Karte zeigen",
+  "‹ Previous": "‹ Zurück", "Next ›": "Weiter ›", "Go to house": "Zum Haus", "Houses": "Häuser",
+  "Switch to the light theme": "Zum hellen Design wechseln", "Switch to the dark theme": "Zum dunklen Design wechseln",
+  // entry page
+  "The Map": "Die Karte", "The Houses": "Die Häuser", "Open the map →": "Zur Karte →", "Browse the houses →": "Zu den Häusern →",
+  "Where each house stood, by order and by year.": "Wo jedes Haus stand, nach Orden und nach Jahr.",
+  // map: panel
+  "Orders": "Orden", "Show all": "Alle zeigen", "House type": "Art des Hauses", "Only exact locations": "Nur genaue Lagen", "Show excluded entries": "Ausgeschlossene Einträge zeigen",
+  "Browse the list": "Liste öffnen", "Export": "Export", "Copy CSV": "CSV kopieren", "Copy Markdown": "Markdown kopieren", "Hide filters": "Filter ausblenden", "Show filters": "Filter einblenden",
+  "houses shown": "Häuser angezeigt", "orders": "Orden", "people in several houses": "Personen in mehreren Häusern",
+  // map: search
+  "Search a place, alias or office holder": "Ort, Namensform oder Amtsträger suchen", "Spelling-tolerant: try": "Schreibweisen-tolerant, z. B.", "or": "oder",
+  "No house matches these filters. Try another year or switch off the year filter.": "Kein Haus entspricht diesen Filtern. Anderes Jahr wählen oder den Jahresfilter ausschalten.",
+  "No house matches these filters. Clear the search or show more orders.": "Kein Haus entspricht diesen Filtern. Suche leeren oder weitere Orden einblenden.",
+  "No house matches. Clear the search or switch an order back on.": "Kein Haus gefunden. Suche leeren oder einen Orden wieder einschalten.",
+  // map: tools and key
+  "Show connections": "Verbindungen zeigen", "Show the links between mother and daughter houses": "Verbindungen zwischen Mutter- und Tochterhäusern zeigen",
+  "Landscape": "Landschaft", "Streets": "Straßen", "Satellite": "Satellit", "Relief, rivers and towns, without today's roads": "Relief, Flüsse und Orte, ohne heutige Straßen",
+  "Today's street map": "Heutige Straßenkarte", "Satellite imagery": "Satellitenbild",
+  "Symbols": "Zeichen", "Changed order": "Ordenswechsel", "Double community": "Doppelkonvent", "Approximate location": "Lage ungefähr", "Mother → daughter": "Mutter → Tochter",
+  "Click to zoom in": "Klicken zum Vergrößern", "Full record →": "Zum Eintrag →", "approximate location": "Lage ungefähr", "exact location": "Lage genau",
+  "excluded": "ausgeschlossen", "checked": "geprüft",
+  // map: time
+  "Show one year": "Ein Jahr zeigen", "All years": "Alle Jahre", "Year": "Jahr", "Time": "Zeit", "Type a year between 1150 and 1820": "Jahr zwischen 1150 und 1820 eingeben",
+  "One year earlier": "Ein Jahr früher", "One year later": "Ein Jahr später", "One year earlier (Shift: ten years)": "Ein Jahr früher (Umschalt: zehn Jahre)", "One year later (Shift: ten years)": "Ein Jahr später (Umschalt: zehn Jahre)",
+  "Step through the years and watch houses appear when they are founded and disappear when they are dissolved": "Durch die Jahre gehen und sehen, wie Häuser bei ihrer Gründung erscheinen und bei ihrer Aufhebung verschwinden",
+  "All houses are shown. Press Play, or drag the slider to a year.": "Alle Häuser werden gezeigt. Abspielen drücken oder den Regler auf ein Jahr ziehen.",
+  "houses active in": "Häuser bestanden im Jahr", "house active in": "Haus bestand im Jahr", "Playing ·": "Läuft ·",
+  "Templar order suppressed (1307–1312)": "Aufhebung des Templerordens (1307–1312)", "Reformation": "Reformation", "Secularisation": "Säkularisation",
+  // houses index
+  "Sort A–Z": "A–Z", "Sort by foundation": "Nach Gründung", "Sort by office holders": "Nach Amtsträgern", "Sort by": "Sortieren nach",
+  // house record
+  "History": "Geschichte", "No history recorded in the sheet.": "In der Tabelle ist keine Geschichte eingetragen.", "Architecture": "Architektur", "What survives": "Erhaltener Bestand",
+  "Name": "Name", "Role": "Amt", "Years": "Jahre", "No office holders recorded in the sheet.": "In der Tabelle sind keine Amtsträger eingetragen.",
+  "Order periods": "Ordenszugehörigkeit", "Place": "Ort", "Coordinates": "Koordinaten", "Location": "Lage", "Second location": "Zweite Lage", "Community": "Konvent",
+  "Diocese": "Bistum", "Province": "Ordensprovinz", "Patron saint": "Patrozinium", "Founder": "Stifter", "Dependencies": "Abhängigkeiten", "References": "Nachweise",
+  "Field": "Feld", "Sheet": "Tabelle", "Cleaned": "Bereinigt", "ID": "ID", "Order": "Orden", "Latitude": "Breite", "Longitude": "Länge", "Founded": "Gründung", "End": "Ende", "Mother house": "Mutterhaus",
+  ", pp. ": ", S. ", "exact": "genau", "approximate": "ungefähr", "(empty)": "(leer)", "dates unknown": "Daten unbekannt", "also at": "auch in",
+  "Hospitaller commandery in Westphalia, outside Lower Saxony. Named as mother house in three rows, spelled three ways.": "Johanniterkommende in Westfalen, außerhalb Niedersachsens. In drei Zeilen als Mutterhaus genannt, in drei Schreibweisen.",
+  "Carmelite house in Hesse, outside Lower Saxony.": "Karmeliterkloster in Hessen, außerhalb Niedersachsens.",
+  // blocks, by key
+  "home.rubric": "Hier beginnt das Verzeichnis der Häuser der vier Orden in Niedersachsen.",
+  "home.intro": '<span class="initial" aria-hidden="true">E</span><span style="position:absolute;left:-9999px">E</span>in Verzeichnis der Häuser der Johanniter, der Templer, des Deutschen Ordens und der Karmeliten in Niedersachsen, von den ersten Kommenden der 1170er Jahre bis zu den letzten Aufhebungen um 1820, erarbeitet aus dem <i>Niedersächsischen Klosterbuch</i>.',
+  "home.use": '<span class="pil" aria-hidden="true">¶</span>Die Karte zeigt, wo jedes Haus stand und wie sich die Orden über die Jahrhunderte ausbreiteten und zurückzogen. <span class="pil b" aria-hidden="true">¶</span>Unter den Häusern findet sich jeder Eintrag: seine Geschichte, seine Amtsträger, seine Mutter- und Tochterhäuser und seine Nachweise.',
+  "home.source": '<span class="pil" aria-hidden="true">¶</span>Die Einträge wurden aus dem <i>Klosterbuch</i> (Dolle 2012) zusammengestellt und mit Wikidata und der Germania Sacra verknüpft. Dies ist ein Prototyp; Daten und Lagen werden noch geprüft.',
+  "home.facts": '<span class="pil b" aria-hidden="true">¶</span>Es umfasst {0} Häuser von vier Orden, gegründet und aufgehoben zwischen {1} und {2}. <span class="pil" aria-hidden="true">¶</span>{3} Amtsträger sind genannt und {4} Filiationen zwischen Mutter- und Tochterhäusern verzeichnet.',
+  "home.houses": "Alle {0} Einträge, mit Suche nach Ort oder Person.",
+};
+// Phrases inside composed lines (never applied to the sheet's own texts).
+const DE_PHRASES = [
+  [/\bc\. (?=\d)/g, "ca. "], [/\bdates unknown\b/g, "Daten unbekannt"],
+  [/\bdouble commandery\b/g, "Doppelkommende"], [/\bcommandery\b/g, "Kommende"], [/\bfriary\b/g, "Kloster"], [/\bchapel\b/g, "Kapelle"],
+  [/\b(\d+) office holders?\b/g, "$1 Amtsträger"], [/\b1 linked house\b/g, "1 verbundenes Haus"], [/\b(\d+) linked houses\b/g, "$1 verbundene Häuser"],
+  [/\bmother → daughter house\b/g, "Mutter- → Tochterhaus"], [/\bmother house\b/g, "Mutterhaus"], [/\bdaughter house\b/g, "Tochterhaus"],
+  [/\bdates not recorded\b/g, "keine Daten überliefert"], [/\buncertain\b/g, "unsicher"], [/\bwritten “/g, "geschrieben “"],
+  [/\(outside Lower Saxony\)/g, "(außerhalb Niedersachsens)"], [/\boutside Lower Saxony\b/g, "außerhalb Niedersachsens"], [/^outside$/, "außerhalb"],
+  [/^of (\d+) houses$/, "von $1 Häusern"], [/^1 house$/, "1 Haus"], [/^(\d+) houses$/, "$1 Häuser"],
+  [/^Office holders( · \d+)?$/, "Amtsträger$1"], [/^office holder: /, "Amtsträger: "], [/^also written /, "auch geschrieben "],
+  [/^As written in the sheet · row /, "Wie in der Tabelle eingetragen · Zeile "], [/^merged from rows /, "vereint aus den Zeilen "],
+  [/^Klosterbuch dating: /, "Datierung im Klosterbuch: "], [/, pp\. /, ", S. "], [/^Image (\d+)$/, "Bild $1"],
+  [/^Play (\d+)–(\d+)$/, "Abspielen $1–$2"], [/^Pause at (\d+)$/, "Pause bei $1"], [/^Play on from (\d+)$/, "Weiter ab $1"], [/^Replay from (\d+)$/, "Neu ab $1"],
+  [/^No house matches “(.*)”\.$/, "Kein Haus passt zu “$1”."], [/^No (.+) house in (\d+)$/, "Kein Haus ($1) im Jahr $2"],
+  [/^(\d+) houses: (.*)\. Zoom in\.$/, "$1 Häuser: $2. Vergrößern."], [/^Lower Saxony with the (\d+) houses marked$/, "Niedersachsen mit den $1 Häusern"],
+  [/^(.*) · Order Houses of Lower Saxony$/, "$1 · Ordenshäuser in Niedersachsen"],
+  [/^Marked “fake” in the sheet: research agrees there was no Templar commandery in Hildesheim\.(.*)$/, "In der Tabelle als „fake“ markiert: Nach dem Stand der Forschung gab es in Hildesheim keine Templerkommende. Der Eintrag bleibt mit dem Status „ausgeschlossen“ erhalten und erscheint nicht auf der öffentlichen Karte."],
+];
+// L("English text", a, b): the text in the current language, with {0}, {1} … filled in. A key that is not
+// English wording (e.g. "home.facts") needs its English as the last-resort text: L(key, ...).or(english).
+function L(s, ...args) {
+  let out = LANG === "de" && DE[s] != null ? DE[s] : s;
+  args.forEach((a, i) => { out = out.replaceAll(`{${i}}`, a); });
+  return out;
+}
+function deText(raw, phrases) {
+  const t = raw.trim();
+  if (!t) return raw;
+  if (DE[t] != null) return raw.replace(t, DE[t]);
+  if (!phrases) return raw;
+  let out = t;
+  for (const [re, to] of DE_PHRASES) out = out.replace(re, to);
+  return out === t ? raw : raw.replace(t, out);
+}
+const SHEET_TEXT = ".prose, .lede, td.was, td.now, .holders td:first-child, [data-sheet]";   // entered by the historians: left alone
+function translateDom(root) {
+  if (LANG !== "de" || !root) return;
+  const el = root.nodeType === 1 ? root : root.parentElement;
+  if (!el || el.closest("script, style, .maplibregl-ctrl-attrib")) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes = root.nodeType === 3 ? [root] : [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  for (const n of nodes) {
+    const host = n.parentElement;
+    if (!host || host.closest("script, style, .maplibregl-ctrl-attrib")) continue;
+    if (host.closest(SHEET_TEXT)) continue;
+    const next = deText(n.nodeValue, n.nodeValue.length < 140);
+    if (next !== n.nodeValue) n.nodeValue = next;
+  }
+  const els = root.nodeType === 1 ? [root, ...root.querySelectorAll("[title], [placeholder], [aria-label]")] : [];
+  for (const e of els) for (const a of ["title", "placeholder", "aria-label"]) {
+    const v = e.getAttribute?.(a);
+    if (v) { const next = deText(v, true); if (next !== v) e.setAttribute(a, next); }
+  }
+}
+function initLang(anchor) {
+  // Blocks translated as a whole.
+  if (LANG === "de") document.querySelectorAll("[data-t]").forEach(e => { if (DE[e.dataset.t] != null) e.innerHTML = DE[e.dataset.t]; });
+  document.querySelectorAll("[lang='en']").forEach(e => { e.lang = LANG; });
+  if (LANG === "de") {
+    document.title = deText(document.title, true);
+    translateDom(document.body);
+    new MutationObserver(list => {
+      for (const m of list) {
+        if (m.type === "characterData") translateDom(m.target);
+        else if (m.type === "attributes") translateDom(m.target);
+        else m.addedNodes.forEach(n => translateDom(n));
+      }
+    }).observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["title", "placeholder", "aria-label"] });
+    new MutationObserver(() => { const t = deText(document.title, true); if (t !== document.title) document.title = t; }).observe(document.querySelector("title"), { childList: true });
+  }
+  // The switch itself, placed beside the theme button.
+  const box = document.createElement("span");
+  box.className = "lang"; box.setAttribute("role", "group"); box.setAttribute("aria-label", "Sprache / Language");
+  box.innerHTML = [["de", "DE", "Deutsch"], ["en", "EN", "English"]].map(([id, label, title]) => `<button type="button" data-l="${id}" aria-pressed="${id === LANG}" title="${title}" data-sheet>${label}</button>`).join("");
+  box.onclick = e => {
+    const b = e.target.closest("[data-l]");
+    if (!b || b.dataset.l === LANG) return;
+    try { localStorage.setItem(LANG_KEY, b.dataset.l); } catch {}
+    location.reload();
+  };
+  anchor.insertAdjacentElement("beforebegin", box);
+}
+
+if (LANG === "de") for (const k of Object.keys(DATA.orders)) DATA.orders[k] = L(DATA.orders[k]);
 const houses = DATA.houses;
 const byId = Object.fromEntries(houses.map(h => [h.id, h]));
 const personById = Object.fromEntries(DATA.persons.map(p => [p.id, p]));
@@ -231,6 +392,7 @@ function initThemeToggle(btn) {
   };
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paint);
   paint();
+  initLang(btn);
 }
 
 // ---------- spelling-tolerant search ----------
@@ -276,10 +438,11 @@ function searchHit(h, raw) {
 const OUTLINE = [[[8.985,53.128],[8.949,53.124],[8.993,53.098],[8.963,53.09],[8.983,53.05],[8.935,53.015],[8.866,53.044],[8.867,53.025],[8.818,53.024],[8.773,53.057],[8.731,53.037],[8.626,53.165],[8.519,53.196],[8.487,53.229],[8.598,53.217],[8.594,53.187],[8.63,53.203],[8.675,53.178],[8.83,53.166],[8.862,53.137],[8.947,53.157],[8.985,53.128]],[[8.681,53.892],[8.757,53.843],[8.884,53.828],[9.016,53.836],[9.1,53.863],[9.096,53.884],[9.288,53.869],[9.359,53.823],[9.418,53.747],[9.507,53.701],[9.547,53.624],[9.674,53.575],[9.769,53.566],[9.763,53.517],[9.802,53.506],[9.796,53.48],[9.861,53.439],[9.899,53.469],[9.925,53.447],[9.906,53.425],[9.944,53.44],[9.983,53.425],[10.054,53.474],[10.177,53.408],[10.248,53.405],[10.331,53.443],[10.579,53.37],[10.708,53.379],[10.839,53.309],[10.932,53.351],[10.994,53.335],[11.069,53.23],[11.199,53.18],[11.174,53.158],[11.186,53.135],[11.267,53.127],[11.329,53.06],[11.46,53.077],[11.602,53.032],[11.564,52.995],[11.515,52.999],[11.508,52.939],[11.321,52.874],[11.042,52.913],[10.992,52.906],[10.943,52.851],[10.766,52.851],[10.761,52.793],[10.796,52.756],[10.796,52.721],[10.832,52.723],[10.921,52.607],[10.978,52.622],[10.934,52.566],[11.01,52.492],[10.948,52.492],[10.936,52.459],[11.079,52.373],[11.061,52.348],[10.988,52.337],[11.043,52.307],[11.013,52.289],[11.092,52.226],[11.02,52.197],[11.02,52.178],[11.068,52.167],[11.051,52.134],[10.949,52.105],[10.98,52.087],[10.975,52.057],[10.692,52.053],[10.649,52.046],[10.661,52.031],[10.631,52.013],[10.563,52.01],[10.656,51.961],[10.613,51.942],[10.656,51.905],[10.577,51.851],[10.578,51.783],[10.632,51.757],[10.669,51.713],[10.669,51.671],[10.705,51.644],[10.64,51.619],[10.634,51.592],[10.671,51.574],[10.665,51.558],[10.605,51.576],[10.522,51.551],[10.444,51.589],[10.378,51.585],[10.385,51.559],[10.35,51.522],[10.238,51.47],[10.196,51.482],[10.179,51.445],[10.144,51.441],[10.162,51.43],[10.096,51.438],[10.073,51.419],[10.055,51.438],[9.943,51.379],[9.911,51.42],[9.856,51.416],[9.869,51.375],[9.819,51.416],[9.795,51.408],[9.801,51.39],[9.706,51.371],[9.736,51.323],[9.771,51.343],[9.766,51.313],[9.731,51.301],[9.562,51.348],[9.572,51.393],[9.646,51.421],[9.628,51.454],[9.645,51.472],[9.59,51.523],[9.625,51.534],[9.613,51.556],[9.648,51.549],[9.689,51.583],[9.628,51.637],[9.382,51.648],[9.409,51.7],[9.389,51.758],[9.451,51.793],[9.437,51.84],[9.466,51.855],[9.341,51.854],[9.351,51.895],[9.278,51.927],[9.282,51.968],[9.179,51.978],[9.202,52.008],[9.176,52.034],[9.193,52.072],[9.137,52.093],[9.16,52.123],[9.074,52.148],[9.021,52.132],[9.019,52.17],[8.987,52.195],[9.048,52.181],[9.04,52.222],[9.076,52.23],[8.965,52.281],[9.028,52.345],[9.089,52.357],[9.123,52.403],[9.097,52.443],[9.138,52.477],[9.094,52.499],[9.051,52.502],[8.94,52.403],[8.856,52.391],[8.71,52.396],[8.704,52.504],[8.654,52.533],[8.558,52.501],[8.508,52.515],[8.433,52.45],[8.304,52.463],[8.313,52.407],[8.444,52.365],[8.471,52.317],[8.446,52.212],[8.521,52.187],[8.414,52.141],[8.404,52.111],[8.27,52.135],[8.196,52.074],[8.033,52.068],[7.974,52.036],[7.886,52.086],[8.009,52.115],[8.0,52.157],[8.025,52.162],[7.9,52.199],[7.928,52.227],[7.92,52.256],[7.955,52.277],[7.929,52.306],[7.988,52.312],[7.945,52.336],[7.938,52.369],[7.811,52.372],[7.719,52.402],[7.693,52.456],[7.613,52.476],[7.578,52.431],[7.609,52.421],[7.587,52.376],[7.532,52.371],[7.299,52.264],[7.159,52.268],[7.07,52.243],[7.03,52.294],[7.079,52.383],[7.006,52.47],[6.951,52.437],[6.714,52.484],[6.684,52.556],[6.768,52.565],[6.724,52.591],[6.719,52.63],[6.744,52.647],[7.052,52.636],[7.094,52.846],[7.212,52.933],[7.261,52.998],[7.257,53.098],[7.227,53.124],[7.293,53.163],[7.27,53.174],[7.285,53.2],[7.272,53.234],[7.205,53.239],[7.249,53.33],[7.027,53.336],[6.999,53.361],[7.025,53.483],[7.05,53.508],[7.034,53.533],[7.134,53.532],[7.09,53.577],[7.158,53.628],[7.317,53.683],[7.53,53.672],[7.794,53.71],[8.016,53.711],[8.045,53.642],[8.11,53.642],[8.096,53.63],[8.126,53.622],[8.121,53.597],[8.172,53.555],[8.155,53.514],[8.065,53.506],[8.074,53.465],[8.252,53.399],[8.316,53.466],[8.316,53.522],[8.231,53.52],[8.241,53.579],[8.272,53.61],[8.333,53.616],[8.394,53.57],[8.516,53.556],[8.557,53.526],[8.52,53.501],[8.571,53.518],[8.577,53.539],[8.484,53.656],[8.484,53.694],[8.558,53.834],[8.609,53.879],[8.681,53.892]]];
 const mine = houses.filter(h => !h.external && h.status === "checked");
 const dated = mine.filter(h => h.start != null);
-$("#facts").innerHTML = `<span class="pil b" aria-hidden="true">¶</span>It holds ${mine.length} houses of four orders, founded and dissolved between ${Math.min(...dated.map(h => h.start))} and ${Math.max(...dated.map(h => h.end))}. <span class="pil" aria-hidden="true">¶</span>${DATA.stats.offices} office holders are named, and ${DATA.stats.links} filiations between mother and daughter houses are recorded.`;
+$("#facts").innerHTML = L(LANG === "de" ? "home.facts" : '<span class="pil b" aria-hidden="true">¶</span>It holds {0} houses of four orders, founded and dissolved between {1} and {2}. <span class="pil" aria-hidden="true">¶</span>{3} office holders are named, and {4} filiations between mother and daughter houses are recorded.',
+  mine.length, Math.min(...dated.map(h => h.start)), Math.max(...dated.map(h => h.end)), DATA.stats.offices, DATA.stats.links);
 // Running head: letters alternately red and blue, as the rubricators wrote the book titles.
 $("#running").innerHTML = [...$("#running").textContent].map(ch => ch === " " ? " " : `<i>${ch}</i>`).join("");
-$("#housesSay").textContent = `All ${mine.length} records, with search by place or person.`;
+$("#housesSay").textContent = L(LANG === "de" ? "home.houses" : "All {0} records, with search by place or person.", mine.length);
 
 // The map door: Lower Saxony's outline with every house as a dot in its order's colour.
 function drawMap() {

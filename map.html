@@ -66,6 +66,11 @@ button, input, select { font: inherit; color: inherit; }
 .crumbs a { color: var(--accent); text-decoration: none; }
 .crumbs a:hover { color: var(--accent); }
 .crumbs a[aria-current] { color: var(--ink); }
+.lang { display: inline-flex; flex: none; border: 1px solid var(--rule); border-radius: 3px; overflow: hidden; }
+.lang button { border: 0; background: var(--paper); color: var(--muted); padding: 5px 8px; font: 600 12px/1 var(--body); letter-spacing: .04em; cursor: pointer; }
+.lang button + button { border-left: 1px solid var(--rule); }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--panel); }
+.crumbs { margin-right: auto; }
 
 /* The map fills the page; the finding aid floats over it as a glass panel, as in Cairometry. --inset-left is the
    strip the panel covers, so everything centred on the map is centred on the part that is actually visible. */
@@ -311,6 +316,161 @@ const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const oc = k => css("--o-" + k);
+// ---------- German / English ----------
+// The interface is written in English in the pages; in German mode it is translated in place. Fixed labels are
+// looked up by their English wording (DE), phrases inside composed lines by pattern (DE_PHRASES), and whole
+// blocks by key (data-t="..."). The reader's choice is kept in this browser; the first visit follows the
+// browser's language. Texts that come from the research sheet (histories, architecture, names) are shown as
+// they were entered, in English.
+const LANG_KEY = "orders-map:lang";
+let LANG = "en";
+try { const s = localStorage.getItem(LANG_KEY); LANG = s === "de" || s === "en" ? s : (navigator.language || "").toLowerCase().startsWith("de") ? "de" : "en"; } catch {}
+document.documentElement.lang = LANG;
+const DE = {
+  // names and vocabulary
+  "Order Houses of Lower Saxony": "Ordenshäuser in Niedersachsen", "Houses · Order Houses of Lower Saxony": "Häuser · Ordenshäuser in Niedersachsen",
+  "Hospitallers": "Johanniter", "Templars": "Templer", "Teutonic Order": "Deutscher Orden", "Carmelites": "Karmeliten",
+  "commandery": "Kommende", "double commandery": "Doppelkommende", "friary": "Kloster", "chapel": "Kapelle",
+  "male": "Männerkonvent", "double (brothers and sisters)": "Doppelkonvent (Brüder und Schwestern)",
+  "commander": "Komtur", "prior": "Prior", "provost": "Propst", "office holder": "Amtsträger", "Templar commander": "Templerkomtur",
+  "Hospitaller commander": "Johanniterkomtur", "commander or prior": "Komtur oder Prior", "head (chaplain)": "Vorsteher (Kaplan)",
+  "head of the farm": "Hofmeister", "secular cleric": "Weltgeistlicher",
+  "white eight-pointed cross on black": "weißes achtspitziges Kreuz auf Schwarz", "red cross pattée on white": "rotes Tatzenkreuz auf Weiß",
+  "black cross on white, gold rim": "schwarzes Kreuz auf Weiß, goldener Rand", "Mount Carmel with a cross": "Berg Karmel mit Kreuz",
+  // navigation
+  "Home": "Start", "All houses": "Alle Häuser", "← All houses": "← Alle Häuser", "← Home": "← Start", "Open the map": "Zur Karte", "Show on the map": "Auf der Karte zeigen",
+  "‹ Previous": "‹ Zurück", "Next ›": "Weiter ›", "Go to house": "Zum Haus", "Houses": "Häuser",
+  "Switch to the light theme": "Zum hellen Design wechseln", "Switch to the dark theme": "Zum dunklen Design wechseln",
+  // entry page
+  "The Map": "Die Karte", "The Houses": "Die Häuser", "Open the map →": "Zur Karte →", "Browse the houses →": "Zu den Häusern →",
+  "Where each house stood, by order and by year.": "Wo jedes Haus stand, nach Orden und nach Jahr.",
+  // map: panel
+  "Orders": "Orden", "Show all": "Alle zeigen", "House type": "Art des Hauses", "Only exact locations": "Nur genaue Lagen", "Show excluded entries": "Ausgeschlossene Einträge zeigen",
+  "Browse the list": "Liste öffnen", "Export": "Export", "Copy CSV": "CSV kopieren", "Copy Markdown": "Markdown kopieren", "Hide filters": "Filter ausblenden", "Show filters": "Filter einblenden",
+  "houses shown": "Häuser angezeigt", "orders": "Orden", "people in several houses": "Personen in mehreren Häusern",
+  // map: search
+  "Search a place, alias or office holder": "Ort, Namensform oder Amtsträger suchen", "Spelling-tolerant: try": "Schreibweisen-tolerant, z. B.", "or": "oder",
+  "No house matches these filters. Try another year or switch off the year filter.": "Kein Haus entspricht diesen Filtern. Anderes Jahr wählen oder den Jahresfilter ausschalten.",
+  "No house matches these filters. Clear the search or show more orders.": "Kein Haus entspricht diesen Filtern. Suche leeren oder weitere Orden einblenden.",
+  "No house matches. Clear the search or switch an order back on.": "Kein Haus gefunden. Suche leeren oder einen Orden wieder einschalten.",
+  // map: tools and key
+  "Show connections": "Verbindungen zeigen", "Show the links between mother and daughter houses": "Verbindungen zwischen Mutter- und Tochterhäusern zeigen",
+  "Landscape": "Landschaft", "Streets": "Straßen", "Satellite": "Satellit", "Relief, rivers and towns, without today's roads": "Relief, Flüsse und Orte, ohne heutige Straßen",
+  "Today's street map": "Heutige Straßenkarte", "Satellite imagery": "Satellitenbild",
+  "Symbols": "Zeichen", "Changed order": "Ordenswechsel", "Double community": "Doppelkonvent", "Approximate location": "Lage ungefähr", "Mother → daughter": "Mutter → Tochter",
+  "Click to zoom in": "Klicken zum Vergrößern", "Full record →": "Zum Eintrag →", "approximate location": "Lage ungefähr", "exact location": "Lage genau",
+  "excluded": "ausgeschlossen", "checked": "geprüft",
+  // map: time
+  "Show one year": "Ein Jahr zeigen", "All years": "Alle Jahre", "Year": "Jahr", "Time": "Zeit", "Type a year between 1150 and 1820": "Jahr zwischen 1150 und 1820 eingeben",
+  "One year earlier": "Ein Jahr früher", "One year later": "Ein Jahr später", "One year earlier (Shift: ten years)": "Ein Jahr früher (Umschalt: zehn Jahre)", "One year later (Shift: ten years)": "Ein Jahr später (Umschalt: zehn Jahre)",
+  "Step through the years and watch houses appear when they are founded and disappear when they are dissolved": "Durch die Jahre gehen und sehen, wie Häuser bei ihrer Gründung erscheinen und bei ihrer Aufhebung verschwinden",
+  "All houses are shown. Press Play, or drag the slider to a year.": "Alle Häuser werden gezeigt. Abspielen drücken oder den Regler auf ein Jahr ziehen.",
+  "houses active in": "Häuser bestanden im Jahr", "house active in": "Haus bestand im Jahr", "Playing ·": "Läuft ·",
+  "Templar order suppressed (1307–1312)": "Aufhebung des Templerordens (1307–1312)", "Reformation": "Reformation", "Secularisation": "Säkularisation",
+  // houses index
+  "Sort A–Z": "A–Z", "Sort by foundation": "Nach Gründung", "Sort by office holders": "Nach Amtsträgern", "Sort by": "Sortieren nach",
+  // house record
+  "History": "Geschichte", "No history recorded in the sheet.": "In der Tabelle ist keine Geschichte eingetragen.", "Architecture": "Architektur", "What survives": "Erhaltener Bestand",
+  "Name": "Name", "Role": "Amt", "Years": "Jahre", "No office holders recorded in the sheet.": "In der Tabelle sind keine Amtsträger eingetragen.",
+  "Order periods": "Ordenszugehörigkeit", "Place": "Ort", "Coordinates": "Koordinaten", "Location": "Lage", "Second location": "Zweite Lage", "Community": "Konvent",
+  "Diocese": "Bistum", "Province": "Ordensprovinz", "Patron saint": "Patrozinium", "Founder": "Stifter", "Dependencies": "Abhängigkeiten", "References": "Nachweise",
+  "Field": "Feld", "Sheet": "Tabelle", "Cleaned": "Bereinigt", "ID": "ID", "Order": "Orden", "Latitude": "Breite", "Longitude": "Länge", "Founded": "Gründung", "End": "Ende", "Mother house": "Mutterhaus",
+  ", pp. ": ", S. ", "exact": "genau", "approximate": "ungefähr", "(empty)": "(leer)", "dates unknown": "Daten unbekannt", "also at": "auch in",
+  "Hospitaller commandery in Westphalia, outside Lower Saxony. Named as mother house in three rows, spelled three ways.": "Johanniterkommende in Westfalen, außerhalb Niedersachsens. In drei Zeilen als Mutterhaus genannt, in drei Schreibweisen.",
+  "Carmelite house in Hesse, outside Lower Saxony.": "Karmeliterkloster in Hessen, außerhalb Niedersachsens.",
+  // blocks, by key
+  "home.rubric": "Hier beginnt das Verzeichnis der Häuser der vier Orden in Niedersachsen.",
+  "home.intro": '<span class="initial" aria-hidden="true">E</span><span style="position:absolute;left:-9999px">E</span>in Verzeichnis der Häuser der Johanniter, der Templer, des Deutschen Ordens und der Karmeliten in Niedersachsen, von den ersten Kommenden der 1170er Jahre bis zu den letzten Aufhebungen um 1820, erarbeitet aus dem <i>Niedersächsischen Klosterbuch</i>.',
+  "home.use": '<span class="pil" aria-hidden="true">¶</span>Die Karte zeigt, wo jedes Haus stand und wie sich die Orden über die Jahrhunderte ausbreiteten und zurückzogen. <span class="pil b" aria-hidden="true">¶</span>Unter den Häusern findet sich jeder Eintrag: seine Geschichte, seine Amtsträger, seine Mutter- und Tochterhäuser und seine Nachweise.',
+  "home.source": '<span class="pil" aria-hidden="true">¶</span>Die Einträge wurden aus dem <i>Klosterbuch</i> (Dolle 2012) zusammengestellt und mit Wikidata und der Germania Sacra verknüpft. Dies ist ein Prototyp; Daten und Lagen werden noch geprüft.',
+  "home.facts": '<span class="pil b" aria-hidden="true">¶</span>Es umfasst {0} Häuser von vier Orden, gegründet und aufgehoben zwischen {1} und {2}. <span class="pil" aria-hidden="true">¶</span>{3} Amtsträger sind genannt und {4} Filiationen zwischen Mutter- und Tochterhäusern verzeichnet.',
+  "home.houses": "Alle {0} Einträge, mit Suche nach Ort oder Person.",
+};
+// Phrases inside composed lines (never applied to the sheet's own texts).
+const DE_PHRASES = [
+  [/\bc\. (?=\d)/g, "ca. "], [/\bdates unknown\b/g, "Daten unbekannt"],
+  [/\bdouble commandery\b/g, "Doppelkommende"], [/\bcommandery\b/g, "Kommende"], [/\bfriary\b/g, "Kloster"], [/\bchapel\b/g, "Kapelle"],
+  [/\b(\d+) office holders?\b/g, "$1 Amtsträger"], [/\b1 linked house\b/g, "1 verbundenes Haus"], [/\b(\d+) linked houses\b/g, "$1 verbundene Häuser"],
+  [/\bmother → daughter house\b/g, "Mutter- → Tochterhaus"], [/\bmother house\b/g, "Mutterhaus"], [/\bdaughter house\b/g, "Tochterhaus"],
+  [/\bdates not recorded\b/g, "keine Daten überliefert"], [/\buncertain\b/g, "unsicher"], [/\bwritten “/g, "geschrieben “"],
+  [/\(outside Lower Saxony\)/g, "(außerhalb Niedersachsens)"], [/\boutside Lower Saxony\b/g, "außerhalb Niedersachsens"], [/^outside$/, "außerhalb"],
+  [/^of (\d+) houses$/, "von $1 Häusern"], [/^1 house$/, "1 Haus"], [/^(\d+) houses$/, "$1 Häuser"],
+  [/^Office holders( · \d+)?$/, "Amtsträger$1"], [/^office holder: /, "Amtsträger: "], [/^also written /, "auch geschrieben "],
+  [/^As written in the sheet · row /, "Wie in der Tabelle eingetragen · Zeile "], [/^merged from rows /, "vereint aus den Zeilen "],
+  [/^Klosterbuch dating: /, "Datierung im Klosterbuch: "], [/, pp\. /, ", S. "], [/^Image (\d+)$/, "Bild $1"],
+  [/^Play (\d+)–(\d+)$/, "Abspielen $1–$2"], [/^Pause at (\d+)$/, "Pause bei $1"], [/^Play on from (\d+)$/, "Weiter ab $1"], [/^Replay from (\d+)$/, "Neu ab $1"],
+  [/^No house matches “(.*)”\.$/, "Kein Haus passt zu “$1”."], [/^No (.+) house in (\d+)$/, "Kein Haus ($1) im Jahr $2"],
+  [/^(\d+) houses: (.*)\. Zoom in\.$/, "$1 Häuser: $2. Vergrößern."], [/^Lower Saxony with the (\d+) houses marked$/, "Niedersachsen mit den $1 Häusern"],
+  [/^(.*) · Order Houses of Lower Saxony$/, "$1 · Ordenshäuser in Niedersachsen"],
+  [/^Marked “fake” in the sheet: research agrees there was no Templar commandery in Hildesheim\.(.*)$/, "In der Tabelle als „fake“ markiert: Nach dem Stand der Forschung gab es in Hildesheim keine Templerkommende. Der Eintrag bleibt mit dem Status „ausgeschlossen“ erhalten und erscheint nicht auf der öffentlichen Karte."],
+];
+// L("English text", a, b): the text in the current language, with {0}, {1} … filled in. A key that is not
+// English wording (e.g. "home.facts") needs its English as the last-resort text: L(key, ...).or(english).
+function L(s, ...args) {
+  let out = LANG === "de" && DE[s] != null ? DE[s] : s;
+  args.forEach((a, i) => { out = out.replaceAll(`{${i}}`, a); });
+  return out;
+}
+function deText(raw, phrases) {
+  const t = raw.trim();
+  if (!t) return raw;
+  if (DE[t] != null) return raw.replace(t, DE[t]);
+  if (!phrases) return raw;
+  let out = t;
+  for (const [re, to] of DE_PHRASES) out = out.replace(re, to);
+  return out === t ? raw : raw.replace(t, out);
+}
+const SHEET_TEXT = ".prose, .lede, td.was, td.now, .holders td:first-child, [data-sheet]";   // entered by the historians: left alone
+function translateDom(root) {
+  if (LANG !== "de" || !root) return;
+  const el = root.nodeType === 1 ? root : root.parentElement;
+  if (!el || el.closest("script, style, .maplibregl-ctrl-attrib")) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes = root.nodeType === 3 ? [root] : [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  for (const n of nodes) {
+    const host = n.parentElement;
+    if (!host || host.closest("script, style, .maplibregl-ctrl-attrib")) continue;
+    if (host.closest(SHEET_TEXT)) continue;
+    const next = deText(n.nodeValue, n.nodeValue.length < 140);
+    if (next !== n.nodeValue) n.nodeValue = next;
+  }
+  const els = root.nodeType === 1 ? [root, ...root.querySelectorAll("[title], [placeholder], [aria-label]")] : [];
+  for (const e of els) for (const a of ["title", "placeholder", "aria-label"]) {
+    const v = e.getAttribute?.(a);
+    if (v) { const next = deText(v, true); if (next !== v) e.setAttribute(a, next); }
+  }
+}
+function initLang(anchor) {
+  // Blocks translated as a whole.
+  if (LANG === "de") document.querySelectorAll("[data-t]").forEach(e => { if (DE[e.dataset.t] != null) e.innerHTML = DE[e.dataset.t]; });
+  document.querySelectorAll("[lang='en']").forEach(e => { e.lang = LANG; });
+  if (LANG === "de") {
+    document.title = deText(document.title, true);
+    translateDom(document.body);
+    new MutationObserver(list => {
+      for (const m of list) {
+        if (m.type === "characterData") translateDom(m.target);
+        else if (m.type === "attributes") translateDom(m.target);
+        else m.addedNodes.forEach(n => translateDom(n));
+      }
+    }).observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ["title", "placeholder", "aria-label"] });
+    new MutationObserver(() => { const t = deText(document.title, true); if (t !== document.title) document.title = t; }).observe(document.querySelector("title"), { childList: true });
+  }
+  // The switch itself, placed beside the theme button.
+  const box = document.createElement("span");
+  box.className = "lang"; box.setAttribute("role", "group"); box.setAttribute("aria-label", "Sprache / Language");
+  box.innerHTML = [["de", "DE", "Deutsch"], ["en", "EN", "English"]].map(([id, label, title]) => `<button type="button" data-l="${id}" aria-pressed="${id === LANG}" title="${title}" data-sheet>${label}</button>`).join("");
+  box.onclick = e => {
+    const b = e.target.closest("[data-l]");
+    if (!b || b.dataset.l === LANG) return;
+    try { localStorage.setItem(LANG_KEY, b.dataset.l); } catch {}
+    location.reload();
+  };
+  anchor.insertAdjacentElement("beforebegin", box);
+}
+
+if (LANG === "de") for (const k of Object.keys(DATA.orders)) DATA.orders[k] = L(DATA.orders[k]);
 const houses = DATA.houses;
 const byId = Object.fromEntries(houses.map(h => [h.id, h]));
 const personById = Object.fromEntries(DATA.persons.map(p => [p.id, p]));
@@ -393,6 +553,7 @@ function initThemeToggle(btn) {
   };
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paint);
   paint();
+  initLang(btn);
 }
 
 // ---------- spelling-tolerant search ----------
