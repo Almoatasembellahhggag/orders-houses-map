@@ -138,12 +138,16 @@ h1 { margin: 0; font: 400 clamp(26px, 4.4vw, 44px)/1.25 var(--display); letter-s
 .go { font: 400 17px var(--display); color: var(--accent); text-align: center; }
 .bay:hover .go, .bay:focus-visible .go { text-decoration: underline; }
 .bay:hover h2, .bay:focus-visible h2 { color: var(--rubric); }
-.orders { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; border-top: 1px solid var(--rule); padding-top: 22px; }
+.orders { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; border-top: 1px solid var(--rule); padding-top: 22px; justify-items: center; }
 .ord { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; align-items: center; }
 .ord .emblem { grid-row: span 2; }
 .ord b { font: 400 18px/1.1 var(--display); }
 .ord span { font-size: 13px; color: var(--muted); }
-.credit { margin: 0; font-size: 13px; line-height: 1.5; color: var(--muted); max-width: 86ch; }
+/* the colophon: where a scribe signs off */
+.colophon { border-top: 1px solid var(--rule); padding-top: 22px; display: grid; gap: 8px; justify-items: center; text-align: center; }
+.colophon .mark { color: var(--rubric); font-size: 17px; line-height: 1; }
+.colophon .note { margin: 0; font: italic 400 17.5px/1.55 var(--display); max-width: 60ch; text-wrap: balance; }
+.colophon .small { margin: 0; font-size: 13px; line-height: 1.5; color: var(--muted); max-width: 70ch; text-wrap: balance; }
 @media (max-width: 700px) {
   .bays { grid-template-columns: 34px minmax(0, 1fr) 34px; --pw: 34px; row-gap: 6px; }
   .pillar.l { grid-column: 1; grid-row: 1 / span 2; } .pillar.r { grid-column: 3; grid-row: 1 / span 2; }
@@ -191,7 +195,11 @@ h1 { margin: 0; font: 400 clamp(26px, 4.4vw, 44px)/1.25 var(--display); letter-s
       </nav>
     </div>
     <section class="orders" id="orders" aria-label="Orders"></section>
-    <p class="credit"><span data-t="home.plate">The plan of this page follows the “Incipit argumentum” page of the Lorsch Gospels (c. 810; Vatican Library, Pal. lat. 50): two columns of text between painted pillars.</span> <span data-t="home.source2">The entries were compiled from the <i>Klosterbuch</i> (Dolle 2012) and are linked to Wikidata and Germania Sacra. This is a prototype; dates and locations are still being checked.</span></p>
+    <footer class="colophon">
+      <div class="mark" aria-hidden="true">✠</div>
+      <p class="note" data-t="home.plate">The plan of this page follows the “Incipit argumentum” page of the Lorsch Gospels, written at Lorsch Abbey around 810. Lorsch is one of my favourite places around here.</p>
+      <p class="small" data-t="home.source2">The entries were compiled from the <i>Klosterbuch</i> (Dolle 2012) and are linked to Wikidata and Germania Sacra. This is a prototype; dates and locations are still being checked.</p>
+    </footer>
   </article>
 </main>
 <script>
@@ -265,7 +273,7 @@ const DE = {
   "Hospitaller commandery in Westphalia, outside Lower Saxony. Named as mother house in three rows, spelled three ways.": "Johanniterkommende in Westfalen, außerhalb Niedersachsens. In drei Zeilen als Mutterhaus genannt, in drei Schreibweisen.",
   "Carmelite house in Hesse, outside Lower Saxony.": "Karmeliterkloster in Hessen, außerhalb Niedersachsens.",
   // blocks, by key
-  "home.plate": "Der Aufbau dieser Seite folgt der Seite „Incipit argumentum“ des Lorscher Evangeliars (um 810; Biblioteca Apostolica Vaticana, Pal. lat. 50): zwei Textspalten zwischen gemalten Säulen.",
+  "home.plate": "Der Aufbau dieser Seite folgt der Seite „Incipit argumentum“ des Lorscher Evangeliars, das um 810 im Kloster Lorsch geschrieben wurde. Lorsch ist einer meiner Lieblingsorte hier in der Gegend.",
   "home.intro2": "Ein Verzeichnis der Häuser der Johanniter, der Templer, des Deutschen Ordens und der Karmeliten in Niedersachsen, von den ersten Kommenden der 1170er Jahre bis zu den letzten Aufhebungen um 1820, erarbeitet aus dem <i>Niedersächsischen Klosterbuch</i>.",
   "home.source2": "Die Einträge wurden aus dem <i>Klosterbuch</i> (Dolle 2012) zusammengestellt und mit Wikidata und der Germania Sacra verknüpft. Dies ist ein Prototyp; Daten und Lagen werden noch geprüft.",
   "home.rubric": "Hier beginnt das Verzeichnis der Häuser der vier Orden in Niedersachsen.",
