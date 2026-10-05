@@ -72,7 +72,8 @@ button, input, select { font: inherit; color: inherit; }
 h1 { margin: 0; font: 600 23px/1.1 var(--display); text-wrap: balance; }
 .tally { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--muted); }
 .tally b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
-.searchbar { position: absolute; top: 10px; left: calc(50% + var(--inset-left) / 2); translate: -50% 0; width: min(440px, calc(100% - var(--inset-left) - 350px)); z-index: 650;
+/* Centred on the page; on a narrow window they slide right just far enough to clear the floating panel. */
+.searchbar { --w: min(440px, calc(100% - var(--inset-left) - 232px)); position: absolute; top: 10px; left: max(50%, calc(var(--inset-left) + var(--w) / 2)); translate: -50% 0; width: var(--w); z-index: 650;
   background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); }
 .search { position: relative; display: block; }
 .search input { width: 100%; padding: 11px 14px 11px 38px; border: 0; border-radius: 10px; background: transparent; font-size: 15px; }
@@ -149,13 +150,14 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 
 /* ---------- map ---------- */
 .mapwrap { position: absolute; inset: 0; }
-.maplibregl-ctrl-top-left { left: calc(var(--aid-w) + var(--aid-gap)) !important; }
+.maplibregl-ctrl-top-right .maplibregl-ctrl { margin: 10px 10px 0 0; }
 #map { position: absolute; inset: 0; background: var(--sea); }
 .maplibregl-map { font: 13px var(--body); }
 .maplibregl-ctrl-group { background: var(--panel) !important; border: 1px solid var(--rule); box-shadow: var(--shadow) !important; }
 .maplibregl-ctrl-group button + button { border-top-color: var(--rule) !important; }
 .maplibregl-ctrl-icon { filter: var(--ctrl-filter); }
 .map-tools { display: grid; overflow: hidden; }
+.maplibregl-ctrl-top-right { display: flex; flex-direction: column; align-items: flex-end; }
 .basemap-btn { width: 100% !important; height: 32px !important; padding: 0 12px 0 10px !important; font: 600 12.5px var(--body) !important; color: var(--ink) !important;
   display: flex !important; align-items: center; gap: 8px; text-align: left; white-space: nowrap; }
 .basemap-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; flex: none; }
@@ -173,6 +175,10 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .maplibregl-popup-anchor-top .maplibregl-popup-tip { border-bottom-color: var(--rule); }
 .maplibregl-popup { pointer-events: none; }
 .hmark { border: 0; padding: 0; background: none; cursor: pointer; width: 34px; height: 34px; display: block; }
+.cluster { width: var(--d); height: var(--d); padding: 0; border: 0; border-radius: 50%; display: grid; place-items: center; cursor: pointer;
+  box-shadow: 0 0 0 2px var(--panel), 0 1px 4px 2px rgba(20, 30, 35, .3); transition: transform .15s; }
+.cluster:hover { transform: scale(1.08); }
+.cluster span { width: calc(var(--d) - 10px); height: calc(var(--d) - 10px); border-radius: 50%; background: var(--panel); color: var(--ink); font: 600 13px/1 var(--body); display: grid; place-items: center; font-variant-numeric: tabular-nums; }
 .arrow { pointer-events: none; width: 11px; height: 11px; }
 .arrow svg { display: block; }
 .tt b { font-weight: 600; } .tt span { color: var(--muted); font-size: 12px; }
@@ -180,7 +186,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .hmark.sel svg { transform: scale(1.3); }
 .region-label { font: italic 500 15px var(--display); color: var(--region-edge); letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; pointer-events: none; }
 .sea-label { font: italic 500 14px var(--display); color: var(--accent); opacity: .7; letter-spacing: .2em; white-space: nowrap; pointer-events: none; }
-.key { position: absolute; right: 10px; top: 12px; z-index: 500; background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; font-size: 12px; color: var(--muted); display: grid; gap: 4px; box-shadow: var(--shadow); }
+.key { position: absolute; right: 10px; bottom: 34px; z-index: 500; background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; font-size: 12px; color: var(--muted); display: grid; gap: 4px; box-shadow: var(--shadow); }
 .key #key { display: grid; gap: 4px; margin-top: 6px; }
 .key summary { cursor: pointer; font-weight: 600; color: var(--ink); font-size: 12.5px; }
 .key:not([open]) { padding-block: 6px; }
@@ -202,7 +208,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .card .btn.primary { justify-content: center; padding: 7px 11px; font-weight: 600; }
 .toast { position: absolute; left: 50%; bottom: 24px; translate: -50% 0; z-index: 900; background: var(--ink); color: var(--panel); padding: 8px 14px; border-radius: 6px; font-size: 14px; box-shadow: var(--shadow); }
 .mobile-tabs { display: none; }
-.timebar { position: absolute; bottom: 30px; left: calc(50% + var(--inset-left) / 2); translate: -50% 0; width: min(520px, calc(100% - var(--inset-left) - 40px)); z-index: 600;
+.timebar { --w: min(520px, calc(100% - var(--inset-left) - 24px)); position: absolute; bottom: 30px; left: max(50%, calc(var(--inset-left) + var(--w) / 2)); translate: -50% 0; width: var(--w); z-index: 600;
   background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--rule); border-radius: 8px; box-shadow: var(--shadow);
   padding: 10px 14px 10px; display: grid; gap: 5px; border-radius: 10px; }
 .timebar .year { font-size: 22px; }
@@ -218,12 +224,12 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
   .app { display: grid; grid-template-rows: auto 1fr; --inset-left: 0px; }
   .aid { position: static; width: auto; max-height: 46vh; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; box-shadow: none; background: var(--panel); backdrop-filter: none; }
   .mapwrap { position: relative; inset: auto; min-height: 0; }
-  .maplibregl-ctrl-top-left { left: 0 !important; }
+  .maplibregl-ctrl-top-right { top: 46px; }
   .aid-head { padding: 12px 16px 10px; }
   h1 { font-size: 21px; }
   .block { padding: 12px 16px; }
   .aid.collapsed .aid-body, .aid.collapsed .aid-foot { display: none; }
-  .searchbar { left: 52px; right: 8px; width: auto; translate: none; top: 8px; }
+  .searchbar { left: 8px; right: 8px; width: auto; translate: none; top: 8px; }
   .mobile-tabs { display: flex; gap: 8px; }
   .key { display: none; }
   .timebar { left: 8px; right: 8px; width: auto; translate: none; bottom: 8px; padding: 8px 10px; }
@@ -573,7 +579,7 @@ const isDark = () => { const t = document.documentElement.dataset.theme; return 
 const narrow = () => matchMedia("(max-width: 760px)").matches;
 // The strip of the map hidden under the floating panel, and the padding that keeps the houses clear of it.
 const insetLeft = () => narrow() ? 0 : $("#aid").offsetWidth + 24;
-const recPad = () => narrow() ? { top: 16, bottom: 16, left: 16, right: 16 } : { top: 70, bottom: 40, left: insetLeft() + 24, right: 32 };
+const recPad = () => narrow() ? { top: 16, bottom: 16, left: 16, right: 16 } : { top: 70, bottom: 40, left: insetLeft() + 24, right: 60 };
 const HOME = [[6.9, 51.45], [11.5, 53.65]];
 let map = null, vendorBasemap = false, overlaysReady = false, basemap = "landscape";
 try { const saved = localStorage.getItem("orders-map:basemap"); if (["landscape", "streets", "satellite"].includes(saved)) basemap = saved; } catch {}
@@ -624,6 +630,7 @@ function linkFeatures(visIds) {
     if (state.useYear && s && (state.year < s || (e && state.year > e))) continue;
     const M = byId[l.mother], D = byId[l.daughter];
     const a = M.at || [M.loc.lon, M.loc.lat], b = D.at || [D.loc.lon, D.loc.lat];
+    if (a === b) continue;                   // both houses sit in the same group at this zoom
     const coords = arc(a, b), k = Math.cos(a[1] * Math.PI / 180);
     const cum = coords.reduce((acc, c, i) => (acc.push(i ? acc[i - 1] + Math.hypot((c[0] - coords[i - 1][0]) * k, c[1] - coords[i - 1][1]) : 0), acc), []);
     out.push({ key: l.mother + ">" + l.daughter, cum, type: "Feature", properties: { color: hot ? css("--accent") : oc(D.orders[0]), hot, uncertain: !!l.uncertain,
@@ -648,6 +655,7 @@ function addOverlayLayers() {
   map.on("mousemove", "links-hit", e => { map.getCanvas().style.cursor = "default"; showTip(e.lngLat, e.features[0].properties.tip); });
   map.on("mouseleave", "links-hit", hideTip);
   map.on("zoom", placeArrows);
+  map.on("zoomend", render);               // groups depend on the zoom level
 }
 // One arrowhead per connection, just outside the daughter house's emblem. Its place along the curve is
 // measured in screen pixels, so it is re-set while zooming and always sits on the line. While a line is
@@ -701,6 +709,47 @@ function drawLinks() {
   cancelAnimationFrame(linkRaf);
   linkRaf = active ? requestAnimationFrame(drawLinks) : null;
 }
+// Houses whose emblems would overlap at the current zoom are shown as one group: a disc with the number of
+// houses, ringed in the colours of their orders. Zooming in splits a group; clicking it zooms to its houses.
+// The open house and the houses outside Lower Saxony always stand alone.
+const GROUP_PX = 30;
+function groupHouses(hs) {
+  const px = new Map(hs.map(h => [h, map.project(h.pos)]));
+  const free = new Set(hs.filter(h => h.id !== state.sel && !h.external));
+  const out = hs.filter(h => !free.has(h)).map(h => [h]);
+  for (const h of hs) {
+    if (!free.has(h)) continue;
+    free.delete(h);
+    const g = [h], p = px.get(h);
+    for (const o of [...free]) { const q = px.get(o); if (Math.hypot(p.x - q.x, p.y - q.y) < GROUP_PX) { g.push(o); free.delete(o); } }
+    out.push(g);
+  }
+  return out;
+}
+function groupMarker(g) {
+  const at = [g.reduce((t, h) => t + h.pos[0], 0) / g.length, g.reduce((t, h) => t + h.pos[1], 0) / g.length];
+  g.forEach(h => { h.at = at; });
+  // Ring: one slice per house, in its order's colour (its order in the chosen year, when a year is set).
+  const orders = g.map(h => (state.useYear && orderAt(h, state.year)?.order) || h.orders.at(-1));
+  const n = ORDER_KEYS.map(k => [k, orders.filter(o => o === k).length]).filter(([, c]) => c);
+  let acc = 0;
+  const ring = n.map(([k, c]) => { const from = acc / g.length * 360; acc += c; return `${oc(k)} ${from}deg ${acc / g.length * 360}deg`; }).join(", ");
+  const el = document.createElement("button");
+  el.className = "cluster";
+  el.style.setProperty("--d", Math.min(48, 32 + g.length * 1.5) + "px");
+  el.style.background = `conic-gradient(${ring})`;
+  const names = g.map(h => h.label).sort((a, b) => a.localeCompare(b, "de"));
+  el.setAttribute("aria-label", `${g.length} houses: ${names.join(", ")}. Zoom in.`);
+  el.innerHTML = `<span>${g.length}</span>`;
+  el.addEventListener("mouseenter", () => showTip(at, `<div class="tt"><b>${g.length} houses</b><br><span>${esc(names.slice(0, 6).join(", "))}${names.length > 6 ? " …" : ""}<br>Click to zoom in</span></div>`));
+  el.addEventListener("mouseleave", hideTip);
+  el.addEventListener("click", e => {
+    e.stopPropagation(); hideTip();
+    const b = g.reduce((b, h) => b.extend(h.pos), new maplibregl.LngLatBounds(g[0].pos, g[0].pos));
+    map.fitBounds(b, { padding: narrow() ? 60 : { top: 110, bottom: 210, left: insetLeft() + 70, right: 90 }, maxZoom: 13, duration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700 });
+  });
+  return new maplibregl.Marker({ element: el }).setLngLat(at).addTo(map);
+}
 function render() {
   const vis = houses.map(h => [h, visible(h)]).filter(([, v]) => v.ok);
   const visIds = new Set(vis.map(([h]) => h.id));
@@ -709,19 +758,20 @@ function render() {
     // Houses that share a spot (two orders in one town) are nudged apart so both stay clickable.
     const spots = {};
     for (const [h] of vis) (spots[h.loc.lat.toFixed(3) + "," + h.loc.lon.toFixed(3)] ||= []).push(h);
-    for (const group of Object.values(spots)) group.forEach((h, i) => {
-      const off = group.length > 1 ? (i - (group.length - 1) / 2) * .012 : 0;
+    for (const group of Object.values(spots)) group.forEach((h, i) => { h.pos = [h.loc.lon + (group.length > 1 ? (i - (group.length - 1) / 2) * .012 : 0), h.loc.lat]; });
+    for (const g of groupHouses(vis.map(([h]) => h))) {
+      if (g.length > 1) { markers.push(groupMarker(g)); continue; }
+      const h = g[0], at = h.at = h.pos;
       const el = document.createElement("button");
       el.className = "hmark" + (state.sel === h.id ? " sel" : "");
       el.setAttribute("aria-label", h.label);
       el.innerHTML = markerSvg(h, state.year);
       el.style.zIndex = state.sel === h.id ? 3 : h.external ? 0 : 1;
-      const at = h.at = [h.loc.lon + off, h.loc.lat];
       el.addEventListener("mouseenter", () => showTip(at, tip(h)));
       el.addEventListener("mouseleave", hideTip);
       el.addEventListener("click", e => { e.stopPropagation(); hideTip(); select(h.id, false); });
       markers.push(new maplibregl.Marker({ element: el }).setLngLat(at).addTo(map));
-    });
+    }
     linkFeats = linkFeatures(visIds);
     // Lines that were not on screen before draw themselves from the mother house to the daughter,
     // one after another; lines already shown stay as they are.
@@ -764,10 +814,10 @@ async function startMap() {
   map.touchZoomRotate.disableRotation();
   // A click on the map itself, away from any house or the card, closes the open card. Dragging does not.
   map.on("click", e => {
-    if (e.originalEvent?.target?.closest?.(".hmark, .maplibregl-popup")) return;
+    if (e.originalEvent?.target?.closest?.(".hmark, .cluster, .maplibregl-popup")) return;
     if (state.sel || card().isOpen()) select(null);
   });
-  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-left");
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
   map.addControl(new maplibregl.AttributionControl({ compact: true,
     customAttribution: (vendorBasemap ? "" : "Outline: Natural Earth, deutschlandGeoJSON · ") + "Data: Niedersächsisches Klosterbuch, sheet 13" }), "bottom-right");
   if (!vendorBasemap) ["Lower Saxony|9.55|52.75|region-label", "North Sea|7.2|54.05|sea-label"].map(s => s.split("|")).forEach(([t, lo, la, c]) => {
@@ -792,7 +842,7 @@ async function startMap() {
         });
         box.append(seg);
       }
-      return box; }, onRemove() {} }, "top-left");
+      return box; }, onRemove() {} }, "top-right");
   map.once("style.load", () => {
     if (vendorBasemap) { curateBasemap(); addBasemapExtras(); applyBasemapTheme(isDark()); setBasemap(basemap); }
     addOverlayLayers();
@@ -993,7 +1043,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && state.sel)
 // Any click outside the open card closes it: the filters, the time bar, the search box, the list header and so
 // on. Left alone are clicks that open a house (markers, list rows, search results), clicks on the map itself
 // (the map's own handler closes the card there, but not after a drag), and zooming or switching to satellite.
-const KEEPS_CARD = ".maplibregl-popup, .hmark, .item, #results, .maplibregl-canvas, .maplibregl-ctrl-zoom-in, .maplibregl-ctrl-zoom-out, .maplibregl-ctrl-attrib, .bm-seg, .theme-btn";
+const KEEPS_CARD = ".maplibregl-popup, .hmark, .cluster, .item, #results, .maplibregl-canvas, .maplibregl-ctrl-zoom-in, .maplibregl-ctrl-zoom-out, .maplibregl-ctrl-attrib, .bm-seg, .theme-btn";
 document.addEventListener("click", e => {
   if (!state.sel && !card.p?.isOpen()) return;
   if (e.target.closest?.(KEEPS_CARD)) return;
