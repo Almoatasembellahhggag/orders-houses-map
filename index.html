@@ -63,7 +63,7 @@ button, input, select { font: inherit; color: inherit; }
 h1 { margin: 0; font: 600 25px/1.1 var(--display); text-wrap: balance; }
 .tally { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--muted); }
 .tally b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
-.searchbar { position: absolute; top: 12px; left: 50%; translate: -50% 0; width: min(440px, calc(100% - 150px)); z-index: 650;
+.searchbar { position: absolute; top: 10px; left: 50%; translate: -50% 0; width: min(440px, calc(100% - 150px)); z-index: 650;
   background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); }
 .search { position: relative; display: block; }
 .search input { width: 100%; padding: 11px 14px 11px 38px; border: 0; border-radius: 10px; background: transparent; font-size: 15px; }
@@ -90,8 +90,8 @@ h1 { margin: 0; font: 600 25px/1.1 var(--display); text-wrap: balance; }
 .order[aria-pressed="false"] { opacity: .45; }
 .order[aria-pressed="false"] .emblem { filter: grayscale(1); }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { border: 1px solid var(--rule); background: var(--paper); border-radius: 999px; padding: 3px 10px; font-size: 13px; cursor: pointer; }
-.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--ink); }
+.chip { border: 1px solid var(--rule); background: transparent; border-radius: 999px; padding: 3px 11px; font-size: 13px; cursor: pointer; color: var(--muted); text-decoration: line-through; text-decoration-color: var(--rule); }
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: transparent; color: var(--ink); text-decoration: none; }
 
 /* time */
 .year-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
@@ -135,10 +135,12 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .maplibregl-ctrl-group { background: var(--panel) !important; border: 1px solid var(--rule); box-shadow: var(--shadow) !important; }
 .maplibregl-ctrl-group button + button { border-top-color: var(--rule) !important; }
 .maplibregl-ctrl-icon { filter: var(--ctrl-filter); }
-.basemap-btn { width: auto !important; padding: 0 10px !important; font: 600 12px var(--body) !important; color: var(--ink) !important; }
-.conn-btn { display: inline-flex !important; align-items: center; gap: 6px; }
-.conn-btn svg { width: 14px; height: 14px; fill: currentColor; stroke: currentColor; }
-.conn-btn[aria-pressed="true"] { background: var(--accent) !important; color: var(--panel) !important; border-radius: 3px; }
+.map-tools { display: grid; overflow: hidden; }
+.basemap-btn { width: 100% !important; height: 32px !important; padding: 0 12px 0 10px !important; font: 600 12.5px var(--body) !important; color: var(--ink) !important;
+  display: flex !important; align-items: center; gap: 8px; text-align: left; white-space: nowrap; }
+.basemap-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; flex: none; }
+.conn-btn svg { fill: currentColor; }
+.conn-btn[aria-pressed="true"] { background: var(--accent) !important; color: var(--panel) !important; }
 .maplibregl-ctrl-attrib { background: color-mix(in srgb, var(--panel) 85%, transparent) !important; color: var(--muted); font-size: 11px; }
 .maplibregl-ctrl-attrib a { color: var(--muted) !important; }
 .maplibregl-ctrl-attrib-button { filter: var(--ctrl-filter); }
@@ -150,8 +152,8 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .arrow { pointer-events: none; width: 11px; height: 11px; }
 .arrow svg { display: block; }
 .tt b { font-weight: 600; } .tt span { color: var(--muted); font-size: 12px; }
-.hmark svg { transition: transform .15s; overflow: visible; display: block; }
-.hmark.sel svg { transform: scale(1.45); }
+.hmark svg { transition: transform .15s; overflow: visible; display: block; filter: drop-shadow(0 1px 1.5px rgba(20, 30, 35, .35)); }
+.hmark.sel svg { transform: scale(1.3); }
 .region-label { font: italic 500 15px var(--display); color: var(--region-edge); letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; pointer-events: none; }
 .sea-label { font: italic 500 14px var(--display); color: var(--accent); opacity: .7; letter-spacing: .2em; white-space: nowrap; pointer-events: none; }
 .key { position: absolute; right: 10px; top: 12px; z-index: 500; background: color-mix(in srgb, var(--panel) 92%, transparent); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; font-size: 12px; color: var(--muted); display: grid; gap: 4px; box-shadow: var(--shadow); }
@@ -176,10 +178,11 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .card .btn.primary { justify-content: center; padding: 7px 11px; font-weight: 600; }
 .toast { position: absolute; left: 50%; bottom: 24px; translate: -50% 0; z-index: 900; background: var(--ink); color: var(--panel); padding: 8px 14px; border-radius: 6px; font-size: 14px; box-shadow: var(--shadow); }
 .mobile-tabs { display: none; }
-.timebar { position: absolute; bottom: 30px; left: 50%; translate: -50% 0; width: min(560px, calc(100% - 40px)); z-index: 600;
+.timebar { position: absolute; bottom: 30px; left: 50%; translate: -50% 0; width: min(520px, calc(100% - 40px)); z-index: 600;
   background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--rule); border-radius: 8px; box-shadow: var(--shadow);
-  padding: 10px 14px 12px; display: grid; gap: 6px; transition: left .2s; }
-.timebar .year { font-size: 24px; }
+  padding: 10px 14px 10px; display: grid; gap: 5px; border-radius: 10px; }
+.timebar .year { font-size: 22px; }
+.timebar .hist { height: 38px; }
 .play { font-weight: 600; min-width: 132px; justify-content: center; }
 .play svg { width: 11px; height: 11px; fill: currentColor; }
 .play[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--panel); }
@@ -232,7 +235,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
   </aside>
   <main class="mapwrap">
     <div id="map" role="application" aria-label="Map of order houses"></div>
-    <details class="key" id="keyBox" open><summary>Map key</summary><div id="key"></div></details>
+    <details class="key" id="keyBox" open><summary>Symbols</summary><div id="key"></div></details>
     <div class="searchbar" id="searchbar">
       <label class="search" for="q">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -390,48 +393,55 @@ const BASEMAP_STYLE = "https://tiles.openfreemap.org/styles/liberty";
 const ESRI_TILES = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
 const SATELLITE = "esri-satellite";
 const CLUTTER_SOURCE_LAYERS = new Set(["poi", "aeroway", "building"]);
-const CLUTTER_IDS = /^(poi_|airport|landuse_(hospital|school|pitch|track)|aeroway|road_shield_us|highway-shield-us)/;
+const CLUTTER_IDS = /^(poi_|airport|landuse_(hospital|school|pitch|track)|aeroway|road_shield|highway-shield)/;
 const NIGHT = { land: "#1b1b1b", residential: "#202020", water: "#16202c", waterLabel: "#5a7f9c", green: "#182619",
   cemetery: "#1d2a20", building: "#262626", casing: "#121212", roadMinor: "#2a2a2a", road: "#333333", roadMajor: "#3d3a34",
   rail: "#2b2b2b", boundary: "#4a4a4a", label: "#9aa0a6", labelHalo: "#101010", roadLabel: "#c8a96e" };
 const COLOR_PROP = { background: "background-color", fill: "fill-color", line: "line-color", "fill-extrusion": "fill-extrusion-color" };
-function nightColor(layer) {
+// The day palette quietens the vendor's colours the same way: pale land and water, white roads, soft
+// yellow motorways, so the order emblems are the strongest marks on the map.
+const DAY = { land: "#f4f2ed", residential: "#efede7", water: "#c3d9e6", waterLabel: "#5b7f97", green: "#dfead6",
+  cemetery: "#dbe6d3", building: "#e6e3dc", casing: "#dedad1", roadMinor: "#ffffff", road: "#ffffff", roadMajor: "#f4e6b6",
+  rail: "#d3cec4", boundary: "#b9b4ab", label: "#4b5459", labelHalo: "#ffffff", roadLabel: "#857d6e" };
+function paletteColor(layer, P) {
   const id = layer.id;
-  if (layer.type === "background") return NIGHT.land;
-  if (/water/.test(id)) return NIGHT.water;
-  if (/park|wood|grass|wetland/.test(id)) return NIGHT.green;
-  if (/cemetery/.test(id)) return NIGHT.cemetery;
-  if (/residential|natural_earth|landcover_(sand|ice)/.test(id)) return NIGHT.residential;
-  if (/building/.test(id)) return NIGHT.building;
-  if (/casing/.test(id)) return NIGHT.casing;
-  if (/rail/.test(id)) return NIGHT.rail;
-  if (/boundary/.test(id)) return NIGHT.boundary;
-  if (/motorway|trunk|primary/.test(id)) return NIGHT.roadMajor;
-  if (/minor|service|track|path|pedestrian/.test(id)) return NIGHT.roadMinor;
-  if (/road|highway|street|link|tunnel|bridge/.test(id)) return NIGHT.road;
+  if (layer.type === "background") return P.land;
+  if (/water/.test(id)) return P.water;
+  if (/park|wood|grass|wetland/.test(id)) return P.green;
+  if (/cemetery/.test(id)) return P.cemetery;
+  if (/residential|natural_earth|landcover_(sand|ice)/.test(id)) return P.residential;
+  if (/building/.test(id)) return P.building;
+  if (/casing/.test(id)) return P.casing;
+  if (/rail/.test(id)) return P.rail;
+  if (/boundary/.test(id)) return P.boundary;
+  if (/motorway|trunk|primary/.test(id)) return P.roadMajor;
+  if (/minor|service|track|path|pedestrian/.test(id)) return P.roadMinor;
+  if (/road|highway|street|link|tunnel|bridge/.test(id)) return P.road;
   return null;
 }
-const nightLabelColor = id => /highway.name|highway.shield|road_shield/.test(id) ? NIGHT.roadLabel : /water/.test(id) ? NIGHT.waterLabel : NIGHT.label;
-const hiddenIds = new Set(), originalPaint = new Map();
+const labelColor = (id, P) => /highway.name|highway.shield|road_shield/.test(id) ? P.roadLabel : /water/.test(id) ? P.waterLabel : P.label;
+const hiddenIds = new Set();
 const isBasemapLayer = layer => layer.type === "background" || (!!layer.source && map.getSource(layer.source)?.type === "vector");
 function curateBasemap() {
   for (const layer of map.getStyle().layers) {
     if (layer.id === SATELLITE) continue;
     const vendor3d = layer.type === "fill-extrusion" && isBasemapLayer(layer);
-    if (!vendor3d && !CLUTTER_SOURCE_LAYERS.has(layer["source-layer"]) && !CLUTTER_IDS.test(layer.id)) continue;
+    const relief = layer.type === "raster";      // the vendor's shaded relief, shown when zoomed far out
+    if (!vendor3d && !relief && !CLUTTER_SOURCE_LAYERS.has(layer["source-layer"]) && !CLUTTER_IDS.test(layer.id)) continue;
     map.setLayoutProperty(layer.id, "visibility", "none");
     hiddenIds.add(layer.id);
   }
 }
 function applyBasemapTheme(night) {
+  const P = night ? NIGHT : DAY;
   for (const layer of map.getStyle().layers) {
     if (hiddenIds.has(layer.id) || !isBasemapLayer(layer)) continue;
-    const props = layer.type === "symbol" ? ["text-color", "text-halo-color"] : [COLOR_PROP[layer.type]].filter(Boolean);
-    if (!props.length) continue;
-    if (!originalPaint.has(layer.id)) originalPaint.set(layer.id, Object.fromEntries(props.map(p => [p, map.getPaintProperty(layer.id, p)])));
-    if (!night) { const snap = originalPaint.get(layer.id); props.forEach(p => map.setPaintProperty(layer.id, p, snap[p])); }
-    else if (layer.type === "symbol") { map.setPaintProperty(layer.id, "text-color", nightLabelColor(layer.id)); map.setPaintProperty(layer.id, "text-halo-color", NIGHT.labelHalo); }
-    else { const c = nightColor(layer); if (c) map.setPaintProperty(layer.id, props[0], c); }
+    if (layer.type === "symbol") { map.setPaintProperty(layer.id, "text-color", labelColor(layer.id, P)); map.setPaintProperty(layer.id, "text-halo-color", P.labelHalo); }
+    else {
+      const c = paletteColor(layer, P), prop = COLOR_PROP[layer.type];
+      if (c && prop) map.setPaintProperty(layer.id, prop, c);
+      if (c && layer.type === "fill") map.setPaintProperty(layer.id, "fill-outline-color", c);   // no bright edges around woods and parks
+    }
   }
 }
 function setSatellite(on) {
@@ -677,24 +687,27 @@ async function startMap() {
   map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-left");
   map.addControl(new maplibregl.AttributionControl({ compact: true,
     customAttribution: (vendorBasemap ? "" : "Outline: Natural Earth, deutschlandGeoJSON · ") + "Data: Niedersächsisches Klosterbuch, sheet 13" }), "bottom-right");
-  if (vendorBasemap) map.addControl({ onAdd() {
-      const box = document.createElement("div"); box.className = "maplibregl-ctrl maplibregl-ctrl-group";
-      const b = document.createElement("button"); b.type = "button"; b.className = "basemap-btn"; b.textContent = "Satellite";
-      b.title = "Switch between the street map and satellite imagery";
-      b.onclick = () => { satelliteOn = !satelliteOn; setSatellite(satelliteOn); b.textContent = satelliteOn ? "Streets" : "Satellite"; b.setAttribute("aria-pressed", satelliteOn); };
-      box.append(b); return box; }, onRemove() {} }, "top-left");
-  else ["Lower Saxony|9.55|52.75|region-label", "North Sea|7.2|54.05|sea-label"].map(s => s.split("|")).forEach(([t, lo, la, c]) => {
+  if (!vendorBasemap) ["Lower Saxony|9.55|52.75|region-label", "North Sea|7.2|54.05|sea-label"].map(s => s.split("|")).forEach(([t, lo, la, c]) => {
     const el = document.createElement("div"); el.className = c; el.textContent = t;
     new maplibregl.Marker({ element: el }).setLngLat([+lo, +la]).addTo(map);
   });
   map.addControl({ onAdd() {
-      const box = document.createElement("div"); box.className = "maplibregl-ctrl maplibregl-ctrl-group";
-      const b = document.createElement("button"); b.type = "button"; b.className = "basemap-btn conn-btn"; b.id = "connBtn";
-      b.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="3.5" cy="12.5" r="2.2"/><circle cx="12.5" cy="3.5" r="2.2"/><path d="M5.2 10.8 10.8 5.2" fill="none" stroke-width="1.6" stroke-dasharray="2.2 1.6"/></svg><span>Show connections</span>';
-      b.title = "Show the links between mother and daughter houses";
-      b.setAttribute("aria-pressed", state.links);
-      b.onclick = () => { state.links = !state.links; b.setAttribute("aria-pressed", state.links); render(); };
-      box.append(b); return box; }, onRemove() {} }, "top-left");
+      const box = document.createElement("div"); box.className = "maplibregl-ctrl maplibregl-ctrl-group map-tools";
+      const conn = document.createElement("button"); conn.type = "button"; conn.className = "basemap-btn conn-btn"; conn.id = "connBtn";
+      conn.innerHTML = '<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="3.5" cy="12.5" r="2.2"/><circle cx="12.5" cy="3.5" r="2.2"/><path d="M5.2 10.8 10.8 5.2" fill="none" stroke-width="1.6" stroke-dasharray="2.2 1.6"/></svg><span>Show connections</span>';
+      conn.title = "Show the links between mother and daughter houses";
+      conn.setAttribute("aria-pressed", state.links);
+      conn.onclick = () => { state.links = !state.links; conn.setAttribute("aria-pressed", state.links); render(); };
+      box.append(conn);
+      if (vendorBasemap) {
+        const sat = document.createElement("button"); sat.type = "button"; sat.className = "basemap-btn";
+        const label = () => `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 14.5 5 8 8.5 1.5 5Z" fill="none" stroke-width="1.4" stroke-linejoin="round"/><path d="M1.5 8 8 11.5 14.5 8M1.5 11 8 14.5 14.5 11" fill="none" stroke-width="1.4" stroke-linejoin="round"/></svg><span>${satelliteOn ? "Street map" : "Satellite"}</span>`;
+        sat.innerHTML = label();
+        sat.title = "Switch between the street map and satellite imagery";
+        sat.onclick = () => { satelliteOn = !satelliteOn; setSatellite(satelliteOn); sat.innerHTML = label(); };
+        box.append(sat);
+      }
+      return box; }, onRemove() {} }, "top-left");
   map.once("style.load", () => {
     if (vendorBasemap) { curateBasemap(); applyBasemapTheme(isDark()); }
     addOverlayLayers();
@@ -755,8 +768,8 @@ function setPlayUi() {
 }
 function setTimeNote(n) {
   $("#timeNote").innerHTML = !state.useYear
-    ? "Showing every house, whatever its dates. Press Play to watch them appear and close, or drag the slider to one year."
-    : `${playT ? "Playing · " : ""}<b>${n}</b> house${n === 1 ? "" : "s"} active in <b>${state.year}</b>. Untick “Show one year” to see all again.`;
+    ? "All houses are shown. Press Play, or drag the slider to a year."
+    : `${playT ? "Playing · " : ""}<b>${n}</b> house${n === 1 ? "" : "s"} active in <b>${state.year}</b>`;
 }
 
 // ---------- floating card ----------
@@ -823,7 +836,6 @@ function toast(t) { const el = $("#toast"); el.textContent = t; el.hidden = fals
 function renderKey() {
   const ink = css("--ink"), pan = css("--panel"), mini = (inner, w = 34) => `<svg viewBox="0 0 ${w} 34" width="${w * 22 / 34}" height="22">${inner}</svg>`;
   $("#key").innerHTML = [
-    ...ORDER_KEYS.map(k => [emblem(k, 20), DATA.orders[k]]),
     [mini(`<g transform="translate(3.5 3.5)">${emblem("temp", 17)}</g><g transform="translate(13.5 13.5)">${emblem("hosp", 17)}</g>`), "Changed order"],
     [mini(`<circle cx="17" cy="17" r="13.8" fill="none" stroke="${ink}" stroke-width="1.4"/><g transform="translate(6 6)">${emblem("hosp", 22)}</g>`), "Double community"],
     [mini(`<g transform="translate(6 6)">${emblem("hosp", 22)}</g><circle cx="17" cy="17" r="15.6" fill="none" stroke="${ink}" stroke-width="1.3" stroke-dasharray="2.4 2.2"/>`), "Approximate location"],
