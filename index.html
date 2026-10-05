@@ -9,8 +9,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Fondamento:ital@0;1&family=Source+Sans+3:wght@400;500;600&display=swap">
 <style>
 /* After the Lorsch Gospels (Codex Aureus of Lorsch, c. 810): gold and purple, minium red for headings, text in a
-   round Carolingian hand, titles and initials in uncials. The dark theme is the purple page written in gold.
-   Titles and initials: Uncial Antiqua. Names and reading text: Fondamento, drawn after the Foundational hand,
+   round Carolingian hand. Kept quiet: the uncials appear only in the entry page's title and initial.
+   Names, headings and reading text: Fondamento, drawn after the Foundational hand,
    which Edward Johnston based on Carolingian minuscule. Controls and figures stay in a plain sans. */
 :root {
   --paper: #eee4cc; --panel: #f6efdc; --ink: #2b2016; --muted: #6d5f4c; --rule: #cdbf9f;
@@ -19,7 +19,7 @@
   --bad: #bf4426; --bad-soft: #f2dccb; --good-soft: #dfe4c9;
   --o-hosp: #2b2723; --o-temp: #a3271b; --o-teut: #a37a12; --o-carm: #6b4226;
   --display: "Fondamento", "Iowan Old Style", Georgia, "Times New Roman", serif;
-  --title: "Uncial Antiqua", "Fondamento", Georgia, serif;
+  --title: var(--display);
   --initial: "Uncial Antiqua", "Fondamento", Georgia, serif;
   --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
   --mono: var(--body);
@@ -27,16 +27,16 @@
   --ctrl-filter: none;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --paper: #1c1220; --panel: #271a2c; --ink: #ecdcab; --muted: #b3a283; --rule: #4b3653;
+  --paper: #1b1819; --panel: #232021; --ink: #e9e2d2; --muted: #a79d8c; --rule: #403a38;
   --sea: #10191c; --land: #2a2520; --land-edge: #4a4035; --region: #38312a; --region-edge: #93866f; --river: #33505a;
-  --accent: #dcb95c; --accent-soft: #3a2a40; --rubric: #ee7a57; --gold: #d2ab4e; --purple: #3a1a43; --on-purple: #ecd389;
+  --accent: #d6b464; --accent-soft: #37302c; --rubric: #e8775a; --gold: #c9a44c; --purple: #4a2a52; --on-purple: #ecd9a0;
   --bad: #ee8a70; --bad-soft: #44231f; --good-soft: #2b3222;
   --o-hosp: #d8d0c0; --o-temp: #ef6f61; --o-teut: #e2b33f; --o-carm: #c99a6c;
   --shadow: 0 1px 2px rgba(0, 0, 0, .45), 0 6px 18px rgba(0, 0, 0, .5); --ctrl-filter: invert(.9); color-scheme: dark; } }
 :root[data-theme="dark"] {
-  --paper: #1c1220; --panel: #271a2c; --ink: #ecdcab; --muted: #b3a283; --rule: #4b3653;
+  --paper: #1b1819; --panel: #232021; --ink: #e9e2d2; --muted: #a79d8c; --rule: #403a38;
   --sea: #10191c; --land: #2a2520; --land-edge: #4a4035; --region: #38312a; --region-edge: #93866f; --river: #33505a;
-  --accent: #dcb95c; --accent-soft: #3a2a40; --rubric: #ee7a57; --gold: #d2ab4e; --purple: #3a1a43; --on-purple: #ecd389;
+  --accent: #d6b464; --accent-soft: #37302c; --rubric: #e8775a; --gold: #c9a44c; --purple: #4a2a52; --on-purple: #ecd9a0;
   --bad: #ee8a70; --bad-soft: #44231f; --good-soft: #2b3222;
   --o-hosp: #d8d0c0; --o-temp: #ef6f61; --o-teut: #e2b33f; --o-carm: #c99a6c;
   --shadow: 0 1px 2px rgba(0, 0, 0, .45), 0 6px 18px rgba(0, 0, 0, .5); --ctrl-filter: invert(.9); color-scheme: dark; }
@@ -48,7 +48,7 @@ button, input, select { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 [hidden] { display: none !important; }
-.eyebrow { font: 400 16px/1.15 var(--display); letter-spacing: .01em; color: var(--rubric); }
+.eyebrow { font: 400 15px/1.15 var(--display); color: var(--rubric); }
 .linkbtn { border: 0; background: none; padding: 0; color: var(--accent); cursor: pointer; font-size: 13px; }
 .btn { border: 1px solid var(--rule); background: var(--paper); border-radius: 3px; padding: 5px 11px; cursor: pointer; font-size: 13px; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 .btn:hover { border-color: var(--muted); }
@@ -74,56 +74,48 @@ button, input, select { font: inherit; color: inherit; }
 .lang button[aria-pressed="true"] { background: var(--ink); color: var(--panel); }
 .crumbs { margin-right: auto; }
 
-/* Layout: an opening page of the Lorsch Gospels. The title stands in gold uncials on a purple ground, as the
-   incipit pages do; the text is framed by a painted band and written in two columns in a Carolingian hand; the
-   two ways in stand under an arcade, as the canon tables do. */
+/* Layout: a plain leaf with three borrowings from the Lorsch Gospels and no more: the title in uncials, one
+   coloured initial, and a thin gold and purple rule framing the text. Everything else is ink on vellum. */
 body { min-height: 100%; }
-.home { max-width: 980px; margin: 0 auto; padding-inline: 22px; padding-block: 16px 60px; display: grid; gap: 22px; }
+.home { max-width: 900px; margin: 0 auto; padding-inline: 22px; padding-block: 16px 60px; display: grid; gap: 18px; }
 .top { display: flex; justify-content: flex-end; align-items: center; gap: 8px; position: relative; min-height: 30px; }
-.running { position: absolute; left: 50%; translate: -50% 0; white-space: nowrap; font: 400 15px/1 var(--title); letter-spacing: .3em; text-transform: uppercase; color: var(--gold); }
-/* the painted frame: gold fillets on either side of a purple band */
-.sheet { background: var(--panel); margin: 14px; box-shadow: 0 0 0 2px var(--gold), 0 0 0 11px var(--purple), 0 0 0 13px var(--gold), var(--shadow); display: grid; }
-.incipit { background: var(--purple); color: var(--on-purple); text-align: center; padding: clamp(26px, 5vw, 46px) clamp(16px, 5vw, 60px) clamp(28px, 5vw, 48px); display: grid; gap: 14px; border-bottom: 2px solid var(--gold); }
-.rubric { margin: 0; font: italic 400 18px/1.4 var(--display); color: var(--on-purple); opacity: .92; }
-h1 { margin: 0; font: 400 clamp(32px, 6.4vw, 62px)/1.08 var(--title); letter-spacing: .02em; text-wrap: balance; color: var(--on-purple); text-shadow: 0 1px 0 rgba(0, 0, 0, .35); }
-.leaf { padding: clamp(22px, 5vw, 44px) clamp(18px, 6vw, 64px) clamp(26px, 5vw, 48px); display: grid; gap: 30px; }
-.cols { columns: 2; column-gap: clamp(22px, 5vw, 46px); column-rule: 1px solid var(--rule); font: 400 19.5px/1.6 var(--display); text-align: justify; hyphens: auto; -webkit-hyphens: auto; }
-.cols p { margin: 0; }
-.cols p + p { margin-top: .5em; }
-.initial { float: left; font: 400 4.7em/.78 var(--initial); color: var(--accent); text-shadow: 2px 2px 0 var(--gold); margin: .08em .1em 0 0; }
-.pil { color: var(--rubric); font-family: var(--initial); margin-right: .25em; }
-.pil.b { color: var(--gold); }
-/* the arcade */
-.doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(26px, 6vw, 56px); padding-inline: 12px; }
-.door { --col: 13px; --shaft: var(--purple); position: relative; display: grid; grid-template-rows: auto auto; padding: 12px calc(var(--col) + 12px) 0; color: var(--ink); text-decoration: none; }
-.door + .door { --shaft: #3f6652; }
-.door::before, .door::after { content: ""; position: absolute; top: 150px; bottom: 0; width: var(--col); border-block: 9px solid var(--gold);
-  background: linear-gradient(90deg, rgba(0, 0, 0, .28), transparent 35% 65%, rgba(0, 0, 0, .28)), var(--shaft); }
-.door::before { left: 0; } .door::after { right: 0; }
-.pic { height: 250px; background: var(--sea); position: relative; overflow: hidden; border-radius: 999px 999px 0 0; border: 3px solid var(--gold);
-  box-shadow: 0 0 0 8px var(--shaft), 0 0 0 10px var(--gold); }
+.running { position: absolute; left: 0; white-space: nowrap; font: 400 15px/1 var(--display); color: var(--muted); }
+.sheet { background: var(--panel); border: 1px solid var(--rule); display: grid; }
+.incipit { padding: clamp(26px, 5vw, 50px) clamp(18px, 7vw, 70px) clamp(20px, 4vw, 34px); display: grid; gap: 10px; }
+.rubric { margin: 0; font: 400 16.5px/1.4 var(--display); color: var(--rubric); }
+h1 { margin: 0; font: 400 clamp(30px, 5.4vw, 50px)/1.1 "Uncial Antiqua", var(--display); text-wrap: balance; color: var(--ink); }
+/* the one ornament: a gold rule with a purple one beneath it */
+.incipit::after { content: ""; height: 5px; margin-top: 18px; border-top: 2px solid var(--gold); border-bottom: 1px solid var(--accent); }
+.leaf { padding: 0 clamp(18px, 7vw, 70px) clamp(26px, 5vw, 46px); display: grid; gap: 30px; }
+.cols { columns: 2; column-gap: clamp(22px, 5vw, 44px); font: 400 18.5px/1.6 var(--display); hyphens: auto; -webkit-hyphens: auto; }
+.cols p { margin: 0; break-inside: avoid; }
+.cols p + p { margin-top: .6em; }
+.initial { float: left; font: 400 3.5em/.8 "Uncial Antiqua", var(--display); color: var(--accent); margin: .08em .1em 0 0; }
+.pil { color: var(--rubric); margin-right: .3em; font-size: .85em; }
+.pil.b { color: var(--rubric); }
+.doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 4vw, 34px); }
+.door { display: grid; grid-template-rows: 200px auto; color: var(--ink); text-decoration: none; border: 1px solid var(--rule); background: var(--paper); }
+.door:hover, .door:focus-visible { border-color: var(--accent); }
+.pic { background: var(--sea); position: relative; overflow: hidden; border-bottom: 1px solid var(--rule); }
 .pic svg { display: block; width: 100%; height: 100%; }
-.pic.rows { background: var(--panel); padding: 78px 22px 0; display: grid; align-content: start; }
+.pic.rows { background: var(--panel); padding: 8px 16px 0; display: grid; align-content: start; }
 .row { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px dotted var(--rule); }
-.row .p { font: 400 18px/1.2 var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .p { font: 400 17.5px/1.2 var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .row .y { font-size: 12.5px; color: var(--muted); }
 .pic.rows::after { content: ""; position: absolute; inset: auto 0 0 0; height: 56px; background: linear-gradient(to bottom, transparent, var(--panel)); }
-.say { padding-block: 26px 20px; display: grid; gap: 6px; text-align: center; border-bottom: 9px solid var(--gold); margin-inline: calc(-1 * (var(--col) + 12px)); padding-inline: calc(var(--col) + 14px); }
-.say h2 { margin: 0; font: 400 27px/1.1 var(--title); letter-spacing: .02em; }
-.say h2::first-letter { color: var(--rubric); }
+.say { padding: 14px 18px 16px; display: grid; gap: 4px; }
+.say h2 { margin: 0; font: 400 25px/1.15 var(--display); }
 .say p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--muted); }
-.go { margin-top: 4px; font: 400 18px var(--display); color: var(--accent); }
+.go { margin-top: 6px; font: 400 17px var(--display); color: var(--accent); }
 .door:hover .go, .door:focus-visible .go { text-decoration: underline; }
-.orders { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; border-top: 1px solid var(--rule); padding-top: 24px; }
+.orders { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; border-top: 1px solid var(--rule); padding-top: 22px; }
 .ord { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; align-items: center; }
 .ord .emblem { grid-row: span 2; }
-.ord b { font: 400 19px/1.1 var(--display); }
+.ord b { font: 400 18px/1.1 var(--display); }
 .ord span { font-size: 13px; color: var(--muted); }
 @media (max-width: 720px) {
-  .top { flex-wrap: wrap; } .running { position: static; translate: none; margin-right: auto; font-size: 13px; letter-spacing: .2em; }
-  .sheet { margin: 12px 13px; }
-  .cols { columns: 1; font-size: 18px; }
-  .doors { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+  .cols { columns: 1; font-size: 17.5px; }
+  .doors { grid-template-columns: minmax(0, 1fr); }
   .orders { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 </style>

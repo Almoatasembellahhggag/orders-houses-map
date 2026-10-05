@@ -11,8 +11,8 @@
 <style>
 /* Layout: full-height atlas — finding aid on the left, the map beside it; a small card floats at the clicked house and links to its full record page. */
 /* After the Lorsch Gospels (Codex Aureus of Lorsch, c. 810): gold and purple, minium red for headings, text in a
-   round Carolingian hand, titles and initials in uncials. The dark theme is the purple page written in gold.
-   Titles and initials: Uncial Antiqua. Names and reading text: Fondamento, drawn after the Foundational hand,
+   round Carolingian hand. Kept quiet: the uncials appear only in the entry page's title and initial.
+   Names, headings and reading text: Fondamento, drawn after the Foundational hand,
    which Edward Johnston based on Carolingian minuscule. Controls and figures stay in a plain sans. */
 :root {
   --paper: #eee4cc; --panel: #f6efdc; --ink: #2b2016; --muted: #6d5f4c; --rule: #cdbf9f;
@@ -21,7 +21,7 @@
   --bad: #bf4426; --bad-soft: #f2dccb; --good-soft: #dfe4c9;
   --o-hosp: #2b2723; --o-temp: #a3271b; --o-teut: #a37a12; --o-carm: #6b4226;
   --display: "Fondamento", "Iowan Old Style", Georgia, "Times New Roman", serif;
-  --title: "Uncial Antiqua", "Fondamento", Georgia, serif;
+  --title: var(--display);
   --initial: "Uncial Antiqua", "Fondamento", Georgia, serif;
   --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
   --mono: var(--body);
@@ -29,16 +29,16 @@
   --ctrl-filter: none;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --paper: #1c1220; --panel: #271a2c; --ink: #ecdcab; --muted: #b3a283; --rule: #4b3653;
+  --paper: #1b1819; --panel: #232021; --ink: #e9e2d2; --muted: #a79d8c; --rule: #403a38;
   --sea: #10191c; --land: #2a2520; --land-edge: #4a4035; --region: #38312a; --region-edge: #93866f; --river: #33505a;
-  --accent: #dcb95c; --accent-soft: #3a2a40; --rubric: #ee7a57; --gold: #d2ab4e; --purple: #3a1a43; --on-purple: #ecd389;
+  --accent: #d6b464; --accent-soft: #37302c; --rubric: #e8775a; --gold: #c9a44c; --purple: #4a2a52; --on-purple: #ecd9a0;
   --bad: #ee8a70; --bad-soft: #44231f; --good-soft: #2b3222;
   --o-hosp: #d8d0c0; --o-temp: #ef6f61; --o-teut: #e2b33f; --o-carm: #c99a6c;
   --shadow: 0 1px 2px rgba(0, 0, 0, .45), 0 6px 18px rgba(0, 0, 0, .5); --ctrl-filter: invert(.9); color-scheme: dark; } }
 :root[data-theme="dark"] {
-  --paper: #1c1220; --panel: #271a2c; --ink: #ecdcab; --muted: #b3a283; --rule: #4b3653;
+  --paper: #1b1819; --panel: #232021; --ink: #e9e2d2; --muted: #a79d8c; --rule: #403a38;
   --sea: #10191c; --land: #2a2520; --land-edge: #4a4035; --region: #38312a; --region-edge: #93866f; --river: #33505a;
-  --accent: #dcb95c; --accent-soft: #3a2a40; --rubric: #ee7a57; --gold: #d2ab4e; --purple: #3a1a43; --on-purple: #ecd389;
+  --accent: #d6b464; --accent-soft: #37302c; --rubric: #e8775a; --gold: #c9a44c; --purple: #4a2a52; --on-purple: #ecd9a0;
   --bad: #ee8a70; --bad-soft: #44231f; --good-soft: #2b3222;
   --o-hosp: #d8d0c0; --o-temp: #ef6f61; --o-teut: #e2b33f; --o-carm: #c99a6c;
   --shadow: 0 1px 2px rgba(0, 0, 0, .45), 0 6px 18px rgba(0, 0, 0, .5); --ctrl-filter: invert(.9); color-scheme: dark; }
@@ -50,7 +50,7 @@ button, input, select { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 [hidden] { display: none !important; }
-.eyebrow { font: 400 16px/1.15 var(--display); letter-spacing: .01em; color: var(--rubric); }
+.eyebrow { font: 400 15px/1.15 var(--display); color: var(--rubric); }
 .linkbtn { border: 0; background: none; padding: 0; color: var(--accent); cursor: pointer; font-size: 13px; }
 .btn { border: 1px solid var(--rule); background: var(--paper); border-radius: 3px; padding: 5px 11px; cursor: pointer; font-size: 13px; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 .btn:hover { border-color: var(--muted); }
@@ -110,7 +110,7 @@ h1 { margin: 0; font: 400 23px/1.1 var(--title); text-wrap: balance; }
 .aid-body { overflow-y: auto; min-height: 0; flex: 0 1 auto; }
 .block { padding: 13px 18px; border-bottom: 1px solid var(--rule); display: grid; gap: 10px; }
 .block-title { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
-.block-title h2 { margin: 0; font: 400 16.5px/1.15 var(--display); letter-spacing: .01em; color: var(--rubric); }
+.block-title h2 { margin: 0; font: 400 15.5px/1.15 var(--display); color: var(--rubric); }
 .orders { display: grid; gap: 4px; }
 .order { display: grid; grid-template-columns: 22px 1fr auto; align-items: center; gap: 8px; padding: 5px 8px; border: 1px solid transparent; border-radius: 3px; background: none; cursor: pointer; text-align: left; }
 .order:hover { border-color: var(--rule); }
@@ -151,7 +151,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .listbox > summary::before { content: ""; width: 7px; height: 7px; border-right: 1.6px solid var(--muted); border-bottom: 1.6px solid var(--muted); rotate: -45deg; transition: rotate .15s; margin-right: 2px; }
 .listbox[open] > summary::before { rotate: 45deg; }
 .listbox > summary:hover .lb-hint { color: var(--accent); }
-.lb-title { font: 400 16.5px/1.15 var(--display); letter-spacing: .01em; color: var(--rubric); }
+.lb-title { font: 400 15.5px/1.15 var(--display); color: var(--rubric); }
 .lb-count { font: 500 12px var(--mono); color: var(--ink); background: var(--accent-soft); border-radius: 3px; padding: 1px 8px; font-variant-numeric: tabular-nums; }
 .lb-hint { margin-left: auto; font-size: 13px; color: var(--muted); }
 .listbox[open] .lb-hint { visibility: hidden; }
