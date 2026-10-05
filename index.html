@@ -55,15 +55,20 @@ button, input, select { font: inherit; color: inherit; }
 .emblem { display: inline-block; vertical-align: middle; flex: none; }
 .emblem.unc { opacity: .5; }
 
-.app { position: fixed; inset: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px) 0; display: grid; grid-template-columns: 372px 1fr; }
+/* The map fills the page; the finding aid floats over it as a glass panel, as in Cairometry. --inset-left is the
+   strip the panel covers, so everything centred on the map is centred on the part that is actually visible. */
+.app { position: fixed; inset: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px) 0; --aid-w: 328px; --aid-gap: 12px; --inset-left: calc(var(--aid-w) + 2 * var(--aid-gap)); }
 
 /* ---------- finding aid ---------- */
-.aid { display: flex; flex-direction: column; min-width: 0; min-height: 0; background: var(--panel); border-right: 1px solid var(--rule); }
-.aid-head { padding: 18px 20px 14px; border-bottom: 1px solid var(--rule); display: grid; gap: 10px; }
-h1 { margin: 0; font: 600 25px/1.1 var(--display); text-wrap: balance; }
+.aid { position: absolute; z-index: 700; top: var(--aid-gap); left: var(--aid-gap); width: var(--aid-w); max-height: calc(100% - 2 * var(--aid-gap));
+  display: flex; flex-direction: column; min-height: 0; overflow: hidden;
+  background: color-mix(in srgb, var(--panel) 80%, transparent); backdrop-filter: blur(20px) saturate(1.3); -webkit-backdrop-filter: blur(20px) saturate(1.3);
+  border: 1px solid color-mix(in srgb, var(--rule) 80%, transparent); border-radius: 14px; box-shadow: var(--shadow); }
+.aid-head { padding: 16px 18px 13px; border-bottom: 1px solid var(--rule); display: grid; gap: 10px; }
+h1 { margin: 0; font: 600 23px/1.1 var(--display); text-wrap: balance; }
 .tally { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--muted); }
 .tally b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
-.searchbar { position: absolute; top: 10px; left: 50%; translate: -50% 0; width: min(440px, calc(100% - 150px)); z-index: 650;
+.searchbar { position: absolute; top: 10px; left: calc(50% + var(--inset-left) / 2); translate: -50% 0; width: min(440px, calc(100% - var(--inset-left) - 350px)); z-index: 650;
   background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; box-shadow: var(--shadow); }
 .search { position: relative; display: block; }
 .search input { width: 100%; padding: 11px 14px 11px 38px; border: 0; border-radius: 10px; background: transparent; font-size: 15px; }
@@ -79,8 +84,8 @@ h1 { margin: 0; font: 600 25px/1.1 var(--display); text-wrap: balance; }
 .searchbar .search-hint { border-top: 1px solid var(--rule); padding: 8px 14px 10px; }
 .search svg { position: absolute; left: 13px; top: 50%; translate: 0 -50%; width: 15px; height: 15px; stroke: var(--muted); fill: none; stroke-width: 2; }
 .search-hint { font-size: 12px; color: var(--muted); }
-.aid-body { overflow-y: auto; min-height: 0; flex: 1; }
-.block { padding: 14px 20px; border-bottom: 1px solid var(--rule); display: grid; gap: 10px; }
+.aid-body { overflow-y: auto; min-height: 0; flex: 0 1 auto; }
+.block { padding: 13px 18px; border-bottom: 1px solid var(--rule); display: grid; gap: 10px; }
 .block-title { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
 .block-title h2 { margin: 0; font: 600 12px/1 var(--body); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .orders { display: grid; gap: 4px; }
@@ -118,7 +123,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .toggle input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
 
 /* list */
-.listbox > summary { list-style: none; display: flex; align-items: center; gap: 8px; padding: 14px 20px; cursor: pointer; }
+.listbox > summary { list-style: none; display: flex; align-items: center; gap: 8px; padding: 13px 18px; cursor: pointer; }
 .listbox > summary::-webkit-details-marker { display: none; }
 .listbox > summary::before { content: ""; width: 7px; height: 7px; border-right: 1.6px solid var(--muted); border-bottom: 1.6px solid var(--muted); rotate: -45deg; transition: rotate .15s; margin-right: 2px; }
 .listbox[open] > summary::before { rotate: 45deg; }
@@ -135,11 +140,12 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .item .y { font: 12px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; align-self: center; }
 .why { color: var(--accent); }
 .empty { padding: 18px 20px; color: var(--muted); font-size: 14px; }
-.aid-foot { padding: 10px 20px; border-top: 1px solid var(--rule); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13px; color: var(--muted); }
+.aid-foot { padding: 10px 18px; border-top: 1px solid var(--rule); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 13px; color: var(--muted); }
 .aid-foot .sp { flex: 1; }
 
 /* ---------- map ---------- */
-.mapwrap { position: relative; min-width: 0; min-height: 0; }
+.mapwrap { position: absolute; inset: 0; }
+.maplibregl-ctrl-top-left { left: calc(var(--aid-w) + var(--aid-gap)) !important; }
 #map { position: absolute; inset: 0; background: var(--sea); }
 .maplibregl-map { font: 13px var(--body); }
 .maplibregl-ctrl-group { background: var(--panel) !important; border: 1px solid var(--rule); box-shadow: var(--shadow) !important; }
@@ -151,6 +157,10 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .basemap-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; flex: none; }
 .conn-btn svg { fill: currentColor; }
 .conn-btn[aria-pressed="true"] { background: var(--accent) !important; color: var(--panel) !important; }
+.bm-seg { display: flex; border-top: 1px solid var(--rule); }
+.bm-seg button { flex: 1; width: auto !important; height: 28px !important; padding: 0 9px !important; font: 500 12px var(--body) !important; color: var(--muted) !important; }
+.bm-seg button + button { border-top: 0 !important; border-left: 1px solid var(--rule) !important; }
+.bm-seg button[aria-pressed="true"] { background: var(--accent-soft) !important; color: var(--ink) !important; font-weight: 600 !important; }
 .maplibregl-ctrl-attrib { background: color-mix(in srgb, var(--panel) 85%, transparent) !important; color: var(--muted); font-size: 11px; }
 .maplibregl-ctrl-attrib a { color: var(--muted) !important; }
 .maplibregl-ctrl-attrib-button { filter: var(--ctrl-filter); }
@@ -188,7 +198,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .card .btn.primary { justify-content: center; padding: 7px 11px; font-weight: 600; }
 .toast { position: absolute; left: 50%; bottom: 24px; translate: -50% 0; z-index: 900; background: var(--ink); color: var(--panel); padding: 8px 14px; border-radius: 6px; font-size: 14px; box-shadow: var(--shadow); }
 .mobile-tabs { display: none; }
-.timebar { position: absolute; bottom: 30px; left: 50%; translate: -50% 0; width: min(520px, calc(100% - 40px)); z-index: 600;
+.timebar { position: absolute; bottom: 30px; left: calc(50% + var(--inset-left) / 2); translate: -50% 0; width: min(520px, calc(100% - var(--inset-left) - 40px)); z-index: 600;
   background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--rule); border-radius: 8px; box-shadow: var(--shadow);
   padding: 10px 14px 10px; display: grid; gap: 5px; border-radius: 10px; }
 .timebar .year { font-size: 22px; }
@@ -201,8 +211,10 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .time-note b { color: var(--ink); font-weight: 600; }
 
 @media (max-width: 760px) {
-  .app { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-  .aid { border-right: 0; border-bottom: 1px solid var(--rule); max-height: 46vh; }
+  .app { display: grid; grid-template-rows: auto 1fr; --inset-left: 0px; }
+  .aid { position: static; width: auto; max-height: 46vh; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; box-shadow: none; background: var(--panel); backdrop-filter: none; }
+  .mapwrap { position: relative; inset: auto; min-height: 0; }
+  .maplibregl-ctrl-top-left { left: 0 !important; }
   .aid-head { padding: 12px 16px 10px; }
   h1 { font-size: 21px; }
   .block { padding: 12px 16px; }
@@ -241,7 +253,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
         <ul class="list" id="list"></ul>
       </details>
     </div>
-    <div class="aid-foot"><span id="shown"></span><span class="sp"></span>
+    <div class="aid-foot"><span>Export</span><span class="sp"></span>
       <button class="btn" id="copyCsv">Copy CSV</button><button class="btn" id="copyMd">Copy Markdown</button></div>
   </aside>
   <main class="mapwrap">
@@ -450,6 +462,7 @@ function curateBasemap() {
 function applyBasemapTheme(night) {
   const P = night ? NIGHT : DAY;
   for (const layer of map.getStyle().layers) {
+    if (layer.id === HILLSHADE) { for (const [k, v] of Object.entries(reliefPaint(night))) map.setPaintProperty(HILLSHADE, k, v); continue; }
     if (hiddenIds.has(layer.id) || !isBasemapLayer(layer)) continue;
     if (layer.type === "symbol") { map.setPaintProperty(layer.id, "text-color", labelColor(layer.id, P)); map.setPaintProperty(layer.id, "text-halo-color", P.labelHalo); }
     else {
@@ -459,16 +472,39 @@ function applyBasemapTheme(night) {
     }
   }
 }
-function setSatellite(on) {
-  if (!map.getSource(SATELLITE)) {
-    map.addSource(SATELLITE, { type: "raster", tiles: [ESRI_TILES], tileSize: 256, maxzoom: 19, attribution: "Imagery © Esri, Maxar, Earthstar Geographics" });
-    map.addLayer({ id: SATELLITE, type: "raster", source: SATELLITE, layout: { visibility: "none" } }, map.getStyle().layers.find(l => l.type === "symbol")?.id);
-  }
-  map.setLayoutProperty(SATELLITE, "visibility", on ? "visible" : "none");
+// Three basemaps over the same vector tiles:
+//   landscape  relief shading, rivers, coast, borders and town names, with today's roads, railways and built-up
+//              areas taken out. The default, because the houses are medieval and the motorways are not.
+//   streets    the full street map, for finding where a house stands today.
+//   satellite  Esri imagery with the labels on top.
+// The relief is shaded in the browser from open elevation tiles (Mapzen terrain on AWS Open Data: free, no key),
+// so its colours follow the light and dark themes.
+const DEM_TILES = "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png";
+const HILLSHADE = "relief";
+const isModern = l => /^transportation/.test(l["source-layer"] || "") || l.id === "landuse_residential";
+function reliefPaint(night) {
+  return night ? { "hillshade-shadow-color": "#000000", "hillshade-highlight-color": "#565c60", "hillshade-accent-color": "#000000", "hillshade-exaggeration": .5 }
+    : { "hillshade-shadow-color": "#6b6455", "hillshade-highlight-color": "#ffffff", "hillshade-accent-color": "#8f8877", "hillshade-exaggeration": .42 };
+}
+function addBasemapExtras() {
+  const layers = map.getStyle().layers;
+  map.addSource(SATELLITE, { type: "raster", tiles: [ESRI_TILES], tileSize: 256, maxzoom: 19, attribution: "Imagery © Esri, Maxar, Earthstar Geographics" });
+  map.addLayer({ id: SATELLITE, type: "raster", source: SATELLITE, layout: { visibility: "none" } }, layers.find(l => l.type === "symbol")?.id);
+  map.addSource("dem", { type: "raster-dem", tiles: [DEM_TILES], tileSize: 256, encoding: "terrarium", maxzoom: 12, attribution: "Relief: Mapzen terrain tiles" });
+  // Above the land and woods, below water, borders and names.
+  map.addLayer({ id: HILLSHADE, type: "hillshade", source: "dem", layout: { visibility: "none" }, paint: reliefPaint(isDark()) }, layers.find(l => /^water/.test(l.id))?.id);
+}
+function setBasemap(mode) {
+  basemap = mode;
+  try { localStorage.setItem("orders-map:basemap", mode); } catch {}
+  map.setLayoutProperty(SATELLITE, "visibility", mode === "satellite" ? "visible" : "none");
+  map.setLayoutProperty(HILLSHADE, "visibility", mode === "landscape" ? "visible" : "none");
   for (const l of map.getStyle().layers) {
-    if (l.id === SATELLITE || hiddenIds.has(l.id) || l.type === "symbol" || !isBasemapLayer(l)) continue;
-    map.setLayoutProperty(l.id, "visibility", on ? "none" : "visible");
+    if (l.id === SATELLITE || l.id === HILLSHADE || hiddenIds.has(l.id) || !isBasemapLayer(l)) continue;
+    const show = mode === "satellite" ? l.type === "symbol" : mode === "landscape" ? !isModern(l) : true;
+    map.setLayoutProperty(l.id, "visibility", show ? "visible" : "none");
   }
+  document.querySelectorAll(".bm-seg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.bm === mode));
 }
 
 // Outline map from the embedded geometry, used when the vector tiles are out of reach.
@@ -507,9 +543,12 @@ async function pickStyle() {
 }
 const isDark = () => { const t = document.documentElement.dataset.theme; return t ? t === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
 const narrow = () => matchMedia("(max-width: 760px)").matches;
-const recPad = () => narrow() ? { top: 16, bottom: 16, left: 16, right: 16 } : { top: 32, bottom: 32, left: 32, right: 32 };
+// The strip of the map hidden under the floating panel, and the padding that keeps the houses clear of it.
+const insetLeft = () => narrow() ? 0 : $("#aid").offsetWidth + 24;
+const recPad = () => narrow() ? { top: 16, bottom: 16, left: 16, right: 16 } : { top: 70, bottom: 40, left: insetLeft() + 24, right: 32 };
 const HOME = [[6.9, 51.45], [11.5, 53.65]];
-let map = null, vendorBasemap = false, satelliteOn = false, overlaysReady = false;
+let map = null, vendorBasemap = false, overlaysReady = false, basemap = "landscape";
+try { const saved = localStorage.getItem("orders-map:basemap"); if (["landscape", "streets", "satellite"].includes(saved)) basemap = saved; } catch {}
 const popup = () => (popup.p ||= new maplibregl.Popup({ closeButton: false, closeOnClick: false, offset: 12, maxWidth: "280px" }));
 let markers = [], playT = null;
 
@@ -716,16 +755,18 @@ async function startMap() {
       conn.onclick = () => { state.links = !state.links; conn.setAttribute("aria-pressed", state.links); render(); };
       box.append(conn);
       if (vendorBasemap) {
-        const sat = document.createElement("button"); sat.type = "button"; sat.className = "basemap-btn";
-        const label = () => `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 14.5 5 8 8.5 1.5 5Z" fill="none" stroke-width="1.4" stroke-linejoin="round"/><path d="M1.5 8 8 11.5 14.5 8M1.5 11 8 14.5 14.5 11" fill="none" stroke-width="1.4" stroke-linejoin="round"/></svg><span>${satelliteOn ? "Street map" : "Satellite"}</span>`;
-        sat.innerHTML = label();
-        sat.title = "Switch between the street map and satellite imagery";
-        sat.onclick = () => { satelliteOn = !satelliteOn; setSatellite(satelliteOn); sat.innerHTML = label(); };
-        box.append(sat);
+        const seg = document.createElement("div"); seg.className = "bm-seg"; seg.setAttribute("role", "group"); seg.setAttribute("aria-label", "Basemap");
+        [["landscape", "Landscape", "Relief, rivers and towns, without today's roads"], ["streets", "Streets", "Today's street map"], ["satellite", "Satellite", "Satellite imagery"]].forEach(([id, label, title]) => {
+          const b = document.createElement("button"); b.type = "button"; b.dataset.bm = id; b.textContent = label; b.title = title;
+          b.setAttribute("aria-pressed", id === basemap);
+          b.onclick = () => setBasemap(id);
+          seg.append(b);
+        });
+        box.append(seg);
       }
       return box; }, onRemove() {} }, "top-left");
   map.once("style.load", () => {
-    if (vendorBasemap) { curateBasemap(); applyBasemapTheme(isDark()); }
+    if (vendorBasemap) { curateBasemap(); addBasemapExtras(); applyBasemapTheme(isDark()); setBasemap(basemap); }
     addOverlayLayers();
     overlaysReady = true;
     render();
@@ -738,7 +779,6 @@ async function startMap() {
 function renderTally(vis) {
   const real = vis.filter(([h]) => !h.external);
   $("#tally").innerHTML = `<span><b>${real.length}</b> houses shown</span><span><b>${new Set(real.flatMap(([h]) => h.orders)).size}</b> orders</span><span><b>${DATA.persons.filter(p => p.houses.length > 1).length}</b> people in several houses</span>`;
-  $("#shown").textContent = `${real.length} of ${houses.filter(h => !h.external && h.status === "checked").length} houses`;
 }
 function renderOrders() {
   // With one year chosen, the count is for that year, and an order with no house then is greyed out and cannot be clicked.
@@ -825,7 +865,7 @@ function select(id, pan = true, scroll = true) {
   // Update the open card in place: re-adding it would fire its "close" event and deselect the new house.
   card().setLngLat(at).setHTML(cardHtml(h));
   if (!card().isOpen()) card().addTo(map);
-  if (pan) map.flyTo({ center: at, zoom: Math.max(map.getZoom(), 8), offset: [0, 90], duration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700 });
+  if (pan) map.flyTo({ center: at, zoom: Math.max(map.getZoom(), 8), offset: [insetLeft() / 2, 90], duration: matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 700 });
 }
 
 // ---------- export (clipboard; the viewer blocks file downloads) ----------
@@ -925,7 +965,7 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && state.sel)
 // Any click outside the open card closes it: the filters, the time bar, the search box, the list header and so
 // on. Left alone are clicks that open a house (markers, list rows, search results), clicks on the map itself
 // (the map's own handler closes the card there, but not after a drag), and zooming or switching to satellite.
-const KEEPS_CARD = ".maplibregl-popup, .hmark, .item, #results, .maplibregl-canvas, .maplibregl-ctrl-zoom-in, .maplibregl-ctrl-zoom-out, .maplibregl-ctrl-attrib, .basemap-btn:not(.conn-btn)";
+const KEEPS_CARD = ".maplibregl-popup, .hmark, .item, #results, .maplibregl-canvas, .maplibregl-ctrl-zoom-in, .maplibregl-ctrl-zoom-out, .maplibregl-ctrl-attrib, .bm-seg";
 document.addEventListener("click", e => {
   if (!state.sel && !card.p?.isOpen()) return;
   if (e.target.closest?.(KEEPS_CARD)) return;
@@ -951,7 +991,7 @@ matchMedia("(prefers-color-scheme: dark)").addEventListener("change", retheme);
 new MutationObserver(retheme).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
 renderOrders(); renderTypes(); renderKey(); setYearLabel(); render();
-if ($(".mapwrap").clientWidth < 980) $("#keyBox").open = false;
+if ($(".mapwrap").clientWidth - insetLeft() < 880) $("#keyBox").open = false;
 const LIST_KEY = "orders-map:list-open";
 try { $("#listBox").open = localStorage.getItem(LIST_KEY) === "1"; } catch {}
 $("#listBox").addEventListener("toggle", () => { try { localStorage.setItem(LIST_KEY, $("#listBox").open ? "1" : "0"); } catch {} });
