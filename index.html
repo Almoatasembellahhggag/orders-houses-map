@@ -6,18 +6,19 @@
 <title>Order Houses of Lower Saxony</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=IM+Fell+English+SC&family=Source+Sans+3:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@500;700&family=Texturina:ital,opsz,wght@0,12..72,400..700;1,12..72,400..700&family=Uncial+Antiqua&family=Source+Sans+3:wght@400;500;600&display=swap">
 <style>
-/* Palette from the manuscript page: vellum, iron-gall ink, rubric red for what a scribe would have written in
-   red, azurite blue for what can be clicked. Type from the printed scholarly book: the Fell types for titles and
-   small-capital labels, a plain humanist sans for the working text. */
+/* After the Gutenberg Bible: black textura on vellum, headings as rubrics in red, initials in red and blue.
+   Page titles are set in a blackletter (Grenze Gotisch), names and reading text in Texturina, a textura drawn
+   to be read on screen, initials in an uncial; controls and figures stay in a plain sans. */
 :root {
-  --paper: #efe8d8; --panel: #f6f1e4; --ink: #2a2119; --muted: #6b5f50; --rule: #cfc4ad;
+  --paper: #ece2c9; --panel: #f5eedb; --ink: #1c1611; --muted: #6b5f50; --rule: #cfc4ad;
   --sea: #c5d1cd; --land: #e6dfcc; --land-edge: #b9ae95; --region: #f4eddb; --region-edge: #8a7c60; --river: #9fb6b8;
-  --accent: #2c4a66; --accent-soft: #dcdfd3; --rubric: #9a2617; --bad: #9a2617; --bad-soft: #f0dacd; --good-soft: #dfe4c9;
+  --accent: #1f4079; --accent-soft: #dadccd; --rubric: #b3221a; --bad: #b3221a; --bad-soft: #f0dacd; --good-soft: #dfe4c9;
   --o-hosp: #2b2723; --o-temp: #a3271b; --o-teut: #a37a12; --o-carm: #6b4226;
-  --display: "IM Fell English", "Iowan Old Style", Georgia, "Times New Roman", serif;
-  --sc: "IM Fell English SC", "IM Fell English", Georgia, serif;
+  --display: "Texturina", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --title: "Grenze Gotisch", "Texturina", Georgia, serif;
+  --initial: "Uncial Antiqua", "Texturina", Georgia, serif;
   --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
   --mono: var(--body);
   --shadow: 0 1px 2px rgba(60, 45, 25, .10), 0 6px 18px rgba(60, 45, 25, .12);
@@ -43,7 +44,7 @@ button, input, select { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 [hidden] { display: none !important; }
-.eyebrow { font: 400 14px/1.1 var(--sc); letter-spacing: .05em; text-transform: lowercase; color: var(--muted); }
+.eyebrow { font: 600 14px/1.15 var(--display); letter-spacing: .01em; color: var(--rubric); }
 .linkbtn { border: 0; background: none; padding: 0; color: var(--accent); cursor: pointer; font-size: 13px; }
 .btn { border: 1px solid var(--rule); background: var(--paper); border-radius: 3px; padding: 5px 11px; cursor: pointer; font-size: 13px; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 .btn:hover { border-color: var(--muted); }
@@ -59,74 +60,86 @@ button, input, select { font: inherit; color: inherit; }
 .theme-btn { width: 30px; height: 30px; flex: none; display: grid; place-items: center; padding: 0; border: 1px solid var(--rule); border-radius: 50%; background: var(--paper); color: var(--ink); cursor: pointer; }
 .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
 .theme-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.crumbs { display: flex; gap: 14px; font: 400 14.5px/1 var(--sc); letter-spacing: .05em; text-transform: lowercase; }
-.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs { display: flex; gap: 14px; font: 500 14.5px/1 var(--display); }
+.crumbs a { color: var(--accent); text-decoration: none; }
 .crumbs a:hover { color: var(--accent); }
 .crumbs a[aria-current] { color: var(--ink); }
 
-/* Layout: a title page. The project's name and one sentence, then two doors of equal weight, the map and the
-   houses, each showing a small live picture of what is behind it. */
+/* Layout: one leaf, after a page of the Gutenberg Bible. A running head in alternating red and blue capitals,
+   the opening rubric in red, the text in two justified columns that begin with a large blue initial, paragraph
+   marks in red and blue, and wide margins. The two ways in, the map and the houses, sit under the text as the
+   two columns continue. */
 body { min-height: 100%; }
-.home { max-width: 1040px; margin: 0 auto; padding-inline: 24px; padding-block: 18px 56px; display: grid; gap: 34px; }
-.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.top .eyebrow { font-size: 16.5px; }
-.intro { display: grid; gap: 14px; padding-top: 22px; }
-h1 { margin: 0; font: 400 clamp(36px, 6vw, 58px)/1.03 var(--display); text-wrap: balance; max-width: 16ch; }
-.lede { margin: 0; font-size: 18px; line-height: 1.55; color: var(--ink); max-width: 62ch; }
-.facts { font: italic 400 17px/1.5 var(--display); color: var(--ink); font-variant-numeric: normal; max-width: 62ch; }
-h1::first-letter { color: var(--rubric); }
-.intro { padding-bottom: 26px; border-bottom: 3px double var(--rule); }
-.lede i { font-family: var(--display); font-size: 1.05em; }
-.doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
-.door { display: grid; grid-template-rows: 230px auto; background: var(--panel); border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; color: var(--ink); text-decoration: none; transition: border-color .15s, box-shadow .15s, translate .15s; }
-.door { outline: 1px solid var(--rule); outline-offset: 3px; }
-.door:hover, .door:focus-visible { border-color: var(--ink); outline-color: var(--ink); }
+.home { max-width: 980px; margin: 0 auto; padding-inline: 20px; padding-block: 16px 56px; display: grid; gap: 14px; }
+.top { display: grid; grid-template-columns: 30px 1fr 30px; align-items: center; }
+.running { grid-column: 2; text-align: center; font: 400 17px/1 var(--initial); letter-spacing: .32em; text-transform: uppercase; }
+.running i { font-style: normal; color: var(--rubric); }
+.running i:nth-child(even) { color: var(--accent); }
+.sheet { background: var(--panel); border: 1px solid var(--rule); box-shadow: var(--shadow); padding: clamp(22px, 6vw, 62px) clamp(18px, 8vw, 86px) clamp(26px, 6vw, 60px); display: grid; gap: 26px; }
+.rubric { margin: 0; color: var(--rubric); font: 500 18px/1.4 var(--display); }
+h1 { margin: 4px 0 0; font: 700 clamp(40px, 7.4vw, 70px)/.98 var(--title); text-wrap: balance; }
+.cols { columns: 2; column-gap: clamp(22px, 5vw, 46px); font: 400 18.5px/1.62 var(--display); text-align: justify; hyphens: auto; -webkit-hyphens: auto;
+  border-block: 1px solid var(--rule); padding-block: 18px; }
+.cols p { margin: 0; }
+.cols p + p { margin-top: .5em; }
+.initial { float: left; font: 400 5.05em/.74 var(--initial); color: var(--accent); margin: .09em .08em 0 -.03em; }
+.pil { color: var(--rubric); font-family: var(--initial); margin-right: .25em; }
+.pil.b { color: var(--accent); }
+.doors { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(22px, 5vw, 46px); }
+.door { display: grid; grid-template-rows: 210px auto; color: var(--ink); text-decoration: none; border: 1px solid var(--rule); background: var(--paper); }
+.door:hover, .door:focus-visible { border-color: var(--ink); }
 .pic { background: var(--sea); position: relative; overflow: hidden; border-bottom: 1px solid var(--rule); }
 .pic svg { display: block; width: 100%; height: 100%; }
-.pic.rows { background: var(--paper); padding: 14px 18px 0; display: grid; align-content: start; gap: 0; }
-.row { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px dotted var(--rule); font-size: 14.5px; }
-.row .p { font: 400 17px/1.2 var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.row .y { font: 12px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
-.pic.rows::after { content: ""; position: absolute; inset: auto 0 0 0; height: 70px; background: linear-gradient(to bottom, transparent, var(--paper)); }
-.say { padding: 18px 20px 20px; display: grid; gap: 6px; }
-.say h2 { margin: 0; font: 400 28px/1.1 var(--display); }
-.say p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.5; }
-.go { margin-top: 8px; font: 400 16px var(--sc); letter-spacing: .04em; text-transform: lowercase; color: var(--accent); }
-.orders { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; border-top: 3px double var(--rule); padding-top: 22px; }
+.pic.rows { background: var(--panel); padding: 10px 16px 0; display: grid; align-content: start; }
+.row { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px dotted var(--rule); }
+.row .p { font: 500 17px/1.2 var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .y { font-size: 12.5px; color: var(--muted); }
+.pic.rows::after { content: ""; position: absolute; inset: auto 0 0 0; height: 64px; background: linear-gradient(to bottom, transparent, var(--panel)); }
+.say { padding: 16px 18px 18px; display: grid; gap: 6px; }
+.say h2 { margin: 0; font: 700 34px/1 var(--title); }
+.say h2::first-letter { color: var(--rubric); }
+.door + .door .say h2::first-letter { color: var(--accent); }
+.say p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--muted); }
+.go { margin-top: 6px; font: 600 16px var(--display); color: var(--accent); }
+.orders { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; border-top: 1px solid var(--rule); padding-top: 22px; }
 .ord { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; align-items: center; }
 .ord .emblem { grid-row: span 2; }
-.ord b { font: 400 19px/1.1 var(--display); }
+.ord b { font: 600 18px/1.1 var(--display); }
 .ord span { font-size: 13px; color: var(--muted); }
-.source { font-size: 13px; color: var(--muted); max-width: 80ch; margin: 0; }
 @media (max-width: 720px) {
-  .home { padding-inline: 16px; gap: 26px; }
+  .cols { columns: 1; font-size: 17.5px; }
   .doors { grid-template-columns: minmax(0, 1fr); }
-  .door { grid-template-rows: 190px auto; }
   .orders { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .running { font-size: 14px; letter-spacing: .22em; }
 }
-@media (prefers-reduced-motion: reduce) { .door { transition: none; } .door:hover { translate: none; } }
 </style>
 </head>
 <body>
 <main class="home">
-  <div class="top"><div class="eyebrow">Niedersächsisches Klosterbuch · Sheet 13 · Prototype</div><button class="theme-btn" id="themeBtn" type="button"></button></div>
-  <header class="intro">
-    <h1>Order Houses of Lower Saxony</h1>
-    <p class="lede">A register of the houses of the Hospitallers, the Templars, the Teutonic Order and the Carmelites in Lower Saxony, from the first commanderies of the 1170s to the last dissolutions around 1820, drawn from the <i>Niedersächsisches Klosterbuch</i>.</p>
-    <div class="facts" id="facts"></div>
-  </header>
-  <nav class="doors" aria-label="Start">
-    <a class="door" href="map.html">
-      <div class="pic" id="mapPic"></div>
-      <div class="say"><h2>The Map</h2><p>See where each house stood, filter by order and type, follow mother and daughter houses, and play through the centuries.</p><div class="go">Open the map →</div></div>
-    </a>
-    <a class="door" href="houses.html">
-      <div class="pic rows" id="rowsPic"></div>
-      <div class="say"><h2>The Houses</h2><p id="housesSay"></p><div class="go">Browse the houses →</div></div>
-    </a>
-  </nav>
-  <section class="orders" id="orders" aria-label="Orders"></section>
-  <p class="source">Data: the Lower Saxony sheet compiled from the <i>Niedersächsisches Klosterbuch</i> (Dolle 2012), with links to Wikidata and Germania Sacra. This is a prototype; dates and locations are being checked.</p>
+  <div class="top"><div class="running" id="running" aria-label="Klosterbuch, sheet thirteen">Klosterbuch XIII</div><button class="theme-btn" id="themeBtn" type="button"></button></div>
+  <article class="sheet">
+    <header>
+      <p class="rubric">Here begins the register of the houses of the four orders in Lower Saxony.</p>
+      <h1>Order Houses of Lower Saxony</h1>
+    </header>
+    <div class="cols" lang="en">
+      <p><span class="initial" aria-hidden="true">A</span><span style="position:absolute;left:-9999px">A</span> register of the houses of the Hospitallers, the Templars, the Teutonic Order and the Carmelites in Lower Saxony, from the first commanderies of the 1170s to the last dissolutions around 1820, drawn from the <i>Niedersächsisches Klosterbuch</i>.</p>
+      <p id="facts"></p>
+      <p><span class="pil" aria-hidden="true">¶</span>Open the map to see where each house stood and how the orders spread and withdrew over the centuries. <span class="pil b" aria-hidden="true">¶</span>Open the houses to read each record: its history, its office holders, its mother and daughter houses, and its sources.</p>
+      <p><span class="pil" aria-hidden="true">¶</span>The entries were compiled from the <i>Klosterbuch</i> (Dolle 2012) and are linked to Wikidata and Germania Sacra. This is a prototype; dates and locations are still being checked.</p>
+    </div>
+    <nav class="doors" aria-label="Start">
+      <a class="door" href="map.html">
+        <div class="pic" id="mapPic"></div>
+        <div class="say"><h2>The Map</h2><p>Where each house stood, by order and by year.</p><div class="go">Open the map →</div></div>
+      </a>
+      <a class="door" href="houses.html">
+        <div class="pic rows" id="rowsPic"></div>
+        <div class="say"><h2>The Houses</h2><p id="housesSay"></p><div class="go">Browse the houses →</div></div>
+      </a>
+    </nav>
+    <section class="orders" id="orders" aria-label="Orders"></section>
+  </article>
 </main>
 <script>
 const DATA = {"houses":[{"id":"H-001","place":"Abbingwehr","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1240,"end":1528,"approx":true,"uncertain":false}],"locations":[{"lat":53.441,"lon":7.244,"accurate":true,"note":null}],"people":[]},{"id":"H-002","place":"Appingen","aliases":[],"type":"friary","status":"checked","periods":[{"order":"carm","start":1433,"end":1550,"approx":true,"uncertain":false}],"locations":[{"lat":53.482,"lon":7.089,"accurate":true,"note":"Mary"}],"people":[]},{"id":"H-003","place":"Atens","aliases":[],"type":"friary","status":"checked","periods":[{"order":"carm","start":1505,"end":1530,"approx":true,"uncertain":false}],"locations":[{"lat":53.495,"lon":8.47,"accurate":true,"note":"north of the Heete near the church nowadays"}],"people":[]},{"id":"H-004","place":"Boekzetel","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1499,"approx":true,"uncertain":false}],"locations":[{"lat":53.336,"lon":7.506,"accurate":true,"note":null}],"people":[]},{"id":"H-005","place":"Bokelesch","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1270,"end":1806,"approx":true,"uncertain":false}],"locations":[{"lat":53.162,"lon":7.664,"accurate":true,"note":null}],"people":[]},{"id":"H-006","place":"Braunschweig","aliases":["Brunswick"],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1173,"end":1528,"approx":true,"uncertain":false}],"locations":[{"lat":52.261,"lon":10.521,"accurate":true,"note":"Altstadt, south of the street Kattreppeln (called by sancte Johannese between 1386 and 1671)"}],"people":[]},{"id":"H-007","place":"Braunschweig","aliases":["Brunswick"],"type":"commandery","status":"checked","periods":[{"order":"temp","start":1173,"end":1312,"approx":true,"uncertain":false}],"locations":[{"lat":52.264,"lon":10.526,"accurate":true,"note":"Bohlweg (now northwest part of the castle square) in the district of Hagen"}],"people":[]},{"id":"H-008","place":"Brederhorn","aliases":["Bredehorn"],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1531,"approx":true,"uncertain":false}],"locations":[{"lat":53.335,"lon":7.949,"accurate":true,"note":null}],"people":[]},{"id":"H-009","place":"Bremen","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1236,"end":1564,"approx":true,"uncertain":false}],"locations":[{"lat":53.073,"lon":8.811,"accurate":true,"note":null}],"people":[]},{"id":"H-010","place":"Burlage","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1300,"end":1319,"approx":true,"uncertain":false}],"locations":[{"lat":53.077,"lon":7.573,"accurate":true,"note":null}],"people":[]},{"id":"H-011","place":"Burmönken","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1528,"approx":true,"uncertain":false}],"locations":[{"lat":53.553,"lon":7.814,"accurate":true,"note":null}],"people":[]},{"id":"H-012","place":"Dünebroek","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1559,"approx":true,"uncertain":false}],"locations":[{"lat":53.131,"lon":7.193,"accurate":true,"note":null}],"people":[]},{"id":"H-013","place":"Elmsburg","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1221,"end":1400,"approx":true,"uncertain":false}],"locations":[{"lat":52.144,"lon":10.919,"accurate":true,"note":null}],"people":[]},{"id":"H-014","place":"Emmerstedt","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"temp","start":1250,"end":1312,"approx":true,"uncertain":false},{"order":"hosp","start":1312,"end":1357,"approx":true,"uncertain":true}],"locations":[{"lat":52.243,"lon":10.96,"accurate":true,"note":null}],"people":[]},{"id":"H-015","place":"Esterwegen","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1223,"end":1564,"approx":true,"uncertain":false}],"locations":[{"lat":52.994,"lon":7.632,"accurate":true,"note":null}],"people":[]},{"id":"H-016","place":"Fallersleben","aliases":["Wolfsburg"],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1451,"end":null,"approx":false,"uncertain":false}],"locations":[{"lat":52.417,"lon":10.717,"accurate":true,"note":null}],"people":[]},{"id":"H-017","place":"Gartow","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1360,"end":1438,"approx":true,"uncertain":false}],"locations":[{"lat":53.023,"lon":11.457,"accurate":true,"note":null}],"people":[]},{"id":"H-018","place":"Goslar","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1214,"end":1550,"approx":true,"uncertain":false}],"locations":[{"lat":51.909,"lon":10.418,"accurate":true,"note":null},{"lat":51.9048,"lon":10.4325,"accurate":true,"start":"1523","end":"1531","note":"Second location"}],"people":[]},{"id":"H-019","place":"Goslar","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1227,"end":1399,"approx":true,"uncertain":false}],"locations":[{"lat":51.904,"lon":10.427,"accurate":true,"note":null}],"people":[]},{"id":"H-020","place":"Göttingen","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1242,"end":1810,"approx":false,"uncertain":false}],"locations":[{"lat":51.532,"lon":9.929,"accurate":true,"note":null}],"people":[]},{"id":"H-021","place":"Hahn","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1525,"approx":true,"uncertain":true}],"locations":[{"lat":53.291,"lon":8.158,"accurate":false,"note":null}],"people":[]},{"id":"H-022","place":"Hameln","aliases":[],"type":"friary","status":"checked","periods":[{"order":"carm","start":1317,"end":1374,"approx":true,"uncertain":true}],"locations":[{"lat":52.103,"lon":9.354,"accurate":false,"note":null}],"people":[]},{"id":"H-023","place":"Hameln","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"temp","start":1300,"end":1312,"approx":true,"uncertain":true}],"locations":[{"lat":52.103,"lon":9.354,"accurate":false,"note":null}],"people":[]},{"id":"H-024","place":"Hasselt","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1806,"approx":true,"uncertain":false}],"locations":[{"lat":53.285,"lon":7.642,"accurate":true,"note":null}],"people":[]},{"id":"H-025","place":"Heiselhusen","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1446,"end":1492,"approx":false,"uncertain":false}],"locations":[{"lat":53.409,"lon":7.028,"accurate":true,"note":null}],"people":[]},{"id":"H-026","place":"Hesel","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1499,"approx":true,"uncertain":false}],"locations":[{"lat":53.302,"lon":7.586,"accurate":true,"note":null}],"people":[]},{"id":"H-027","place":"Hildesheim","aliases":[],"type":"commandery","status":"excluded","periods":[{"order":"temp","start":null,"end":null,"approx":true,"uncertain":false}],"locations":[{"lat":52.153,"lon":9.956,"accurate":false,"note":null}],"people":[]},{"id":"H-028","place":"Inte","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1531,"approx":true,"uncertain":false}],"locations":[{"lat":53.493,"lon":8.378,"accurate":true,"note":"Four farmyards are grouped around the main house."}],"people":[]},{"id":"H-029","place":"Jemgum","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1240,"end":1528,"approx":true,"uncertain":false}],"locations":[{"lat":53.264,"lon":7.387,"accurate":true,"note":"The rectory was in the ‘Lange Straße’ district, whilst the convent was near the Ems dyke on Sielstrasse. Today, a walk takes you to the old convent church"}],"people":[]},{"id":"H-030","place":"Klosterholte","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1378,"end":1401,"approx":true,"uncertain":true}],"locations":[{"lat":52.633,"lon":7.409,"accurate":true,"note":null}],"people":[]},{"id":"H-031","place":"Hoven","aliases":["Dangast"],"type":"commandery","status":"checked","periods":[{"order":"temp","start":1294,"end":1312,"approx":true,"uncertain":true},{"order":"hosp","start":1319,"end":1550,"approx":true,"uncertain":false}],"locations":[{"lat":53.475,"lon":8.183,"accurate":true,"note":null}],"people":[]},{"id":"H-032","place":"Lage","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1245,"end":1810,"approx":false,"uncertain":false}],"locations":[{"lat":52.496,"lon":8.026,"accurate":true,"note":null}],"people":[]},{"id":"H-033","place":"Langewische","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1334,"approx":true,"uncertain":false}],"locations":[{"lat":53.518,"lon":8.354,"accurate":true,"note":null}],"people":[]},{"id":"H-034","place":"Langholt","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1270,"end":1528,"approx":true,"uncertain":false}],"locations":[{"lat":53.113,"lon":7.591,"accurate":true,"note":null}],"people":[]},{"id":"H-035","place":"Lemwerder","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1290,"end":1300,"approx":true,"uncertain":false}],"locations":[{"lat":53.158,"lon":8.617,"accurate":true,"note":null}],"people":[]},{"id":"H-036","place":"Lucklum","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1264,"end":1809,"approx":true,"uncertain":false}],"locations":[{"lat":52.205,"lon":10.69,"accurate":true,"note":null}],"people":[]},{"id":"H-037","place":"Marienau","aliases":[],"type":"friary","status":"checked","periods":[{"order":"carm","start":1310,"end":1566,"approx":true,"uncertain":false}],"locations":[{"lat":52.11,"lon":9.57,"accurate":true,"note":null}],"people":[]},{"id":"H-038","place":"Muhde","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1284,"end":1561,"approx":true,"uncertain":false}],"locations":[{"lat":53.205,"lon":7.418,"accurate":true,"note":null}],"people":[]},{"id":"H-039","place":"Oldenburg","aliases":[],"type":"chapel","status":"checked","periods":[{"order":"hosp","start":1378,"end":1531,"approx":true,"uncertain":false}],"locations":[{"lat":53.136,"lon":8.214,"accurate":false,"note":"Ortsangabe: vermuteter Standort der Johanniterkapelle"}],"people":[]},{"id":"H-040","place":"Osnabrück","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1378,"end":1805,"approx":true,"uncertain":false}],"locations":[{"lat":52.268,"lon":8.048,"accurate":true,"note":null}],"people":[]},{"id":"H-041","place":"Roddens","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1334,"end":1525,"approx":true,"uncertain":false}],"locations":[{"lat":53.542,"lon":8.287,"accurate":true,"note":null}],"people":[]},{"id":"H-042","place":"Strückhausen","aliases":["Struckhusen"],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1410,"end":1530,"approx":true,"uncertain":false}],"locations":[{"lat":53.316,"lon":8.387,"accurate":true,"note":null}],"people":[]},{"id":"H-043","place":"Süpplingburg","aliases":["Süpplingenburg"],"type":"commandery","status":"checked","periods":[{"order":"temp","start":1170,"end":1312,"approx":true,"uncertain":false},{"order":"hosp","start":1312,"end":1820,"approx":false,"uncertain":false}],"locations":[{"lat":52.25,"lon":10.904,"accurate":true,"note":null}],"people":[]},{"id":"H-044","place":"Tempelhof","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"temp","start":1213,"end":1312,"approx":true,"uncertain":false}],"locations":[{"lat":52.05,"lon":10.585,"accurate":true,"note":null}],"people":[]},{"id":"H-045","place":"Tjüchen","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1300,"end":1319,"approx":true,"uncertain":false}],"locations":[{"lat":53.552,"lon":7.799,"accurate":true,"note":null}],"people":[]},{"id":"H-046","place":"Versfleth","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1190,"end":1295,"approx":true,"uncertain":false}],"locations":[{"lat":53.167,"lon":8.606,"accurate":true,"note":null}],"people":[]},{"id":"H-047","place":"Weddingen","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1360,"end":1809,"approx":true,"uncertain":false}],"locations":[{"lat":51.974,"lon":10.49,"accurate":true,"note":null}],"people":[]},{"id":"H-048","place":"Witleke","aliases":["Witleken"],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1300,"end":1378,"approx":true,"uncertain":false}],"locations":[{"lat":53.54,"lon":8.33,"accurate":true,"note":null}],"people":[]}],"links":[],"persons":[],"orders":{"hosp":"Hospitallers","temp":"Templars","teut":"Teutonic Order","carm":"Carmelites"},"stats":{"offices":399,"links":10}};
@@ -263,8 +276,10 @@ function searchHit(h, raw) {
 const OUTLINE = [[[8.985,53.128],[8.949,53.124],[8.993,53.098],[8.963,53.09],[8.983,53.05],[8.935,53.015],[8.866,53.044],[8.867,53.025],[8.818,53.024],[8.773,53.057],[8.731,53.037],[8.626,53.165],[8.519,53.196],[8.487,53.229],[8.598,53.217],[8.594,53.187],[8.63,53.203],[8.675,53.178],[8.83,53.166],[8.862,53.137],[8.947,53.157],[8.985,53.128]],[[8.681,53.892],[8.757,53.843],[8.884,53.828],[9.016,53.836],[9.1,53.863],[9.096,53.884],[9.288,53.869],[9.359,53.823],[9.418,53.747],[9.507,53.701],[9.547,53.624],[9.674,53.575],[9.769,53.566],[9.763,53.517],[9.802,53.506],[9.796,53.48],[9.861,53.439],[9.899,53.469],[9.925,53.447],[9.906,53.425],[9.944,53.44],[9.983,53.425],[10.054,53.474],[10.177,53.408],[10.248,53.405],[10.331,53.443],[10.579,53.37],[10.708,53.379],[10.839,53.309],[10.932,53.351],[10.994,53.335],[11.069,53.23],[11.199,53.18],[11.174,53.158],[11.186,53.135],[11.267,53.127],[11.329,53.06],[11.46,53.077],[11.602,53.032],[11.564,52.995],[11.515,52.999],[11.508,52.939],[11.321,52.874],[11.042,52.913],[10.992,52.906],[10.943,52.851],[10.766,52.851],[10.761,52.793],[10.796,52.756],[10.796,52.721],[10.832,52.723],[10.921,52.607],[10.978,52.622],[10.934,52.566],[11.01,52.492],[10.948,52.492],[10.936,52.459],[11.079,52.373],[11.061,52.348],[10.988,52.337],[11.043,52.307],[11.013,52.289],[11.092,52.226],[11.02,52.197],[11.02,52.178],[11.068,52.167],[11.051,52.134],[10.949,52.105],[10.98,52.087],[10.975,52.057],[10.692,52.053],[10.649,52.046],[10.661,52.031],[10.631,52.013],[10.563,52.01],[10.656,51.961],[10.613,51.942],[10.656,51.905],[10.577,51.851],[10.578,51.783],[10.632,51.757],[10.669,51.713],[10.669,51.671],[10.705,51.644],[10.64,51.619],[10.634,51.592],[10.671,51.574],[10.665,51.558],[10.605,51.576],[10.522,51.551],[10.444,51.589],[10.378,51.585],[10.385,51.559],[10.35,51.522],[10.238,51.47],[10.196,51.482],[10.179,51.445],[10.144,51.441],[10.162,51.43],[10.096,51.438],[10.073,51.419],[10.055,51.438],[9.943,51.379],[9.911,51.42],[9.856,51.416],[9.869,51.375],[9.819,51.416],[9.795,51.408],[9.801,51.39],[9.706,51.371],[9.736,51.323],[9.771,51.343],[9.766,51.313],[9.731,51.301],[9.562,51.348],[9.572,51.393],[9.646,51.421],[9.628,51.454],[9.645,51.472],[9.59,51.523],[9.625,51.534],[9.613,51.556],[9.648,51.549],[9.689,51.583],[9.628,51.637],[9.382,51.648],[9.409,51.7],[9.389,51.758],[9.451,51.793],[9.437,51.84],[9.466,51.855],[9.341,51.854],[9.351,51.895],[9.278,51.927],[9.282,51.968],[9.179,51.978],[9.202,52.008],[9.176,52.034],[9.193,52.072],[9.137,52.093],[9.16,52.123],[9.074,52.148],[9.021,52.132],[9.019,52.17],[8.987,52.195],[9.048,52.181],[9.04,52.222],[9.076,52.23],[8.965,52.281],[9.028,52.345],[9.089,52.357],[9.123,52.403],[9.097,52.443],[9.138,52.477],[9.094,52.499],[9.051,52.502],[8.94,52.403],[8.856,52.391],[8.71,52.396],[8.704,52.504],[8.654,52.533],[8.558,52.501],[8.508,52.515],[8.433,52.45],[8.304,52.463],[8.313,52.407],[8.444,52.365],[8.471,52.317],[8.446,52.212],[8.521,52.187],[8.414,52.141],[8.404,52.111],[8.27,52.135],[8.196,52.074],[8.033,52.068],[7.974,52.036],[7.886,52.086],[8.009,52.115],[8.0,52.157],[8.025,52.162],[7.9,52.199],[7.928,52.227],[7.92,52.256],[7.955,52.277],[7.929,52.306],[7.988,52.312],[7.945,52.336],[7.938,52.369],[7.811,52.372],[7.719,52.402],[7.693,52.456],[7.613,52.476],[7.578,52.431],[7.609,52.421],[7.587,52.376],[7.532,52.371],[7.299,52.264],[7.159,52.268],[7.07,52.243],[7.03,52.294],[7.079,52.383],[7.006,52.47],[6.951,52.437],[6.714,52.484],[6.684,52.556],[6.768,52.565],[6.724,52.591],[6.719,52.63],[6.744,52.647],[7.052,52.636],[7.094,52.846],[7.212,52.933],[7.261,52.998],[7.257,53.098],[7.227,53.124],[7.293,53.163],[7.27,53.174],[7.285,53.2],[7.272,53.234],[7.205,53.239],[7.249,53.33],[7.027,53.336],[6.999,53.361],[7.025,53.483],[7.05,53.508],[7.034,53.533],[7.134,53.532],[7.09,53.577],[7.158,53.628],[7.317,53.683],[7.53,53.672],[7.794,53.71],[8.016,53.711],[8.045,53.642],[8.11,53.642],[8.096,53.63],[8.126,53.622],[8.121,53.597],[8.172,53.555],[8.155,53.514],[8.065,53.506],[8.074,53.465],[8.252,53.399],[8.316,53.466],[8.316,53.522],[8.231,53.52],[8.241,53.579],[8.272,53.61],[8.333,53.616],[8.394,53.57],[8.516,53.556],[8.557,53.526],[8.52,53.501],[8.571,53.518],[8.577,53.539],[8.484,53.656],[8.484,53.694],[8.558,53.834],[8.609,53.879],[8.681,53.892]]];
 const mine = houses.filter(h => !h.external && h.status === "checked");
 const dated = mine.filter(h => h.start != null);
-$("#facts").textContent = `${mine.length} houses of four orders, ${Math.min(...dated.map(h => h.start))}–${Math.max(...dated.map(h => h.end))}; ${DATA.stats.offices} office holders named; ${DATA.stats.links} filiations between mother and daughter houses.`;
-$("#housesSay").textContent = `Browse all ${mine.length} records: history, office holders, dependencies, sources, and how each entry was cleaned from the sheet.`;
+$("#facts").innerHTML = `<span class="pil b" aria-hidden="true">¶</span>It holds ${mine.length} houses of four orders, founded and dissolved between ${Math.min(...dated.map(h => h.start))} and ${Math.max(...dated.map(h => h.end))}. <span class="pil" aria-hidden="true">¶</span>${DATA.stats.offices} office holders are named, and ${DATA.stats.links} filiations between mother and daughter houses are recorded.`;
+// Running head: letters alternately red and blue, as the rubricators wrote the book titles.
+$("#running").innerHTML = [...$("#running").textContent].map(ch => ch === " " ? " " : `<i>${ch}</i>`).join("");
+$("#housesSay").textContent = `All ${mine.length} records, with search by place or person.`;
 
 // The map door: Lower Saxony's outline with every house as a dot in its order's colour.
 function drawMap() {
