@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex">
+<meta charset="utf-8">
+<title>Houses · Order Houses of Lower Saxony</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,500;0,600;1,500&family=Source+Sans+3:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root {
+  --paper: #f4f5f2; --panel: #fbfbf9; --ink: #1d2327; --muted: #5b656b; --rule: #d5d9d6;
+  --sea: #cfdde4; --land: #e7e6df; --land-edge: #c8c6bb; --region: #f6f4ec; --region-edge: #8e8a7a; --river: #a8c3d1;
+  --accent: #1f5f7a; --accent-soft: #e1ecf1; --bad: #a33a2c; --bad-soft: #f6e3df; --good-soft: #e3efe5;
+  --o-hosp: #2f3e4c; --o-temp: #b3261e; --o-teut: #a87908; --o-carm: #7a4e2d;
+  --display: "Spectral", Georgia, "Times New Roman", serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --shadow: 0 1px 2px rgba(20, 30, 35, .08), 0 8px 24px rgba(20, 30, 35, .10);
+  --ctrl-filter: none;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #15191c; --panel: #1b2024; --ink: #e5e8e6; --muted: #9aa4a9; --rule: #323a3f;
+  --sea: #0c1820; --land: #2a3033; --land-edge: #454e52; --region: #394145; --region-edge: #8c989d; --river: #2f5568;
+  --accent: #79b7d3; --accent-soft: #1e3440; --bad: #e08a7a; --bad-soft: #3a2420; --good-soft: #1f3324;
+  --o-hosp: #c9d4de; --o-temp: #ef6f61; --o-teut: #e2b33f; --o-carm: #c99a6c;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .45); --ctrl-filter: invert(.9); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --paper: #15191c; --panel: #1b2024; --ink: #e5e8e6; --muted: #9aa4a9; --rule: #323a3f;
+  --sea: #0c1820; --land: #2a3033; --land-edge: #454e52; --region: #394145; --region-edge: #8c989d; --river: #2f5568;
+  --accent: #79b7d3; --accent-soft: #1e3440; --bad: #e08a7a; --bad-soft: #3a2420; --good-soft: #1f3324;
+  --o-hosp: #c9d4de; --o-temp: #ef6f61; --o-teut: #e2b33f; --o-carm: #c99a6c;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px rgba(0, 0, 0, .45); --ctrl-filter: invert(.9); color-scheme: dark; }
+
+html, body { height: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.45 var(--body); }
+* { box-sizing: border-box; }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+[hidden] { display: none !important; }
+.eyebrow { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.linkbtn { border: 0; background: none; padding: 0; color: var(--accent); cursor: pointer; font-size: 13px; }
+.btn { border: 1px solid var(--rule); background: var(--paper); border-radius: 6px; padding: 5px 11px; cursor: pointer; font-size: 13px; color: var(--ink); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+.dots { display: inline-flex; gap: 3px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--c); display: inline-block; flex: none; }
+.dot.unc { background: transparent; border: 1.5px dashed var(--c); }
+.tag { font: 500 11.5px var(--mono); padding: 2px 7px; border-radius: 4px; background: var(--accent-soft); color: var(--ink); }
+.tag.warn { background: var(--bad-soft); color: var(--bad); }
+.tag.ok { background: var(--good-soft); }
+.emblem { display: inline-block; vertical-align: middle; flex: none; }
+.emblem.unc { opacity: .5; }
+.theme-btn { width: 30px; height: 30px; flex: none; display: grid; place-items: center; padding: 0; border: 1px solid var(--rule); border-radius: 50%; background: var(--paper); color: var(--ink); cursor: pointer; }
+.theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+.theme-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.crumbs { display: flex; gap: 14px; font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--accent); }
+.crumbs a[aria-current] { color: var(--ink); }
+
+/* Layout: an index, as at the back of a book. A slim navigation bar, the title with search and order filters,
+   then one row per house; each row opens that house's full record. */
+body { min-height: 100%; }
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: color-mix(in srgb, var(--paper) 92%, transparent); backdrop-filter: blur(6px); border-bottom: 1px solid var(--rule); }
+.nav-in { max-width: 1040px; margin: 0 auto; padding: 10px 24px; display: flex; gap: 10px; align-items: center; }
+.nav .sp { flex: 1; }
+.page { max-width: 1040px; margin: 0 auto; padding-inline: 24px; padding-block: 26px 56px; display: grid; gap: 18px; }
+h1 { margin: 0; font: 600 clamp(32px, 5vw, 46px)/1.05 var(--display); }
+.tools { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
+.search { position: relative; flex: 1 1 280px; max-width: 420px; }
+.search input { width: 100%; padding: 10px 12px 10px 36px; border: 1px solid var(--rule); border-radius: 8px; background: var(--panel); font-size: 15px; }
+.search input:focus-visible { outline: none; border-color: var(--accent); }
+.search svg { position: absolute; left: 12px; top: 50%; translate: 0 -50%; width: 15px; height: 15px; stroke: var(--muted); fill: none; stroke-width: 2; }
+.filters { display: flex; flex-wrap: wrap; gap: 6px; }
+.of { display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--rule); background: var(--panel); border-radius: 999px; padding: 3px 11px 3px 4px; font-size: 13.5px; cursor: pointer; }
+.of[aria-pressed="false"] { opacity: .45; }
+.of[aria-pressed="false"] .emblem { filter: grayscale(1); }
+.sort { border: 1px solid var(--rule); background: var(--panel); border-radius: 8px; padding: 7px 8px; font-size: 13.5px; margin-left: auto; }
+.count { font-size: 13.5px; color: var(--muted); }
+.count b { color: var(--ink); }
+.index { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.index a { display: grid; grid-template-columns: 54px minmax(0, 1.5fr) minmax(0, 1.6fr) 118px 92px; gap: 14px; align-items: center; padding: 11px 10px; border-bottom: 1px solid var(--rule); color: var(--ink); text-decoration: none; }
+.index a:hover, .index a:focus-visible { background: var(--accent-soft); }
+.index .name { font: 600 18px/1.2 var(--display); min-width: 0; }
+.index .why { display: block; font: 400 12.5px var(--body); color: var(--accent); margin-top: 2px; }
+.index .what { font-size: 14px; color: var(--muted); min-width: 0; }
+.index .what b { color: var(--ink); font-weight: 500; }
+.index .yrs { font: 13px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.index .n { font-size: 13px; color: var(--muted); text-align: right; }
+.empty { padding: 26px 10px; color: var(--muted); }
+@media (max-width: 760px) {
+  .page { padding-inline: 16px; }
+  .nav-in { padding: 8px 16px; }
+  .index a { grid-template-columns: 46px minmax(0, 1fr) auto; gap: 4px 12px; }
+  .index .what { grid-column: 2 / -1; }
+  .index .n { display: none; }
+  .sort { margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-in">
+  <a class="btn" href="./">← Home</a>
+  <a class="btn" href="map.html">Open the map</a>
+  <span class="sp"></span>
+  <button class="theme-btn" id="themeBtn" type="button"></button>
+</div></nav>
+<main class="page">
+  <h1>Houses</h1>
+  <div class="tools">
+    <label class="search" for="q"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search a place, alias or office holder" autocomplete="off"></label>
+    <div class="filters" id="filters" role="group" aria-label="Orders"></div>
+    <label for="sort" style="position:absolute;left:-9999px">Sort by</label>
+    <select class="sort" id="sort"><option value="name">Sort A–Z</option><option value="start">Sort by foundation</option><option value="people">Sort by office holders</option></select>
+  </div>
+  <div class="count" id="count" aria-live="polite"></div>
+  <ul class="index" id="index"></ul>
+</main>
+<script>
+const DATA = {"houses":[{"id":"H-001","place":"Abbingwehr","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1240,"end":1528,"approx":true,"uncertain":false}],"locations":[{"lat":53.441,"lon":7.244,"accurate":true,"note":null}],"people":[{"name":"Hermann"},{"name":"Emmeko"},{"name":"Nyttardus"},{"name":"Udo"},{"name":"Aydo"},{"name":"Abbe"},{"name":"Awo"},{"name":"Habo Hey"},{"name":"Johannes von Münster"},{"name":"Heinrich von Nymwegen"}]},{"id":"H-002","place":"Appingen","aliases":[],"type":"friary","status":"checked","periods":[{"order":"carm","start":1433,"end":1550,"approx":true,"uncertain":false}],"locations":[{"lat":53.482,"lon":7.089,"accurate":true,"note":"Mary"}],"people":[{"name":"Albert von Aachen"},{"name":"Heidenricus Mynenbodt"},{"name":"Heidenricus Mynenbodt"},{"name":"Arnold von Utrecht"},{"name":"Friedrich von Appingen"},{"name":"Cornelius von Oldenbosch"},{"name":"Friedrich von Appingen"},{"name":"Johannes Kruse"},{"name":"Adolph von Osterhusen"},{"name":"Johannes Kruse"},{"name":"Lübbert Sickingh"},{"name":"Friedrich von Appingen"},{"name":"Heinrich Sorgh"},{"name":"Johannes Kruse"},{"name":"Gisbert Haeck"},{"name":"Johannes Kruse"},{"name":"Johann Ludwig von Antwerpen"},{"name":"Johann Moyen von Geldern"},{"name":"Helenus von Emden"},{"name":"Johann Ellens aus Brüssel"}]},{"id":"H-003","place":"Atens","aliases":[],"type":"friary","status":"checked","periods":[{"order":"carm","start":1505,"end":1530,"approx":true,"uncertain":false}],"locations":[{"lat":53.495,"lon":8.47,"accurate":true,"note":"north of the Heete near the church nowadays"}],"people":[{"name":"Johannes Kruse"},{"name":"Albertus von Erkelenz"},{"name":"Johannes Kruse"},{"name":"Petrus vom Berg"},{"name":"Cornelius von Harlem"}]},{"id":"H-004","place":"Boekzetel","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1499,"approx":true,"uncertain":false}],"locations":[{"lat":53.336,"lon":7.506,"accurate":true,"note":null}],"people":[{"name":"Hermann"}]},{"id":"H-005","place":"Bokelesch","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1270,"end":1806,"approx":true,"uncertain":false}],"locations":[{"lat":53.162,"lon":7.664,"accurate":true,"note":null}],"people":[{"name":"Hermann Wolf"},{"name":"Nikolaus"},{"name":"Melchior von Drosste"}]},{"id":"H-006","place":"Braunschweig","aliases":["Brunswick"],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1173,"end":1528,"approx":true,"uncertain":false}],"locations":[{"lat":52.261,"lon":10.521,"accurate":true,"note":"Altstadt, south of the street Kattreppeln (called by sancte Johannese between 1386 and 1671)"}],"people":[{"name":"magister hospitalis G. clericus"},{"name":"Ulrich Swaf"},{"name":"Erembert"},{"name":"Gebhard von Bortfeld"},{"name":"Dietrich von Peyne"},{"name":"Conrad von Dorstadt"},{"name":"Heinrich von Werben"},{"name":"Ludof von Goslar"},{"name":"Johannes von der Heyde"},{"name":"nicolaus"},{"name":"Heinrich von Wendeburg"},{"name":"Georg Kröger"},{"name":"Peter Kynbawer"},{"name":"Gerhard Bisbeck"},{"name":"Hermann Knackenhover"},{"name":"Hermann Gernegast"}]},{"id":"H-007","place":"Braunschweig","aliases":["Brunswick"],"type":"commandery","status":"checked","periods":[{"order":"temp","start":1173,"end":1312,"approx":true,"uncertain":false}],"locations":[{"lat":52.264,"lon":10.526,"accurate":true,"note":"Bohlweg (now northwest part of the castle square) in the district of Hagen"}],"people":[{"name":"Martinus magister curie nostre Brunswic"},{"name":"Johannes de Bardeleve"}]},{"id":"H-008","place":"Brederhorn","aliases":["Bredehorn"],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1531,"approx":true,"uncertain":false}],"locations":[{"lat":53.335,"lon":7.949,"accurate":true,"note":null}],"people":[{"name":"Elias Unverzagt"},{"name":"Spilwynck"},{"name":"Johannes von haren"},{"name":"Theile Röben"}]},{"id":"H-009","place":"Bremen","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1236,"end":1564,"approx":true,"uncertain":false}],"locations":[{"lat":53.073,"lon":8.811,"accurate":true,"note":null}],"people":[{"name":"Arnold"},{"name":"Hartmann"},{"name":"Gebhard"},{"name":"Esich"},{"name":"Walter"},{"name":"Dietrich"},{"name":"Ludwig"},{"name":"Johann von Frenke"},{"name":"Derward von Bremen"},{"name":"Johann von Ladbergen"},{"name":"Ekbert"},{"name":"Wilhelm von Haren"},{"name":"Goswin von Vietinghoff"},{"name":"Marquard von Revele"},{"name":"Rabod von der Horst"},{"name":"Albrecht Klye"},{"name":"Eberhard Ovelacker"},{"name":"Engelbrecht von Peize"},{"name":"Hermann von Gimbte"},{"name":"Dondeldey Duckel"},{"name":"Johann von Nienburg"},{"name":"Konrad von Lünen"},{"name":"Dietrich Brand"},{"name":"Hermann von Barnsfeld"},{"name":"Dietrich Brand"},{"name":"Engelbert Monnik"},{"name":"Jasper von Münchhausen"},{"name":"Hermann Ovelacker von Wischlingen"},{"name":"Johann von Knippenburg"},{"name":"Rolf von Bardewisch"},{"name":"Franz von Dumstorp"}]},{"id":"H-010","place":"Burlage","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1300,"end":1319,"approx":true,"uncertain":false}],"locations":[{"lat":53.077,"lon":7.573,"accurate":true,"note":null}],"people":[]},{"id":"H-011","place":"Burmönken","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1528,"approx":true,"uncertain":false}],"locations":[{"lat":53.553,"lon":7.814,"accurate":true,"note":null}],"people":[{"name":"Commanders. Irpe"},{"name":"Haye van Vaerle"},{"name":"Jelbert van Buchoern"},{"name":"Eylard der Alte"},{"name":"Eylard der Junge"},{"name":"Johan Munter"},{"name":"Haye van Repsholt"},{"name":"Hinrik to Westerende"},{"name":"Gerhard aus Friesland"},{"name":"Garlich zu Burmönken"}]},{"id":"H-012","place":"Dünebroek","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1559,"approx":true,"uncertain":false}],"locations":[{"lat":53.131,"lon":7.193,"accurate":true,"note":null}],"people":[{"name":"Johannes aus Brabant"},{"name":"Hermann Moermann"},{"name":"Arnold von Dünebroek"},{"name":"Nicolaus von Bokelesch (1525"},{"name":"actually commandery of Bokelesch)"},{"name":"Arnold Iderhoff"},{"name":"Egbert von Aurich"},{"name":"Emko"},{"name":"Lübbert Meyer"}]},{"id":"H-013","place":"Elmsburg","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1221,"end":1400,"approx":true,"uncertain":false}],"locations":[{"lat":52.144,"lon":10.919,"accurate":true,"note":null}],"people":[{"name":"Johann von Wegeleben"},{"name":"Ludolf"},{"name":"Rudolf"},{"name":"Albert von Winningstedt"},{"name":"Coneman Buschestede"}]},{"id":"H-014","place":"Emmerstedt","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"temp","start":1250,"end":1312,"approx":true,"uncertain":false},{"order":"hosp","start":1312,"end":1357,"approx":true,"uncertain":true}],"locations":[{"lat":52.243,"lon":10.96,"accurate":true,"note":null}],"people":[{"name":"Johann de Bornstede"}]},{"id":"H-015","place":"Esterwegen","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1223,"end":1564,"approx":true,"uncertain":false}],"locations":[{"lat":52.994,"lon":7.632,"accurate":true,"note":null}],"people":[{"name":"Johannes de Butere"},{"name":"Heinrich von Sterneberg"},{"name":"Heinrich von Warmelo"}]},{"id":"H-016","place":"Fallersleben","aliases":["Wolfsburg"],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1451,"end":null,"approx":false,"uncertain":false}],"locations":[{"lat":52.417,"lon":10.717,"accurate":true,"note":null}],"people":[]},{"id":"H-017","place":"Gartow","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1360,"end":1438,"approx":true,"uncertain":false}],"locations":[{"lat":53.023,"lon":11.457,"accurate":true,"note":null}],"people":[{"name":"Albrecht von Dannenberg"},{"name":"Bernhard von der Schulenburg"},{"name":"Busso von Alvensleben"},{"name":"Nikolaus von Bülow"},{"name":"NN von Roditz"},{"name":"Heinrich von Redern"}]},{"id":"H-018","place":"Goslar","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1214,"end":1550,"approx":true,"uncertain":false}],"locations":[{"lat":51.909,"lon":10.418,"accurate":true,"note":null},{"lat":51.9048,"lon":10.4325,"accurate":true,"start":"1523","end":"1531","note":"Second location"}],"people":[{"name":"Guncelinus"},{"name":"Ludolf"},{"name":"Werenbold/Warmbold"},{"name":"Rudolf de Homenshusen"},{"name":"Rudolf von Sassenburg"},{"name":"Albrecht Wyling"},{"name":"Henning Blomberg"},{"name":"Johannes von Dornthen"},{"name":"Maneke de Sculenborch"},{"name":"Klinkebyl"},{"name":"Johannes Engel"},{"name":"Engel Mews"},{"name":"Balthazar Schrader"}]},{"id":"H-019","place":"Goslar","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1227,"end":1399,"approx":true,"uncertain":false}],"locations":[{"lat":51.904,"lon":10.427,"accurate":true,"note":null}],"people":[{"name":"Konrad"},{"name":"Arnold"},{"name":"Buchard von Dreinleve"},{"name":"Konrad von Quedlinburg"},{"name":"Heinrich von Barum"},{"name":"Johann Senkepil"}]},{"id":"H-020","place":"Göttingen","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1242,"end":1810,"approx":false,"uncertain":false}],"locations":[{"lat":51.532,"lon":9.929,"accurate":true,"note":null}],"people":[{"name":"Bodo"},{"name":"Dietrich von Mengershausen"},{"name":"Burchart von Winnigstede"},{"name":"Johann Senkepil"},{"name":"Heinrich von Kitzleben"},{"name":"Johann von Steinhorst"},{"name":"Ludolph Klencke"},{"name":"Wilhelm von Rheden"},{"name":"Freiherr von Bothmer"},{"name":"August Wilhelm von Grote"},{"name":"Johann Friedrich Freiherr von Stein"},{"name":"Philipp Otto Freiherr von Münchhausen"},{"name":"Alexander Friedrich Wilhelm von Seckendorf"},{"name":"August Friedrich Wilhelm Freiherr von Woellwart"},{"name":"Raban Freiherr von Spiegel zu Peckelsheim"}]},{"id":"H-021","place":"Hahn","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1525,"approx":true,"uncertain":true}],"locations":[{"lat":53.291,"lon":8.158,"accurate":false,"note":null}],"people":[{"name":"Hospitaller priest Sievert Schmedes"}]},{"id":"H-022","place":"Hameln","aliases":[],"type":"friary","status":"checked","periods":[{"order":"carm","start":1317,"end":1374,"approx":true,"uncertain":true}],"locations":[{"lat":52.103,"lon":9.354,"accurate":false,"note":null}],"people":[]},{"id":"H-023","place":"Hameln","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"temp","start":1300,"end":1312,"approx":true,"uncertain":true}],"locations":[{"lat":52.103,"lon":9.354,"accurate":false,"note":null}],"people":[]},{"id":"H-024","place":"Hasselt","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1806,"approx":true,"uncertain":false}],"locations":[{"lat":53.285,"lon":7.642,"accurate":true,"note":null}],"people":[{"name":"Heinrich von Brabant"},{"name":"Berend Buther"},{"name":"Johann Sigismund Graf von und zu Schaesberg"},{"name":"Johann Franz Freiherr von Freyberg"},{"name":"Franz Josef Nicolaus de Griset de Forell"},{"name":"Maximilian Alexander Freiherr von Hornstein zu Weiterdingen"},{"name":"Joseph Wilhelm Freiherr von Schauenburg zu Herlisheim"}]},{"id":"H-025","place":"Heiselhusen","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1446,"end":1492,"approx":false,"uncertain":false}],"locations":[{"lat":53.409,"lon":7.028,"accurate":true,"note":null}],"people":[{"name":"Acke"},{"name":"Wernyko"},{"name":"Bernd Buther"}]},{"id":"H-026","place":"Hesel","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1499,"approx":true,"uncertain":false}],"locations":[{"lat":53.302,"lon":7.586,"accurate":true,"note":null}],"people":[]},{"id":"H-027","place":"Hildesheim","aliases":[],"type":"commandery","status":"excluded","periods":[{"order":"temp","start":null,"end":null,"approx":true,"uncertain":false}],"locations":[{"lat":52.153,"lon":9.956,"accurate":false,"note":null}],"people":[]},{"id":"H-028","place":"Inte","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1531,"approx":true,"uncertain":false}],"locations":[{"lat":53.493,"lon":8.378,"accurate":true,"note":"Four farmyards are grouped around the main house."}],"people":[{"name":"Johann"}]},{"id":"H-029","place":"Jemgum","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1240,"end":1528,"approx":true,"uncertain":false}],"locations":[{"lat":53.264,"lon":7.387,"accurate":true,"note":"The rectory was in the ‘Lange Straße’ district, whilst the convent was near the Ems dyke on Sielstrasse. Today, a walk takes you to the old convent church"}],"people":[{"name":"Bernardu"},{"name":"Ocko"},{"name":"Edzerde"},{"name":"Haye/Hayo Witlink/Huytting Hwyttynga"},{"name":"Hey Friso"},{"name":"Wyardus"},{"name":"Feico or Heiko"}]},{"id":"H-030","place":"Klosterholte","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1378,"end":1401,"approx":true,"uncertain":true}],"locations":[{"lat":52.633,"lon":7.409,"accurate":true,"note":null}],"people":[]},{"id":"H-031","place":"Hoven","aliases":["Dangast"],"type":"commandery","status":"checked","periods":[{"order":"temp","start":1294,"end":1312,"approx":true,"uncertain":true},{"order":"hosp","start":1319,"end":1550,"approx":true,"uncertain":false}],"locations":[{"lat":53.475,"lon":8.183,"accurate":true,"note":null}],"people":[{"name":"Volquard 1443"},{"name":"Severt Schmedes"}]},{"id":"H-032","place":"Lage","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1245,"end":1810,"approx":false,"uncertain":false}],"locations":[{"lat":52.496,"lon":8.026,"accurate":true,"note":null}],"people":[{"name":"Albero"},{"name":"Rudolfus"},{"name":"Hermannus Unccus"},{"name":"Arnold"},{"name":"Johann Dusenfoet"},{"name":"Hermann"},{"name":"Gottfried von Seynen"},{"name":"Johann Hundertosse"},{"name":"Albert von Ulenbroke"},{"name":"Bernhard von Kerkering"},{"name":"Lubbert von Dehem"},{"name":"Hermann von Hamelen"},{"name":"Ludolph von Langhen"},{"name":"Hermann von Brandlecht"},{"name":"Johann Kruse"},{"name":"Hermann von Brockhusen"},{"name":"Johann von Warendorp"},{"name":"Herbord von Snetlage"},{"name":"Otto Graf von Waldeck"},{"name":"Johann von Altenbockum"},{"name":"Heinrich Johann von Ledebur"},{"name":"Moritz Lesch von Mühlheim"},{"name":"Heinich von Bernsau"},{"name":"Jakob Christoph von Andelau"},{"name":"Friedrich Ludwig Landgraf von Hessen-Darmstadt"},{"name":"Johann Jakob Freiherr von Pallandt zu Eyll und Hamern"},{"name":"Otto Theodor Heinrich Freiherr von Pallandt zu Borschemich"},{"name":"Johann Sigismund Graf von und zu Schaesberg"},{"name":"Philipp Wilhelm Graf von Nesselrode und Reichenstein"},{"name":"Bernhard Moritz Dietrich Freiherr von Cappel zu Horst"},{"name":"Caspar Fidelis Freiherr von Schönau zu Wehr"},{"name":"Fidelis Joseph Felix Ignatius Freiherr von Schönau zu Wehr"}]},{"id":"H-033","place":"Langewische","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1319,"end":1334,"approx":true,"uncertain":false}],"locations":[{"lat":53.518,"lon":8.354,"accurate":true,"note":null}],"people":[]},{"id":"H-034","place":"Langholt","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1270,"end":1528,"approx":true,"uncertain":false}],"locations":[{"lat":53.113,"lon":7.591,"accurate":true,"note":null}],"people":[{"name":"Memmo"},{"name":"Herher"},{"name":"Jost Lamperts"},{"name":"Haye Schartebroch"}]},{"id":"H-035","place":"Lemwerder","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1290,"end":1300,"approx":true,"uncertain":false}],"locations":[{"lat":53.158,"lon":8.617,"accurate":true,"note":null}],"people":[]},{"id":"H-036","place":"Lucklum","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1264,"end":1809,"approx":true,"uncertain":false}],"locations":[{"lat":52.205,"lon":10.69,"accurate":true,"note":null}],"people":[{"name":"Bodo de Wanzleve"},{"name":"frater Wedde"},{"name":"frater Wedego"},{"name":"Olricus de Barum"},{"name":"frater Henricus"},{"name":"Burchard de Winningstede"},{"name":"broder Johannes von den Haghen"},{"name":"Widekind"},{"name":"Hünere von Bartensleben"},{"name":"Friedrich von Pollenzik"},{"name":"Wersmode von Düben"},{"name":"Marten von Dopffere"},{"name":"Joachim von Hogtorb/Hopkorff"},{"name":"Johann Daniel von Priort"},{"name":"Friedrich Maximilian Freiherr von Stayn"},{"name":"Otto Dieterich von Bülow"},{"name":"Hildebrand Christoph Freiherr von Hardenberg"},{"name":"August Wilhelm Baron von Grothe/Grote"},{"name":"Daniel Christoph Graf von der Schulenburg"},{"name":"Eckart August Freiherr von Stammer"},{"name":"Gottlob Friedrich Wilhelm Freiherr von Hardenberg"},{"name":"Friedrich Wilhelm von Veltheim"},{"name":"Philipp Otto Freiherr von Münchhausen"}]},{"id":"H-037","place":"Marienau","aliases":[],"type":"friary","status":"checked","periods":[{"order":"carm","start":1310,"end":1566,"approx":true,"uncertain":false}],"locations":[{"lat":52.11,"lon":9.57,"accurate":true,"note":null}],"people":[{"name":"Johann"},{"name":"Johann von Minden"},{"name":"Konrad von Oldendorf"},{"name":"Heinrich von Oldendorf"},{"name":"Friedrich von Himmelfeldt"},{"name":"Konrad von Rinteln"},{"name":"Konrad von Oldendorf"},{"name":"Johann von Diest"},{"name":"Johann von Münder"},{"name":"Hermann von Hameln"},{"name":"Johann von Hildesheim"},{"name":"Gerhard von Göttingen"},{"name":"Albert von Stockem"},{"name":"Johann von Münder"},{"name":"Ludwig von Zierenberg"},{"name":"Johann von Münder"},{"name":"Borchard Teitze"},{"name":"Johann von Münder"},{"name":"Dietrich von Alfeld"},{"name":"Borchard Teitze"},{"name":"Dietrich von Alfeld"},{"name":"Johann von Münder"},{"name":"Johann von der Neustadt"},{"name":"Hermann von Einbeck"},{"name":"Konrad von Kassel"},{"name":"Heinrich de Foro"},{"name":"Konrad von Kassel"},{"name":"Berthold von Lauenstein"},{"name":"Gottfried Bose"},{"name":"Wedekind"},{"name":"Heinrich de Foro"},{"name":"Johann vom Hagen"},{"name":"Dietrich von Springe"},{"name":"Friedrich Breyer"},{"name":"Eilhard Bose"},{"name":"Baccalaureus Heinrich von Marienau"},{"name":"Eilhard Bose der Ältere"},{"name":"Heinrich vom Hagen"},{"name":"Bernhard von Eldagsen"},{"name":"Heinrich vom Hagen"},{"name":"Konrad Pantelen"},{"name":"Konrad Brandis"},{"name":"Gerhard Plasmann"},{"name":"Konrad Brandis"},{"name":"Johannes von Höxter"},{"name":"Henning Loess"},{"name":"Barthold Breyer"},{"name":"Johann Hartegen"},{"name":"Barthold Britz"},{"name":"Heinrich Kerckhove"},{"name":"Heinrich Mestwart"},{"name":"Henning Loß"},{"name":"Hermann Soleken"},{"name":"Albert Speithane"},{"name":"Heinrich Mestwart"},{"name":"Heinrich Tornemann"},{"name":"Vicarius prioris: Heinrich Mestwart"},{"name":"Subprioren: Albert von Stockem"},{"name":"Johann von Münder"},{"name":"Günther"},{"name":"Heinrich de Foro"},{"name":"Heinrich von Steinfurt"},{"name":"Konrad Brandis"},{"name":"Sander Wilden"},{"name":"Johann von Köln"},{"name":"Bruno Nagel"},{"name":"Albert Speithane"}]},{"id":"H-038","place":"Muhde","aliases":[],"type":"double commandery","status":"checked","periods":[{"order":"hosp","start":1284,"end":1561,"approx":true,"uncertain":false}],"locations":[{"lat":53.205,"lon":7.418,"accurate":true,"note":null}],"people":[{"name":"Aynardus"},{"name":"Hero"},{"name":"Aynardus Lheris"},{"name":"Gosyng/Gotze/Goesman"},{"name":"Eylert"},{"name":"Johannes"},{"name":"Weber"},{"name":"Berendt von Hage"}]},{"id":"H-039","place":"Oldenburg","aliases":[],"type":"chapel","status":"checked","periods":[{"order":"hosp","start":1378,"end":1531,"approx":true,"uncertain":false}],"locations":[{"lat":53.136,"lon":8.214,"accurate":false,"note":"Ortsangabe: vermuteter Standort der Johanniterkapelle"}],"people":[{"name":"Head"},{"name":"Johannes mines heren sone"},{"name":"Friedrich Hovemann. Secular clergy: Johannes"},{"name":"Johannes Nopernagel"},{"name":"Heinrich Wolters (around 1432"},{"name":"later accepted into the order)"}]},{"id":"H-040","place":"Osnabrück","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1378,"end":1805,"approx":true,"uncertain":false}],"locations":[{"lat":52.268,"lon":8.048,"accurate":true,"note":null}],"people":[{"name":"Hermann van Brantlecht"},{"name":"Arnd"},{"name":"Reynold von Asbeke"},{"name":"Thomas Hagenbeke"},{"name":"Kersten Wulner"},{"name":"Sweder von Diepenbrock"},{"name":"Heinrich von Bodelschwingh"},{"name":"Gerd von Mallinckrodt"},{"name":"Wilhelm von der Recke"},{"name":"Jobst Stael"},{"name":"Johann Gisbert up dem Berge"},{"name":"Gerd von Meschede"},{"name":"Johann von Senden"},{"name":"Heinrich von Ittersumb"},{"name":"Eberhard von Dellwig"},{"name":"Gisbert von der Capellen"},{"name":"Ernst Schilder"},{"name":"Friedrich von Voß"},{"name":"Johann Hunold von Plettenberg"},{"name":"Hermann Orto Bar"},{"name":"Rab Henrich von Westrem"},{"name":"Ferdinand Röttger von Dobbe"},{"name":"Rosier Gottfried von Dellwig"},{"name":"Ferdinand Mauritz von Korff"},{"name":"Franz Gaudenz von Westrem"},{"name":"Johann Heidenreich von Ketteler"},{"name":"Franz Wilhelm von Schade"},{"name":"Ferdinand Johann von Holdinghausen"},{"name":"Franz Wilhelm Bernd von Westrem"},{"name":"Hermann Wennemar von Hörde"},{"name":"Ferdinand Moritz von Mengersen"},{"name":"Ferdinand Wilhelm Otto von Haxthausen"},{"name":"Karl von Schlamersdorff"},{"name":"Friedrich Ernst von Spiegel"}]},{"id":"H-041","place":"Roddens","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1334,"end":1525,"approx":true,"uncertain":false}],"locations":[{"lat":53.542,"lon":8.287,"accurate":true,"note":null}],"people":[{"name":"Meynard"}]},{"id":"H-042","place":"Strückhausen","aliases":["Struckhusen"],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1410,"end":1530,"approx":true,"uncertain":false}],"locations":[{"lat":53.316,"lon":8.387,"accurate":true,"note":null}],"people":[{"name":"Heinrich Marßmann/Hinrich Marschmann"}]},{"id":"H-043","place":"Süpplingburg","aliases":["Süpplingenburg"],"type":"commandery","status":"checked","periods":[{"order":"temp","start":1170,"end":1312,"approx":true,"uncertain":false},{"order":"hosp","start":1312,"end":1820,"approx":false,"uncertain":false}],"locations":[{"lat":52.25,"lon":10.904,"accurate":true,"note":null}],"people":[{"name":"Johann von Zcoploy"},{"name":"Friedrich von Zerchsen"},{"name":"Magister Hermann"},{"name":"Friedrich von Alvensleben"},{"name":"Herzog Orto von Braunschweig"},{"name":"Gerhard von Bortfeld"},{"name":"Hermann von Warberg"},{"name":"Rudolf von Sachsenberg Sassenberg"},{"name":"Rudolf von Omenshausen"},{"name":"Bernhard von der Schulenburg"},{"name":"Ulrich von Regenstein"},{"name":"Albrecht von Warberg"},{"name":"von Welmder"},{"name":"Reimer von Güntersberg"},{"name":"Nikolaus von Kolditz"},{"name":"Kurt von Reden"},{"name":"Burghard von der Schulenburg"},{"name":"Meincke von der Schulenburg"},{"name":"Friedrich von der Schulenburg"},{"name":"Achim von Holste"},{"name":"Matthias Diricke Dörgke"},{"name":"Christoph von Bredow"},{"name":"Nicolaus von Kolowrat"},{"name":"Philipp Friedrich von Weidensee"},{"name":"Hans Wolf von der Heiden"},{"name":"Georg Ehrenreich von Burgsdorf"},{"name":"Freiherr Christoph Kaspar von Blumenthal"},{"name":"Herzog Ludwig Rudolph von Braunschweig-Lüneburg"},{"name":"Erdmann Freiherr von Stein"},{"name":"Herzog Ludwig Ernst von Braunschweig"},{"name":"Reichsgraf Friedrich Otto Leopold von Finckenstein"},{"name":"Herzog August von Braunschweig-Lüneburg"}]},{"id":"H-044","place":"Tempelhof","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"temp","start":1213,"end":1312,"approx":true,"uncertain":false}],"locations":[{"lat":52.05,"lon":10.585,"accurate":true,"note":null}],"people":[]},{"id":"H-045","place":"Tjüchen","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1300,"end":1319,"approx":true,"uncertain":false}],"locations":[{"lat":53.552,"lon":7.799,"accurate":true,"note":null}],"people":[]},{"id":"H-046","place":"Versfleth","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1190,"end":1295,"approx":true,"uncertain":false}],"locations":[{"lat":53.167,"lon":8.606,"accurate":true,"note":null}],"people":[]},{"id":"H-047","place":"Weddingen","aliases":[],"type":"commandery","status":"checked","periods":[{"order":"teut","start":1360,"end":1809,"approx":true,"uncertain":false}],"locations":[{"lat":51.974,"lon":10.49,"accurate":true,"note":null}],"people":[{"name":"Johann von Sickte"},{"name":"Heinrich von Sehlde"},{"name":"Arnd"},{"name":"Nikolaus Pauli"},{"name":"Lorenz Berlin"},{"name":"Georg Seel"},{"name":"Dietrich Bock von Nordholz"},{"name":"Gebhard von Honrodt"},{"name":"Balthasar von Einbeck (also Endtbeckh"},{"name":"Burchard von Cramm"}]},{"id":"H-048","place":"Witleke","aliases":["Witleken"],"type":"commandery","status":"checked","periods":[{"order":"hosp","start":1300,"end":1378,"approx":true,"uncertain":false}],"locations":[{"lat":53.54,"lon":8.33,"accurate":true,"note":null}],"people":[]}],"links":[],"persons":[],"orders":{"hosp":"Hospitallers","temp":"Templars","teut":"Teutonic Order","carm":"Carmelites"},"stats":{"offices":399,"links":10}};
+const ORDER_KEYS = ["hosp", "temp", "teut", "carm"];
+const MIN_Y = 1150, MAX_Y = 1820;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const oc = k => css("--o-" + k);
+const houses = DATA.houses;
+const byId = Object.fromEntries(houses.map(h => [h.id, h]));
+const personById = Object.fromEntries(DATA.persons.map(p => [p.id, p]));
+
+// ---------- derived fields ----------
+for (const h of houses) {
+  const ps = h.periods.filter(p => p.start != null);
+  h.start = ps.length ? Math.min(...ps.map(p => p.start)) : null;
+  h.end = ps.length ? Math.max(...ps.map(p => p.end ?? p.start)) : null;
+  h.endUnknown = h.periods.some(p => p.start != null && p.end == null);
+  h.orders = [...new Set(h.periods.map(p => p.order))];
+  h.loc = h.locations[0];
+  h.label = h.external ? h.name : h.place;
+}
+const range = h => h.start == null ? "dates unknown" :
+  `${h.periods.some(p => p.approx) ? "c. " : ""}${h.start}–${h.endUnknown ? "?" : h.end}`;
+const orderAt = (h, y) => h.periods.find(p => p.start != null && y >= p.start && y <= (p.end ?? MAX_Y));
+
+const ordersText = h => h.periods.map(p => DATA.orders[p.order] + (p.uncertain ? " (uncertain)" : "")).join(" → ");
+const houseUrl = id => "house.html#" + id;
+function timelineSvg(h, year = null) {
+  const W = 360, x = y => 4 + (y - MIN_Y) / (MAX_Y - MIN_Y) * (W - 8);
+  const rows = h.periods.filter(p => p.start != null);
+  const bars = rows.map((p, i) => {
+    const e = p.end ?? p.start + 10, y0 = 6 + i * 14;
+    const fade = p.approx ? `<rect x="${x(p.start) - 10}" y="${y0}" width="10" height="9" fill="${oc(p.order)}" opacity=".3"/>` : "";
+    return `${fade}<rect x="${x(p.start)}" y="${y0}" width="${Math.max(2, x(e) - x(p.start))}" height="9" rx="1.5" fill="${oc(p.order)}" ${p.uncertain ? 'fill-opacity=".45" stroke="' + oc(p.order) + '" stroke-dasharray="3 2"' : ""}/>`;
+  }).join("");
+  const ticks = [1200, 1300, 1400, 1500, 1600, 1700, 1800].map(y => `<line class="axis" x1="${x(y)}" x2="${x(y)}" y1="40" y2="44"/><text x="${x(y)}" y="55" text-anchor="middle">${y}</text>`).join("");
+  const now = year != null ? `<line class="now" x1="${x(year)}" x2="${x(year)}" y1="0" y2="44"/>` : "";
+  return `<svg class="timeline" viewBox="0 0 ${W} 58" role="img" aria-label="Order periods on a time axis"><line class="axis" x1="4" x2="${W - 4}" y1="42" y2="42"/>${ticks}${bars}${now}</svg>`;
+}
+
+// Order emblems, drawn after each order's own heraldry: the Hospitallers' white eight-pointed cross on black,
+// the Templars' red cross pattée on white, the Teutonic Order's black cross on white with a gold rim, and the
+// Carmelites' Mount Carmel crowned by a cross. Heraldic colours are fixed, so an emblem reads the same in both themes.
+const EMBLEM = {
+  hosp: { field: "#22272c", rim: "#c9d0d6", ink: "#ffffff", name: "white eight-pointed cross on black" },
+  temp: { field: "#fbfaf6", rim: "#b3261e", ink: "#b3261e", name: "red cross pattée on white" },
+  teut: { field: "#fbfaf6", rim: "#b8901c", ink: "#1b1b1b", name: "black cross on white, gold rim" },
+  carm: { field: "#f6efe3", rim: "#6b4226", ink: "#6b4226", name: "Mount Carmel with a cross" },
+};
+const quarter = d => [0, 90, 180, 270].map(a => `<path d="${d}" transform="rotate(${a} 12 12)"/>`).join("");
+const star = (cx, cy, R, r) => "M" + Array.from({ length: 10 }, (_, i) => {
+  const a = -Math.PI / 2 + i * Math.PI / 5, d = i % 2 ? r : R;
+  return `${(cx + d * Math.cos(a)).toFixed(2)} ${(cy + d * Math.sin(a)).toFixed(2)}`;
+}).join("L") + "Z";
+const EMBLEM_INK = {
+  hosp: quarter("M12 12 8.2 3.5 12 5.7 15.8 3.5Z"),               // each arm: two points with a V notch
+  temp: quarter("M10.9 12 9.9 7.4 8.1 3.5H15.9L14.1 7.4 13.1 12Z"),  // arms flaring towards the rim
+  teut: quarter("M10.2 12V5.7L9 3.5H15L13.8 5.7V12Z"),               // straight arms, short flare
+  carm: `<path d="M4.4 18.4 12 8.6 19.6 18.4Z"/><path d="M11.3 2.9h1.4v1.7h1.6V6h-1.6v2.6h-1.4V6H9.7V4.6h1.6Z"/>`
+    + `<path d="${star(12, 14.6, 2.3, .95)}" fill="#f6efe3"/>`,
+};
+function emblem(o, size = 22, uncertain = false) {
+  const e = EMBLEM[o];
+  return `<svg class="emblem${uncertain ? " unc" : ""}" width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true">`
+    + `<circle cx="12" cy="12" r="11" fill="${e.field}" stroke="${e.rim}" stroke-width="1.6"/><g fill="${e.ink}">${EMBLEM_INK[o]}</g></svg>`;
+}
+
+// Light / dark theme. The page follows the system setting until the reader picks one; the choice is kept in
+// this browser. Setting data-theme is all it takes: the colour tokens, the map and the emblems follow it.
+const THEME_KEY = "orders-map:theme";
+try { const t = localStorage.getItem(THEME_KEY); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch {}
+const currentTheme = () => document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+function initThemeToggle(btn) {
+  const sun = '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.6"/><path d="M10 1.8v2.4M10 15.8v2.4M1.8 10h2.4M15.8 10h2.4M4.2 4.2l1.700 1.700M14.1 14.1l1.700 1.700M4.2 15.8l1.700-1.700M14.1 5.900l1.700-1.700"/></svg>';
+  const moon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 12.300A7 7 0 0 1 7.700 3.500a7 7 0 1 0 8.800 8.800Z"/></svg>';
+  const paint = () => {
+    const dark = currentTheme() === "dark";
+    btn.innerHTML = dark ? sun : moon;
+    btn.title = dark ? "Switch to the light theme" : "Switch to the dark theme";
+    btn.setAttribute("aria-label", btn.title);
+  };
+  btn.onclick = () => {
+    const next = currentTheme() === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem(THEME_KEY, next); } catch {}
+    paint();
+  };
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paint);
+  paint();
+}
+
+// ---------- spelling-tolerant search ----------
+const fold = s => String(s).toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "")
+  .replace(/ß/g, "ss").replace(/ae/g, "a").replace(/oe/g, "o").replace(/ue/g, "u")
+  .replace(/[zß]/g, "s").replace(/ck|c|q/g, "k").replace(/th/g, "t").replace(/y/g, "i").replace(/(.)\1+/g, "$1");
+function lev(a, b, max) {
+  if (Math.abs(a.length - b.length) > max) return max + 1;
+  let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i]; let best = i;
+    for (let j = 1; j <= b.length; j++) {
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      best = Math.min(best, cur[j]);
+    }
+    if (best > max) return max + 1;
+    prev = cur;
+  }
+  return prev[b.length];
+}
+function wordMatch(q, text) {
+  const t = fold(text);
+  if (t.includes(q)) return true;
+  if (q.length < 5) return false;
+  const tol = q.length >= 9 ? 2 : 1;
+  return t.split(/[^a-z]+/).some(w => w.length >= 4 && (lev(q, w, tol) <= tol || (w.length > q.length && lev(q, w.slice(0, q.length), tol) <= tol)));
+}
+for (const h of houses) {
+  h.index = [
+    { why: null, text: h.label }, ...h.aliases.map(a => ({ why: "also written " + a, text: a })),
+    { why: null, text: h.id },
+    ...h.people.map(p => ({ why: "office holder: " + p.name, text: p.name })),
+  ];
+}
+function searchHit(h, raw) {
+  const words = fold(raw).split(/\s+/).filter(Boolean);
+  if (!words.length) return { ok: true };
+  for (const entry of h.index) if (words.every(w => wordMatch(w, entry.text))) return { ok: true, why: entry.why };
+  return { ok: false };
+}
+
+
+const state = { q: "", orders: new Set(ORDER_KEYS), sort: "name" };
+const mine = houses.filter(h => !h.external && h.status === "checked");   // the same houses the map shows
+function renderFilters() {
+  $("#filters").innerHTML = ORDER_KEYS.map(o => `<button class="of" data-o="${o}" aria-pressed="${state.orders.has(o)}">${emblem(o, 22)}${DATA.orders[o]}</button>`).join("");
+}
+const sorters = {
+  name: (a, b) => a.label.localeCompare(b.label, "de") || (a.start ?? 0) - (b.start ?? 0),
+  start: (a, b) => (a.start ?? 9999) - (b.start ?? 9999) || a.label.localeCompare(b.label, "de"),
+  people: (a, b) => b.people.length - a.people.length || a.label.localeCompare(b.label, "de"),
+};
+function render() {
+  const rows = mine.map(h => [h, searchHit(h, state.q)]).filter(([h, v]) => v.ok && h.orders.some(o => state.orders.has(o))).sort(([a], [b]) => sorters[state.sort](a, b));
+  $("#count").innerHTML = `<b>${rows.length}</b> of ${mine.length} houses`;
+  $("#index").innerHTML = rows.length ? rows.map(([h, v]) => `<li><a href="${houseUrl(h.id)}">
+      <span class="dots">${h.periods.map(p => emblem(p.order, 24, p.uncertain)).join("")}</span>
+      <span class="name">${esc(h.label)}${v.why ? `<span class="why">${esc(v.why)}</span>` : ""}</span>
+      <span class="what"><b>${esc(h.periods.map(p => DATA.orders[p.order] + (p.uncertain ? " (?)" : "")).join(" → "))}</b> · ${esc(h.type)}${h.status === "excluded" ? ' · <span class="tag warn">excluded</span>' : ""}</span>
+      <span class="yrs">${esc(range(h))}</span>
+      <span class="n">${h.people.length ? h.people.length + " office holder" + (h.people.length === 1 ? "" : "s") : ""}</span></a></li>`).join("")
+    : `<li class="empty">No house matches. Clear the search or switch an order back on.</li>`;
+}
+$("#q").oninput = e => { state.q = e.target.value; render(); };
+$("#sort").onchange = e => { state.sort = e.target.value; render(); };
+$("#filters").onclick = e => { const b = e.target.closest("[data-o]"); if (!b) return; const o = b.dataset.o;
+  state.orders.has(o) && state.orders.size > 1 ? state.orders.delete(o) : state.orders.add(o); renderFilters(); render(); };
+initThemeToggle($("#themeBtn"));
+renderFilters(); render();
+</script>
+</body>
+</html>

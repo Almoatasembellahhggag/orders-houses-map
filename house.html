@@ -55,6 +55,10 @@ button, input, select { font: inherit; color: inherit; }
 .theme-btn { width: 30px; height: 30px; flex: none; display: grid; place-items: center; padding: 0; border: 1px solid var(--rule); border-radius: 50%; background: var(--paper); color: var(--ink); cursor: pointer; }
 .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
 .theme-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.crumbs { display: flex; gap: 14px; font: 500 12px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+.crumbs a { color: var(--muted); text-decoration: none; }
+.crumbs a:hover { color: var(--accent); }
+.crumbs a[aria-current] { color: var(--ink); }
 
 /* Layout: a record sheet — a slim navigation bar, the house's title block, then the narrative on the left and the
    reference facts (dates, place, links, sources) in a side column, as in an archive finding aid. */
@@ -117,7 +121,9 @@ dl.kv dd { margin: 0; overflow-wrap: anywhere; }
 </head>
 <body>
 <nav class="nav"><div class="nav-in">
-  <a class="btn" id="back" href="./">← Back to map</a>
+  <a class="btn" href="houses.html">← All houses</a>
+  <a class="btn" id="back" href="map.html">Show on the map</a>
+  <nav class="crumbs" style="margin-left:8px"><a href="./">Home</a></nav>
   <span class="sp"></span>
   <a class="btn" id="prev" href="#">‹ Previous</a>
   <label for="pick" class="eyebrow" style="position:absolute;left:-9999px">Go to house</label>
@@ -218,16 +224,54 @@ function initThemeToggle(btn) {
   paint();
 }
 
+// ---------- spelling-tolerant search ----------
+const fold = s => String(s).toLowerCase().normalize("NFKD").replace(/[̀-ͯ]/g, "")
+  .replace(/ß/g, "ss").replace(/ae/g, "a").replace(/oe/g, "o").replace(/ue/g, "u")
+  .replace(/[zß]/g, "s").replace(/ck|c|q/g, "k").replace(/th/g, "t").replace(/y/g, "i").replace(/(.)\1+/g, "$1");
+function lev(a, b, max) {
+  if (Math.abs(a.length - b.length) > max) return max + 1;
+  let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i]; let best = i;
+    for (let j = 1; j <= b.length; j++) {
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      best = Math.min(best, cur[j]);
+    }
+    if (best > max) return max + 1;
+    prev = cur;
+  }
+  return prev[b.length];
+}
+function wordMatch(q, text) {
+  const t = fold(text);
+  if (t.includes(q)) return true;
+  if (q.length < 5) return false;
+  const tol = q.length >= 9 ? 2 : 1;
+  return t.split(/[^a-z]+/).some(w => w.length >= 4 && (lev(q, w, tol) <= tol || (w.length > q.length && lev(q, w.slice(0, q.length), tol) <= tol)));
+}
+for (const h of houses) {
+  h.index = [
+    { why: null, text: h.label }, ...h.aliases.map(a => ({ why: "also written " + a, text: a })),
+    { why: null, text: h.id },
+    ...h.people.map(p => ({ why: "office holder: " + p.name, text: p.name })),
+  ];
+}
+function searchHit(h, raw) {
+  const words = fold(raw).split(/\s+/).filter(Boolean);
+  if (!words.length) return { ok: true };
+  for (const entry of h.index) if (words.every(w => wordMatch(w, entry.text))) return { ok: true, why: entry.why };
+  return { ok: false };
+}
+
+
 const list = houses.filter(h => !h.external).sort((a, b) => a.label.localeCompare(b.label, "de") || (a.start ?? 0) - (b.start ?? 0));
 const pick = $("#pick");
 pick.innerHTML = list.map(h => `<option value="${h.id}">${esc(h.label)} · ${esc(DATA.orders[h.orders[0]])}</option>`).join("");
 pick.onchange = () => { location.hash = pick.value; };
-// The map page is wherever we came from; opened directly, it is the file next to this one.
-const fromMap = document.referrer && !/house\.html/.test(document.referrer) ? document.referrer.split("#")[0] : "./";
-const mapUrl = id => fromMap + "#" + id;
+const mapUrl = id => "map.html#" + id;
 $("#back").onclick = e => {
-  // Return to the map as it was left (filters, zoom) when we came from it.
-  if (document.referrer && history.length > 1) { e.preventDefault(); history.back(); }
+  // Coming from the map, go back to it as it was left (filters, zoom) rather than loading it afresh.
+  if (/map\.html/.test(document.referrer) && history.length > 1) { e.preventDefault(); history.back(); }
 };
 
 function relLink(id, small) {
