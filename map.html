@@ -271,6 +271,22 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
 .card .btn.primary { justify-content: center; padding: 7px 11px; font-weight: 600; }
 .toast { position: absolute; left: 50%; bottom: 24px; translate: -50% 0; z-index: 900; background: var(--ink); color: var(--panel); padding: 8px 14px; border-radius: 3px; font-size: 14px; box-shadow: var(--shadow); }
 .mobile-tabs { display: none; }
+/* the download dialog: a plate like the others */
+.dl { width: min(380px, calc(100% - 32px)); padding: 0; border: 1px solid var(--region-edge); outline: 1px solid var(--region-edge); outline-offset: 2px; background: var(--panel); color: var(--ink); box-shadow: var(--shadow); }
+.dl::backdrop { background: rgba(30, 22, 14, .45); }
+.dl form { display: grid; gap: 10px; padding: 18px 20px 18px; }
+.dl h2 { margin: 0; font: 400 17px/1.2 var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+.dl p { margin: 0; font: 400 17px/1.45 var(--display); }
+.dl p b { font-weight: 700; }
+.dl label[for="dlName"], .dl legend { font-size: 13px; color: var(--muted); padding: 0; }
+.dl-name { display: flex; align-items: center; border: 1px solid var(--rule); background: var(--paper); }
+.dl-name:focus-within { border-color: var(--accent); }
+.dl-name input { flex: 1; min-width: 0; border: 0; background: transparent; padding: 8px 10px; font-size: 15px; }
+.dl-name input:focus-visible { outline: none; }
+.dl-name span { padding-right: 10px; color: var(--muted); font-size: 15px; }
+.dl fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; }
+.dl-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px; }
+.dl-actions .btn { padding: 7px 14px; font-size: 14px; }
 .timebar { --w: min(520px, calc(100% - var(--inset-left) - 24px)); position: absolute; bottom: 30px; left: max(50%, calc(var(--inset-left) + var(--w) / 2)); translate: -50% 0; width: var(--w); z-index: 600;
   background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--rule); border-radius: 4px; box-shadow: var(--shadow);
   padding: 10px 14px 10px; display: grid; gap: 5px; border-radius: 4px; }
@@ -327,7 +343,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
       </details>
     </div>
     <div class="aid-foot"><span>Export</span><span class="sp"></span>
-      <button class="btn" id="copyCsv">Download CSV</button><button class="btn" id="copyMd">Download Markdown</button></div>
+      <button class="btn" id="dlOpen">Download…</button></div>
   </aside>
   <main class="mapwrap">
     <div id="map" role="application" aria-label="Map of order houses"></div>
@@ -353,6 +369,19 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
       <div class="time-note" id="timeNote" aria-live="polite"></div>
     </section>
     <div class="toast" id="toast" hidden></div>
+    <dialog class="dl" id="dl" aria-labelledby="dlTitle">
+      <form id="dlForm" method="dialog">
+        <h2 id="dlTitle">Download</h2>
+        <p id="dlCount"></p>
+        <label for="dlName">File name</label>
+        <div class="dl-name"><input id="dlName" type="text" autocomplete="off" spellcheck="false" maxlength="80"><span id="dlExt">.csv</span></div>
+        <fieldset><legend>Format</legend>
+          <label class="toggle" for="dlCsv"><input type="radio" name="dlFormat" id="dlCsv" value="csv" checked> CSV (opens in Excel)</label>
+          <label class="toggle" for="dlMd"><input type="radio" name="dlFormat" id="dlMd" value="md"> Markdown table</label>
+        </fieldset>
+        <div class="dl-actions"><button type="button" class="btn" id="dlCancel">Cancel</button><button type="submit" class="btn primary" id="dlGo">Download</button></div>
+      </form>
+    </dialog>
   </main>
 </div>
 
@@ -395,7 +424,8 @@ const DE = {
   "Where each house stood, by order and by year.": "Wo jedes Haus stand, nach Orden und nach Jahr.",
   // map: panel
   "Orders": "Orden", "Show all": "Alle zeigen", "House type": "Art des Hauses", "Only exact locations": "Nur genaue Lagen", "Show excluded entries": "Ausgeschlossene Einträge zeigen",
-  "Browse the list": "Liste öffnen", "Export": "Export", "Download CSV": "CSV herunterladen", "Download Markdown": "Markdown herunterladen", "Hide filters": "Filter ausblenden", "Show filters": "Filter einblenden",
+  "Browse the list": "Liste öffnen", "Export": "Export", "Download…": "Herunterladen…", "Download": "Herunterladen", "File name": "Dateiname", "Cancel": "Abbrechen", "CSV (opens in Excel)": "CSV (öffnet in Excel)", "Markdown table": "Markdown-Tabelle", "Format": "Format",
+  "The file will hold": "Die Datei enthält", "houses: those shown on the map now.": "Häuser: die, die jetzt auf der Karte gezeigt werden.", "house: the one shown on the map now.": "Haus: das, das jetzt auf der Karte gezeigt wird.", "Hide filters": "Filter ausblenden", "Show filters": "Filter einblenden",
   "houses shown": "Häuser angezeigt", "orders": "Orden", "people in several houses": "Personen in mehreren Häusern",
   // map: search
   "Search a place, alias or office holder": "Ort, Namensform oder Amtsträger suchen", "Spelling-tolerant: try": "Schreibweisen-tolerant, z. B.", "or": "oder",
@@ -732,8 +762,6 @@ function applyBasemapTheme(night) {
   for (const layer of map.getStyle().layers) {
     if (layer.id === HILLSHADE) { for (const [k, v] of Object.entries(reliefPaint(night))) map.setPaintProperty(HILLSHADE, k, v); continue; }
     if (layer.id === WAVES) { map.updateImage(WAVES, wavesImage()); continue; }
-    if (layer.id === "home-wash") { map.setPaintProperty(layer.id, "line-color", css("--rubric")); continue; }
-    if (layer.id === "home-edge") { map.setPaintProperty(layer.id, "line-color", css("--region-edge")); continue; }
     if (hiddenIds.has(layer.id) || !isBasemapLayer(layer)) continue;
     if (layer.type === "symbol") { map.setPaintProperty(layer.id, "text-color", labelColor(layer.id, P)); map.setPaintProperty(layer.id, "text-halo-color", P.labelHalo); }
     else {
@@ -764,18 +792,14 @@ function addBasemapExtras() {
   map.addSource("dem", { type: "raster-dem", tiles: [DEM_TILES], tileSize: 256, encoding: "terrarium", maxzoom: 12, attribution: "Relief: Mapzen terrain tiles" });
   // Above the land and woods, below water, borders and names.
   map.addLayer({ id: HILLSHADE, type: "hillshade", source: "dem", layout: { visibility: "none" }, paint: reliefPaint(isDark()) }, layers.find(l => /^water/.test(l.id))?.id);
-  // As on the entry page's map: fine wave lines over the sea, and the region's border washed with colour inside.
+  // As on the entry page's map: fine wave lines over the sea.
   const firstName = layers.find(l => l.type === "symbol")?.id, water = layers.find(l => l["source-layer"] === "water" && l.type === "fill");
   if (water) {
     map.addImage(WAVES, wavesImage(), { pixelRatio: 2 });
     map.addLayer({ id: WAVES, type: "fill", source: water.source, "source-layer": "water", paint: { "fill-pattern": WAVES, "fill-opacity": .7 } }, firstName);
   }
-  const home = BASE.states.filter(st => st.id === "DE-NI" || st.id === "DE-HB").map(st => ({ type: "Feature", properties: {}, geometry: { type: "LineString", coordinates: st.ring } }));
-  map.addSource("home", { type: "geojson", data: fc(home) });
-  map.addLayer({ id: "home-wash", type: "line", source: "home", layout: { "line-join": "round" }, paint: { "line-color": css("--rubric"), "line-width": ["interpolate", ["linear"], ["zoom"], 5, 4, 9, 12], "line-opacity": .2, "line-offset": ["interpolate", ["linear"], ["zoom"], 5, HOME_SIDE * 2, 9, HOME_SIDE * 6] } }, firstName);
-  map.addLayer({ id: "home-edge", type: "line", source: "home", layout: { "line-join": "round" }, paint: { "line-color": css("--region-edge"), "line-width": 1.3 } }, firstName);
 }
-const WAVES = "sea-waves", HOME_SIDE = 1;
+const WAVES = "sea-waves";
 function wavesImage() {
   const cv = document.createElement("canvas"); cv.width = 44; cv.height = 14;
   const g = cv.getContext("2d");
@@ -793,7 +817,6 @@ function setBasemap(mode) {
     const show = mode === "satellite" ? l.type === "symbol" : mode === "landscape" ? !isModern(l) : true;
     map.setLayoutProperty(l.id, "visibility", show ? "visible" : "none");
   }
-  for (const id of ["home-wash", "home-edge"]) map.setLayoutProperty(id, "visibility", mode === "satellite" ? "none" : "visible");
   document.querySelectorAll(".bm-seg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.bm === mode));
 }
 
@@ -1224,14 +1247,39 @@ async function save(text, name, type, label) {
   catch { toast("Downloads are blocked in this preview. Open the site itself to download."); }
 }
 const FILE = "order-houses-lower-saxony";
-$("#copyCsv").onclick = () => {
-  const r = rowsForExport(), cols = Object.keys(r[0] || { id: 1 });
-  // The byte-order mark makes Excel read the umlauts correctly.
-  save("\ufeff" + [cols.join(","), ...r.map(o => cols.map(c => /[",;\n]/.test(o[c]) ? `"${String(o[c]).replace(/"/g, '""')}"` : o[c]).join(","))].join("\r\n"), FILE + ".csv", "text/csv", `${r.length} houses as CSV`);
+const exporters = {
+  csv(r) {
+    const cols = Object.keys(r[0] || { id: 1 });
+    // The byte-order mark makes Excel read the umlauts correctly.
+    return ["\ufeff" + [cols.join(","), ...r.map(o => cols.map(c => /[",;\n]/.test(o[c]) ? `"${String(o[c]).replace(/"/g, '""')}"` : o[c]).join(","))].join("\r\n"), "text/csv", "CSV"];
+  },
+  md(r) {
+    const cols = ["id", "place", "type", "orders", "latitude", "longitude", "wikidata"];
+    return [[`| ${cols.join(" | ")} |`, `|${cols.map(() => " --- ").join("|")}|`, ...r.map(o => `| ${cols.map(c => o[c]).join(" | ")} |`)].join("\n") + "\n", "text/markdown", "Markdown"];
+  },
 };
-$("#copyMd").onclick = () => {
-  const r = rowsForExport(), cols = ["id", "place", "type", "orders", "latitude", "longitude", "wikidata"];
-  save([`| ${cols.join(" | ")} |`, `|${cols.map(() => " --- ").join("|")}|`, ...r.map(o => `| ${cols.map(c => o[c]).join(" | ")} |`)].join("\n") + "\n", FILE + ".md", "text/markdown", `${r.length} houses as Markdown`);
+// Download asks first: it says how many houses the file will hold and lets the reader name it.
+const dl = $("#dl"), dlFormat = () => document.querySelector('input[name="dlFormat"]:checked').value;
+$("#dlOpen").onclick = () => {
+  const n = rowsForExport().length;
+  $("#dlCount").innerHTML = n === 1 ? "The file will hold <b>1</b> house: the one shown on the map now."
+    : `The file will hold <b>${n}</b> houses: those shown on the map now.`;
+  $("#dlGo").disabled = n === 0;
+  if (!$("#dlName").value.trim()) $("#dlName").value = FILE;
+  $("#dlExt").textContent = "." + dlFormat();
+  dl.showModal();
+  $("#dlName").select();
+};
+document.querySelectorAll('input[name="dlFormat"]').forEach(el => el.onchange = () => { $("#dlExt").textContent = "." + dlFormat(); });
+$("#dlCancel").onclick = () => dl.close();
+dl.onclick = e => { if (e.target === dl) dl.close(); };          // a click on the dimmed page behind
+$("#dlForm").onsubmit = e => {
+  e.preventDefault();
+  const r = rowsForExport(), [text, type, label] = exporters[dlFormat()](r);
+  // Keep the name the reader typed, minus characters a file name cannot hold and any extension they added.
+  const name = ($("#dlName").value.trim().replace(/[\\/:*?"<>|\u0000-\u001f]/g, "").replace(/\.(csv|md)$/i, "") || FILE).slice(0, 80);
+  dl.close();
+  save(text, `${name}.${dlFormat()}`, type, `${r.length} houses as ${label}`);
 };
 let toastT;
 function toast(t) { const el = $("#toast"); el.textContent = t; el.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => el.hidden = true, 2600); }
