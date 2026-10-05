@@ -663,6 +663,7 @@ function render() {
     });
     drawLinks();
   }
+  renderOrders();
   renderList(vis);
   renderTally(vis);
   setTimeNote(vis.filter(([h]) => !h.external).length);
@@ -725,8 +726,12 @@ function renderTally(vis) {
   $("#shown").textContent = `${real.length} of ${houses.filter(h => !h.external && h.status === "checked").length} houses`;
 }
 function renderOrders() {
-  const counts = Object.fromEntries(ORDER_KEYS.map(k => [k, houses.filter(h => !h.external && h.status === "checked" && h.orders.includes(k)).length]));
-  $("#orders").innerHTML = ORDER_KEYS.map(k => `<button class="order" data-o="${k}" aria-pressed="${state.orders.has(k)}" title="${EMBLEM[k].name}">${emblem(k, 22)}<span>${DATA.orders[k]}</span><span class="n">${counts[k]}</span></button>`).join("");
+  // With one year chosen, an order is listed only while it has a house in that year, and the count is for that year.
+  const inYear = (h, k) => h.periods.some(p => p.order === k && (!state.useYear || (p.start != null && state.year >= p.start && state.year <= (p.end ?? MAX_Y))));
+  const counts = Object.fromEntries(ORDER_KEYS.map(k => [k, houses.filter(h => !h.external && h.status === "checked" && inYear(h, k)).length]));
+  const shown = ORDER_KEYS.filter(k => counts[k] > 0);
+  $("#orders").innerHTML = shown.map(k => `<button class="order" data-o="${k}" aria-pressed="${state.orders.has(k)}" title="${EMBLEM[k].name}">${emblem(k, 22)}<span>${DATA.orders[k]}</span><span class="n">${counts[k]}</span></button>`).join("")
+    || `<div class="empty" style="padding:4px 8px">No order had a house in ${state.year}.</div>`;
 }
 function renderTypes() {
   $("#types").innerHTML = types.map(t => `<button class="chip" data-t="${esc(t)}" aria-pressed="${state.types.has(t)}">${esc(t)}</button>`).join("");
