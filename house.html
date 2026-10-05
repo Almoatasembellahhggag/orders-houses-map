@@ -52,6 +52,9 @@ button, input, select { font: inherit; color: inherit; }
 .tag.ok { background: var(--good-soft); }
 .emblem { display: inline-block; vertical-align: middle; flex: none; }
 .emblem.unc { opacity: .5; }
+.theme-btn { width: 30px; height: 30px; flex: none; display: grid; place-items: center; padding: 0; border: 1px solid var(--rule); border-radius: 50%; background: var(--paper); color: var(--ink); cursor: pointer; }
+.theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+.theme-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Layout: a record sheet — a slim navigation bar, the house's title block, then the narrative on the left and the
    reference facts (dates, place, links, sources) in a side column, as in an archive finding aid. */
@@ -120,6 +123,7 @@ dl.kv dd { margin: 0; overflow-wrap: anywhere; }
   <label for="pick" class="eyebrow" style="position:absolute;left:-9999px">Go to house</label>
   <select id="pick"></select>
   <a class="btn" id="next" href="#">Next ›</a>
+  <button class="theme-btn" id="themeBtn" type="button"></button>
 </div></nav>
 <main class="page" id="page"></main>
 <script>
@@ -188,6 +192,30 @@ function emblem(o, size = 22, uncertain = false) {
   const e = EMBLEM[o];
   return `<svg class="emblem${uncertain ? " unc" : ""}" width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true">`
     + `<circle cx="12" cy="12" r="11" fill="${e.field}" stroke="${e.rim}" stroke-width="1.6"/><g fill="${e.ink}">${EMBLEM_INK[o]}</g></svg>`;
+}
+
+// Light / dark theme. The page follows the system setting until the reader picks one; the choice is kept in
+// this browser. Setting data-theme is all it takes: the colour tokens, the map and the emblems follow it.
+const THEME_KEY = "orders-map:theme";
+try { const t = localStorage.getItem(THEME_KEY); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch {}
+const currentTheme = () => document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+function initThemeToggle(btn) {
+  const sun = '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.6"/><path d="M10 1.8v2.4M10 15.8v2.4M1.8 10h2.4M15.8 10h2.4M4.2 4.2l1.700 1.700M14.1 14.1l1.700 1.700M4.2 15.8l1.700-1.700M14.1 5.900l1.700-1.700"/></svg>';
+  const moon = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M16.5 12.300A7 7 0 0 1 7.700 3.500a7 7 0 1 0 8.800 8.800Z"/></svg>';
+  const paint = () => {
+    const dark = currentTheme() === "dark";
+    btn.innerHTML = dark ? sun : moon;
+    btn.title = dark ? "Switch to the light theme" : "Switch to the dark theme";
+    btn.setAttribute("aria-label", btn.title);
+  };
+  btn.onclick = () => {
+    const next = currentTheme() === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem(THEME_KEY, next); } catch {}
+    paint();
+  };
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", paint);
+  paint();
 }
 
 const list = houses.filter(h => !h.external).sort((a, b) => a.label.localeCompare(b.label, "de") || (a.start ?? 0) - (b.start ?? 0));
@@ -278,6 +306,7 @@ window.addEventListener("hashchange", () => { render(); window.scrollTo(0, 0); }
 const rerender = () => render();
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", rerender);
 new MutationObserver(rerender).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+initThemeToggle($("#themeBtn"));
 render();
 </script>
 </body>
