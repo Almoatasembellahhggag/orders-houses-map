@@ -13,5 +13,6 @@ The pages are generated; the data cleaning and the build script live in the `ord
 ## Design
 
 The entry page is built on the plan of the "Incipit argumentum" page of the Lorsch Gospels (Codex Aureus of Lorsch,
-c. 810; Biblioteca Apostolica Vaticana, Pal. lat. 50): two columns between painted pillars. The pillars are drawn
-for this site; no image of the manuscript is used.
+c. 810; Biblioteca Apostolica Vaticana, Pal. lat. 50): two columns between painted pillars. The capitals are
+vector tracings of the capitals on that page (reproduction: Wikimedia Commons, File:Codexaureus_18.jpg, public
+domain); the shafts and bases are drawn for this site. No photograph of the manuscript is shown.
