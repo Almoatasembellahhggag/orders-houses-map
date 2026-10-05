@@ -6,21 +6,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>House Record · Order Houses of Lower Saxony</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Uncial+Antiqua&family=Fondamento:ital@0;1&family=Source+Sans+3:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Source+Sans+3:wght@400;500;600&display=swap">
 <style>
-/* After the Lorsch Gospels (Codex Aureus of Lorsch, c. 810): gold and purple, minium red for headings, text in a
-   round Carolingian hand. Kept quiet: the uncials appear only in the entry page's title and initial.
-   Names, headings and reading text: Fondamento, drawn after the Foundational hand,
-   which Edward Johnston based on Carolingian minuscule. Controls and figures stay in a plain sans. */
+/* After the Lorsch Gospels (Codex Aureus of Lorsch, c. 810). Nothing is imitated in CSS: the entry page shows a
+   real page of the manuscript, and the colours here are measured from that page: its vellum, the brown-gold of
+   its letters, the minium orange and the dark blue of its frame. The type is Cardo, a face made for medievalists
+   and classicists; controls and figures stay in a plain sans. */
 :root {
-  --paper: #eee4cc; --panel: #f6efdc; --ink: #2b2016; --muted: #6d5f4c; --rule: #cdbf9f;
+  --paper: #e9dec4; --panel: #f3ead5; --ink: #2a2018; --muted: #6c5d48; --rule: #cdbd9b;
   --sea: #c5d1cd; --land: #e6dfcc; --land-edge: #b9ae95; --region: #f4eddb; --region-edge: #8a7c60; --river: #9fb6b8;
-  --accent: #5c2b6b; --accent-soft: #e3d8d6; --rubric: #bf4426; --gold: #a47f24; --purple: #4a2154; --on-purple: #e9cf86;
-  --bad: #bf4426; --bad-soft: #f2dccb; --good-soft: #dfe4c9;
+  --accent: #3c3a63; --accent-soft: #dfd8cc; --rubric: #ad4a22; --gold: #765622; --purple: #33304f; --on-purple: #efe3c4;
+  --bad: #ad4a22; --bad-soft: #f2dccb; --good-soft: #dfe4c9;
   --o-hosp: #2b2723; --o-temp: #a3271b; --o-teut: #a37a12; --o-carm: #6b4226;
-  --display: "Fondamento", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  --display: "Cardo", "Iowan Old Style", Georgia, "Times New Roman", serif;
   --title: var(--display);
-  --initial: "Uncial Antiqua", "Fondamento", Georgia, serif;
   --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
   --mono: var(--body);
   --shadow: 0 1px 2px rgba(60, 45, 25, .10), 0 6px 18px rgba(60, 45, 25, .12);
@@ -29,14 +28,14 @@
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --paper: #1b1819; --panel: #232021; --ink: #e9e2d2; --muted: #a79d8c; --rule: #403a38;
   --sea: #10191c; --land: #2a2520; --land-edge: #4a4035; --region: #38312a; --region-edge: #93866f; --river: #33505a;
-  --accent: #d6b464; --accent-soft: #37302c; --rubric: #e8775a; --gold: #c9a44c; --purple: #4a2a52; --on-purple: #ecd9a0;
+  --accent: #c9b06a; --accent-soft: #37302c; --rubric: #e08660; --gold: #c9a55a; --purple: #3d3a5c; --on-purple: #efe3c4;
   --bad: #ee8a70; --bad-soft: #44231f; --good-soft: #2b3222;
   --o-hosp: #d8d0c0; --o-temp: #ef6f61; --o-teut: #e2b33f; --o-carm: #c99a6c;
   --shadow: 0 1px 2px rgba(0, 0, 0, .45), 0 6px 18px rgba(0, 0, 0, .5); --ctrl-filter: invert(.9); color-scheme: dark; } }
 :root[data-theme="dark"] {
   --paper: #1b1819; --panel: #232021; --ink: #e9e2d2; --muted: #a79d8c; --rule: #403a38;
   --sea: #10191c; --land: #2a2520; --land-edge: #4a4035; --region: #38312a; --region-edge: #93866f; --river: #33505a;
-  --accent: #d6b464; --accent-soft: #37302c; --rubric: #e8775a; --gold: #c9a44c; --purple: #4a2a52; --on-purple: #ecd9a0;
+  --accent: #c9b06a; --accent-soft: #37302c; --rubric: #e08660; --gold: #c9a55a; --purple: #3d3a5c; --on-purple: #efe3c4;
   --bad: #ee8a70; --bad-soft: #44231f; --good-soft: #2b3222;
   --o-hosp: #d8d0c0; --o-temp: #ef6f61; --o-teut: #e2b33f; --o-carm: #c99a6c;
   --shadow: 0 1px 2px rgba(0, 0, 0, .45), 0 6px 18px rgba(0, 0, 0, .5); --ctrl-filter: invert(.9); color-scheme: dark; }
@@ -217,6 +216,7 @@ const DE = {
   "Hospitaller commandery in Westphalia, outside Lower Saxony. Named as mother house in three rows, spelled three ways.": "Johanniterkommende in Westfalen, außerhalb Niedersachsens. In drei Zeilen als Mutterhaus genannt, in drei Schreibweisen.",
   "Carmelite house in Hesse, outside Lower Saxony.": "Karmeliterkloster in Hessen, außerhalb Niedersachsens.",
   // blocks, by key
+  "home.plate": "Der Beginn des Lukasevangeliums im Lorscher Evangeliar, um 810 in Gold geschrieben. Biblioteca Apostolica Vaticana, Pal. lat. 50. Die Farben dieser Seiten und das Band unter dem Titel sind ihm entnommen. Bild: Wikimedia Commons, gemeinfrei.",
   "home.rubric": "Hier beginnt das Verzeichnis der Häuser der vier Orden in Niedersachsen.",
   "home.intro": '<span class="initial" aria-hidden="true">E</span><span style="position:absolute;left:-9999px">E</span>in Verzeichnis der Häuser der Johanniter, der Templer, des Deutschen Ordens und der Karmeliten in Niedersachsen, von den ersten Kommenden der 1170er Jahre bis zu den letzten Aufhebungen um 1820, erarbeitet aus dem <i>Niedersächsischen Klosterbuch</i>.',
   "home.use": '<span class="pil" aria-hidden="true">¶</span>Die Karte zeigt, wo jedes Haus stand und wie sich die Orden über die Jahrhunderte ausbreiteten und zurückzogen. <span class="pil b" aria-hidden="true">¶</span>Unter den Häusern findet sich jeder Eintrag: seine Geschichte, seine Amtsträger, seine Mutter- und Tochterhäuser und seine Nachweise.',
