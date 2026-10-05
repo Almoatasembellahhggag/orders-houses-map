@@ -86,6 +86,8 @@ h1 { margin: 0; font: 600 25px/1.1 var(--display); text-wrap: balance; }
 .orders { display: grid; gap: 4px; }
 .order { display: grid; grid-template-columns: 22px 1fr auto; align-items: center; gap: 8px; padding: 5px 8px; border: 1px solid transparent; border-radius: 6px; background: none; cursor: pointer; text-align: left; }
 .order:hover { border-color: var(--rule); }
+.order:disabled { opacity: .38; cursor: default; pointer-events: none; }
+.order:disabled .emblem { filter: grayscale(1); }
 .order .n { font: 500 12px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
 .order[aria-pressed="false"] { opacity: .45; }
 .order[aria-pressed="false"] .emblem { filter: grayscale(1); }
@@ -726,12 +728,10 @@ function renderTally(vis) {
   $("#shown").textContent = `${real.length} of ${houses.filter(h => !h.external && h.status === "checked").length} houses`;
 }
 function renderOrders() {
-  // With one year chosen, an order is listed only while it has a house in that year, and the count is for that year.
+  // With one year chosen, the count is for that year, and an order with no house then is greyed out and cannot be clicked.
   const inYear = (h, k) => h.periods.some(p => p.order === k && (!state.useYear || (p.start != null && state.year >= p.start && state.year <= (p.end ?? MAX_Y))));
   const counts = Object.fromEntries(ORDER_KEYS.map(k => [k, houses.filter(h => !h.external && h.status === "checked" && inYear(h, k)).length]));
-  const shown = ORDER_KEYS.filter(k => counts[k] > 0);
-  $("#orders").innerHTML = shown.map(k => `<button class="order" data-o="${k}" aria-pressed="${state.orders.has(k)}" title="${EMBLEM[k].name}">${emblem(k, 22)}<span>${DATA.orders[k]}</span><span class="n">${counts[k]}</span></button>`).join("")
-    || `<div class="empty" style="padding:4px 8px">No order had a house in ${state.year}.</div>`;
+  $("#orders").innerHTML = ORDER_KEYS.map(k => `<button class="order" data-o="${k}" aria-pressed="${state.orders.has(k)}" ${counts[k] ? `title="${EMBLEM[k].name}"` : `disabled title="No ${DATA.orders[k]} house in ${state.year}"`}>${emblem(k, 22)}<span>${DATA.orders[k]}</span><span class="n">${counts[k] || "–"}</span></button>`).join("");
 }
 function renderTypes() {
   $("#types").innerHTML = types.map(t => `<button class="chip" data-t="${esc(t)}" aria-pressed="${state.types.has(t)}">${esc(t)}</button>`).join("");
