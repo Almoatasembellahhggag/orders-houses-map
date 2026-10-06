@@ -377,6 +377,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); margin: 0; }
         <fieldset><legend>Format</legend>
           <label class="toggle" for="dlCsv"><input type="radio" name="dlFormat" id="dlCsv" value="csv" checked> CSV (opens in Excel)</label>
           <label class="toggle" for="dlMd"><input type="radio" name="dlFormat" id="dlMd" value="md"> Markdown table</label>
+          <label class="toggle" for="dlPdf"><input type="radio" name="dlFormat" id="dlPdf" value="pdf"> PDF (to print or pass on)</label>
         </fieldset>
         <div class="dl-actions"><button type="button" class="btn" id="dlCancel">Cancel</button><button type="submit" class="btn primary" id="dlGo">Download</button></div>
       </form>
@@ -423,7 +424,7 @@ const DE = {
   "Where each house stood, by order and by year.": "Wo jedes Haus stand, nach Orden und nach Jahr.",
   // map: panel
   "Orders": "Orden", "Show all": "Alle zeigen", "House type": "Art des Hauses", "Only exact locations": "Nur genaue Lagen", "Show excluded entries": "Ausgeschlossene Einträge zeigen",
-  "Browse the list": "Liste öffnen", "Export": "Export", "Download…": "Herunterladen…", "Download": "Herunterladen", "File name": "Dateiname", "Cancel": "Abbrechen", "CSV (opens in Excel)": "CSV (öffnet in Excel)", "Markdown table": "Markdown-Tabelle", "Format": "Format",
+  "Browse the list": "Liste öffnen", "Export": "Export", "Download…": "Herunterladen…", "Download": "Herunterladen", "File name": "Dateiname", "Cancel": "Abbrechen", "CSV (opens in Excel)": "CSV (öffnet in Excel)", "Markdown table": "Markdown-Tabelle", "PDF (to print or pass on)": "PDF (zum Drucken oder Weitergeben)", "Format": "Format",
   "The file will hold": "Die Datei enthält", "houses: those shown on the map now.": "Häuser: die, die jetzt auf der Karte gezeigt werden.", "house: the one shown on the map now.": "Haus: das, das jetzt auf der Karte gezeigt wird.", "Hide filters": "Filter ausblenden", "Show filters": "Filter einblenden",
   "houses shown": "Häuser angezeigt", "orders": "Orden", "people in several houses": "Personen in mehreren Häusern",
   // map: search
@@ -480,7 +481,7 @@ const DE_PHRASES = [
   [/^As written in the sheet · row /, "Wie in der Tabelle eingetragen · Zeile "], [/^merged from rows /, "vereint aus den Zeilen "],
   [/^Klosterbuch dating: /, "Datierung im Klosterbuch: "], [/, pp\. /, ", S. "], [/^Image (\d+)$/, "Bild $1"],
   [/^Play (\d+)–(\d+)$/, "Abspielen $1–$2"], [/^Pause at (\d+)$/, "Pause bei $1"], [/^Play on from (\d+)$/, "Weiter ab $1"], [/^Replay from (\d+)$/, "Neu ab $1"],
-  [/^(\d+) houses as (CSV|Markdown) downloaded$/, "$1 Häuser als $2 heruntergeladen"],
+  [/^(\d+) houses as (CSV|Markdown|PDF) downloaded$/, "$1 Häuser als $2 heruntergeladen"],
   [/^No house matches “(.*)”\.$/, "Kein Haus passt zu “$1”."], [/^No (.+) house in (\d+)$/, "Kein Haus ($1) im Jahr $2"],
   [/^(\d+) houses: (.*)\. Zoom in\.$/, "$1 Häuser: $2. Vergrößern."], [/^Lower Saxony with the (\d+) houses marked$/, "Niedersachsen mit den $1 Häusern"],
   [/^(.*) · Order Houses of Lower Saxony$/, "$1 · Ordenshäuser in Niedersachsen"],
@@ -1238,13 +1239,15 @@ function rowsForExport() {
 // the same text is copied to the clipboard instead, and the message says so.
 const embedded = (() => { try { return window.self !== window.top; } catch { return true; } })();
 async function save(text, name, type, label) {
+  const binary = typeof text !== "string";
   if (!embedded) {
-    const url = URL.createObjectURL(new Blob([text], { type: type + ";charset=utf-8" }));
+    const url = URL.createObjectURL(new Blob([text], { type: binary ? type : type + ";charset=utf-8" }));
     const a = Object.assign(document.createElement("a"), { href: url, download: name });
     document.body.append(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 2000);
     return toast(label + " downloaded");
   }
+  if (binary) return toast("Downloads are blocked in this preview. Open the site itself to download.");
   try { await navigator.clipboard.writeText(text); toast(label + " copied to the clipboard (downloads are blocked in this preview)"); }
   catch { toast("Downloads are blocked in this preview. Open the site itself to download."); }
 }
@@ -1259,7 +1262,73 @@ const exporters = {
     const cols = ["id", "place", "type", "orders", "latitude", "longitude", "wikidata"];
     return [[`| ${cols.join(" | ")} |`, `|${cols.map(() => " --- ").join("|")}|`, ...r.map(o => `| ${cols.map(c => o[c]).join(" | ")} |`)].join("\n") + "\n", "text/markdown", "Markdown"];
   },
+  pdf(r) { return [pdfTable(r), "application/pdf", "PDF"]; },
 };
+// ---------- PDF ----------
+// A table on landscape A4 pages, written out by hand: a PDF that holds only text and rules is a short file, and
+// the page should not load a library for it. It uses the built-in Helvetica, so nothing is embedded; its
+// WinAnsi encoding covers the umlauts and the typographic dashes and quotes.
+const WIN_ANSI = { 0x20ac: 0x80, 0x2026: 0x85, 0x2018: 0x91, 0x2019: 0x92, 0x201c: 0x93, 0x201d: 0x94, 0x2022: 0x95, 0x2013: 0x96, 0x2014: 0x97, 0x201e: 0x84 };
+const winAnsi = s => Uint8Array.from(s, ch => { const c = ch.charCodeAt(0); return c < 256 ? c : WIN_ANSI[c] ?? 0x3f; });
+// Helvetica's width table is long; these classes run slightly wide, so a wrapped cell never overruns its column.
+function textWidth(s, size) {
+  let w = 0;
+  for (const c of s) w += " ijlt.,:;'|!()[]/-f".includes(c) ? .32 : "mwMW@%".includes(c) ? .9 : /[A-ZÄÖÜ0-9?]/.test(c) ? .68 : .56;
+  return w * size;
+}
+function wrap(text, width, size) {
+  const lines = []; let line = "";
+  for (const word of String(text ?? "").split(/\s+/).filter(Boolean)) {
+    const t = line ? line + " " + word : word;
+    if (textWidth(t, size) <= width || !line) line = t; else lines.push(line), line = word;
+  }
+  return line ? [...lines, line] : lines.length ? lines : [""];
+}
+function pdfTable(rows) {
+  const W = 842, H = 595, M = 40, SIZE = 9, LEAD = 11.5, PAD = 4;
+  const cols = [{ head: L("Place"), w: 150, get: o => o.place }, { head: L("House type"), w: 115, get: o => L(o.type) },
+    { head: L("Orders"), w: 372, get: o => Object.values(DATA.orders).reduce((t, n) => t.replaceAll(n, L(n)), o.orders) },
+    { head: L("Coordinates"), w: 125, get: o => `${(+o.latitude).toFixed(4)}, ${(+o.longitude).toFixed(4)}${o.location_exact === "yes" ? "" : " ~"}` }];
+  const str = t => "(" + t.replace(/[\\()]/g, "\\$&") + ")";
+  const text = (t, x, y, font = "F1", size = SIZE) => `BT /${font} ${size} Tf ${x.toFixed(1)} ${y.toFixed(1)} Td ${str(t)} Tj ET\n`;
+  const rule = (y, grey) => `${grey} G 0.5 w ${M} ${y.toFixed(1)} m ${W - M} ${y.toFixed(1)} l S\n`;
+  const filter = state.useYear ? ` · ${state.year}` : "";
+  const today = new Date().toISOString().slice(0, 10);
+  const pages = []; let ops = "", y = 0;
+  const head = () => {
+    ops = text(L("Order Houses of Lower Saxony"), M, H - M - 6, "F2", 15)
+      + text(`${(n => LANG === "de" ? deText(n, true) : n)(rows.length === 1 ? "1 house" : `${rows.length} houses`)}${filter} · ${today}`, M, H - M - 22, "F1", 9.5);
+    y = H - M - 46; let x = M;
+    for (const c of cols) ops += text(c.head, x + PAD, y, "F2"), x += c.w;
+    y -= PAD + 2; ops += rule(y, 0.2);
+  };
+  head();
+  for (const o of rows) {
+    const cells = cols.map(c => wrap(c.get(o), c.w - 2 * PAD, SIZE)), h = Math.max(...cells.map(l => l.length)) * LEAD + PAD;
+    if (y - h < M + 16) pages.push(ops), head();
+    let x = M;
+    cells.forEach((lines, i) => { lines.forEach((l, j) => ops += text(l, x + PAD, y - LEAD + 2 - j * LEAD)); x += cols[i].w; });
+    y -= h; ops += rule(y, 0.8);
+  }
+  pages.push(ops);
+  // objects: 1 catalog, 2 page tree, 3–4 fonts, then each page followed by its content stream
+  const objs = ["<< /Type /Catalog /Pages 2 0 R >>",
+    `<< /Type /Pages /Count ${pages.length} /Kids [${pages.map((_, i) => `${5 + 2 * i} 0 R`).join(" ")}] >>`,
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>",
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>"];
+  pages.forEach((p, i) => {
+    p += text(`${i + 1} / ${pages.length}`, W - M - 30, M - 14, "F1", 8);
+    objs.push(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${W} ${H}] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${6 + 2 * i} 0 R >>`,
+      `<< /Length ${p.length} >>\nstream\n${p}endstream`);
+  });
+  // Every character becomes one byte, so string lengths are byte offsets.
+  let out = "%PDF-1.4\n%\xe2\xe3\xcf\xd3\n"; const at = [];
+  objs.forEach((b, i) => { at.push(out.length); out += `${i + 1} 0 obj\n${b}\nendobj\n`; });
+  const xref = out.length;
+  out += `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n${at.map(n => String(n).padStart(10, "0") + " 00000 n \n").join("")}`
+    + `trailer\n<< /Size ${objs.length + 1} /Root 1 0 R /Info << /Title ${str(L("Order Houses of Lower Saxony"))} >> >>\nstartxref\n${xref}\n%%EOF\n`;
+  return winAnsi(out);
+}
 // Download asks first: it says how many houses the file will hold and lets the reader name it.
 const dl = $("#dl"), dlFormat = () => document.querySelector('input[name="dlFormat"]:checked').value;
 $("#dlOpen").onclick = () => {
@@ -1279,7 +1348,7 @@ $("#dlForm").onsubmit = e => {
   e.preventDefault();
   const r = rowsForExport(), [text, type, label] = exporters[dlFormat()](r);
   // Keep the name the reader typed, minus characters a file name cannot hold and any extension they added.
-  const name = ($("#dlName").value.trim().replace(/[\\/:*?"<>|\u0000-\u001f]/g, "").replace(/\.(csv|md)$/i, "") || FILE).slice(0, 80);
+  const name = ($("#dlName").value.trim().replace(/[\\/:*?"<>|\u0000-\u001f]/g, "").replace(/\.(csv|md|pdf)$/i, "") || FILE).slice(0, 80);
   dl.close();
   save(text, `${name}.${dlFormat()}`, type, `${r.length} houses as ${label}`);
 };
