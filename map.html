@@ -123,7 +123,8 @@ button, input, select { font: inherit; color: inherit; }
 .music-btn .n2 { margin-left: -9px; animation-delay: 1.2s !important; }
 .music-btn .n3 { margin-left: 5px; animation-delay: 2.4s !important; }
 @keyframes note-rise { 0% { opacity: 0; transform: translate(0, 4px) scale(.6) rotate(0); } 20% { opacity: 1; } 70% { opacity: .9; } 100% { opacity: 0; transform: translate(-30px, -16px) scale(1.1) rotate(-18deg); } }
-@media (prefers-reduced-motion: reduce) { .music-btn[aria-pressed="true"] .note { animation: none; opacity: 0; } }
+@keyframes note-fade { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .music-btn[aria-pressed="true"] .note { animation-name: note-fade; } }
 .music-btn[aria-pressed="true"] { color: var(--rubric); border: 2px solid var(--rubric); }
 .music-btn[aria-pressed="true"] > svg:first-child { opacity: 1; }
 #ytHolder { position: fixed; width: 1px; height: 1px; left: -9999px; top: 0; overflow: hidden; }
