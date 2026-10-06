@@ -432,6 +432,7 @@ function initLang(anchor) {
   box.onclick = () => {
     const next = LANG === "de" ? "en" : "de";
     try { localStorage.setItem(LANG_KEY, next); sessionStorage.setItem("orders-map:langfrom", LANG); } catch {}
+    if (window.saveMusicPosition) window.saveMusicPosition();
     box.classList.add("shuffle"); reel.style.transform = `translateY(${pos(next)})`;
     setTimeout(() => location.reload(), 650);
   };
@@ -642,9 +643,13 @@ initThemeToggle($("#themeBtn"));
   paint();
   document.querySelector(".lang").insertAdjacentElement("beforebegin", btn);
   document.body.insertAdjacentHTML("beforeend", '<div id="ytHolder"><div id="ytPlayer"></div></div>');
+  // Changing the language reloads the page: the song's position is kept across it so the music carries on where it was.
+  let resume = 0;
+  try { const m = JSON.parse(sessionStorage.getItem("orders-map:musicpos") || "null"); sessionStorage.removeItem("orders-map:musicpos"); if (m && Date.now() - m.ts < 15000) resume = Math.floor(m.t + (m.on ? (Date.now() - m.ts) / 1000 : 0)); } catch {}
+  window.saveMusicPosition = () => { try { if (ready && player.getCurrentTime) sessionStorage.setItem("orders-map:musicpos", JSON.stringify({ t: player.getCurrentTime(), ts: Date.now(), on: want && player.getPlayerState() === 1 })); } catch {} };
   let player = null, ready = false, started = false;
   const sync = () => { if (!ready) return; if (want) player.playVideo(); else player.pauseVideo(); };
-  window.onYouTubeIframeAPIReady = () => { player = new YT.Player("ytPlayer", { videoId: VIDEO, playerVars: { loop: 1, playlist: VIDEO, playsinline: 1, autoplay: want ? 1 : 0 },
+  window.onYouTubeIframeAPIReady = () => { player = new YT.Player("ytPlayer", { videoId: VIDEO, playerVars: { loop: 1, playlist: VIDEO, playsinline: 1, autoplay: want ? 1 : 0, start: resume },
     events: { onReady: () => { ready = true; sync(); }, onStateChange: e => { if (e.data === 1) started = true; if (e.data === -1 || e.data === 5 || e.data === 2) { /* blocked or paused */ } } } }); };
   const t = document.createElement("script"); t.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(t);
   // the first gesture anywhere lets the browser play the sound

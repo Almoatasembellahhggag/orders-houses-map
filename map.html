@@ -591,6 +591,7 @@ function initLang(anchor) {
   box.onclick = () => {
     const next = LANG === "de" ? "en" : "de";
     try { localStorage.setItem(LANG_KEY, next); sessionStorage.setItem("orders-map:langfrom", LANG); } catch {}
+    if (window.saveMusicPosition) window.saveMusicPosition();
     box.classList.add("shuffle"); reel.style.transform = `translateY(${pos(next)})`;
     setTimeout(() => location.reload(), 650);
   };
