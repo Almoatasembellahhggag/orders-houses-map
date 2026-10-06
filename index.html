@@ -109,6 +109,14 @@ button, input, select { font: inherit; color: inherit; }
 .lang button[aria-pressed="true"] { color: var(--rubric); opacity: 1; border-color: var(--rubric); border-width: 2px; }
 .lang button[aria-pressed="true"]::before { opacity: 1; }
 .lang button > span { position: relative; }
+/* the music switch: a niche like the language ones, holding a note; it rings when the music plays */
+.music-btn { position: relative; overflow: hidden; width: 32px; height: 36px; flex: none; display: grid; place-items: center; padding: 0 0 2px; border: 1px solid var(--rule); border-radius: 15px 15px 3px 3px; background: var(--paper); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 3px var(--rule); color: var(--ink); cursor: var(--hand); margin-right: 6px; }
+.music-btn:hover { border-color: var(--accent); }
+.music-btn svg { width: 20px; height: 22px; display: block; opacity: .6; }
+.music-btn[aria-pressed="false"] svg { opacity: .5; }
+.music-btn[aria-pressed="true"] { color: var(--rubric); border: 2px solid var(--rubric); }
+.music-btn[aria-pressed="true"] svg { opacity: 1; }
+#ytHolder { position: fixed; width: 1px; height: 1px; left: -9999px; top: 0; overflow: hidden; }
 .crumbs { margin-right: auto; }
 
 /* Layout: the plan of the "Incipit argumentum" page of the Lorsch Gospels. A beam across the top; under it two
@@ -583,6 +591,27 @@ $("#orders").innerHTML = ORDER_KEYS.map(o => {
   return `<div class="ord">${emblem(o, 34)}<b>${DATA.orders[o]}</b><span>${n} house${n === 1 ? "" : "s"}</span></div>`;
 }).join("");
 initThemeToggle($("#themeBtn"));
+// Music: browsers only start sound after a click, so a button in the corner loads the YouTube player and plays or pauses it.
+(() => {
+  const VIDEO = "WIx4srqU3BE";
+  const btn = document.createElement("button");
+  btn.className = "music-btn"; btn.type = "button"; btn.setAttribute("aria-pressed", "false");
+  btn.innerHTML = '<svg viewBox="0 0 20 22" aria-hidden="true"><path d="M16 2C9 1 3.500 3.500 3.500 8.500c0 4 .8 8 1.800 11.500h10.700z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M16 2v18" stroke="currentColor" stroke-width="2.2"/><path d="M5.800 5.600v10M8.600 4.200v13M11.400 3.200v15.500M14 2.600v16.800" stroke="currentColor" stroke-width=".9"/></svg>';
+  const label = on => { btn.title = LANG === "de" ? (on ? "Musik anhalten" : "Musik spielen") : (on ? "Pause the music" : "Play music"); btn.setAttribute("aria-label", btn.title); };
+  label(false);
+  document.querySelector(".lang").insertAdjacentElement("beforebegin", btn);
+  document.body.insertAdjacentHTML("beforeend", '<div id="ytHolder"><div id="ytPlayer"></div></div>');
+  let player = null, loading = false, playing = false;
+  const set = on => { playing = on; btn.setAttribute("aria-pressed", on); label(on); };
+  const make = () => { player = new YT.Player("ytPlayer", { videoId: VIDEO, playerVars: { loop: 1, playlist: VIDEO, playsinline: 1 },
+    events: { onReady: e => { e.target.playVideo(); set(true); }, onStateChange: e => { if (e.data === 1) set(true); else if (e.data === 2) set(false); } } }); };
+  btn.onclick = () => {
+    if (player && player.playVideo) { playing ? player.pauseVideo() : player.playVideo(); set(!playing); return; }
+    if (loading) return; loading = true;
+    window.onYouTubeIframeAPIReady = make;
+    const t = document.createElement("script"); t.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(t);
+  };
+})();
 </script>
 </body>
 </html>
