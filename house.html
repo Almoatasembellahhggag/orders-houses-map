@@ -630,15 +630,15 @@ function render() {
         <section class="sec"><h2>References</h2>
           ${h.literature ? `<p class="prose" style="font-size:14.5px">${h.literature.author ? esc(h.literature.author) + ", in " : ""}<i>Niedersächsisches Klosterbuch</i> (Dolle 2012)${h.literature.pages ? L(", pp. ") + esc(h.literature.pages) : ""}.</p>` : ""}
           <div class="links">${h.wikidata ? `<a href="https://www.wikidata.org/wiki/${h.wikidata}" target="_blank" rel="noopener">Wikidata ${h.wikidata}</a>` : ""}${h.gsn ? `<a href="https://klosterdatenbank.germania-sacra.de/gsn/${h.gsn}" target="_blank" rel="noopener">Germania Sacra ${h.gsn}</a>` : ""}${h.images.map((u, i) => `<a href="${esc(u)}" target="_blank" rel="noopener">Image ${i + 1}</a>`).join("")}</div></section>
-        <section class="sec"><h2>As written in the sheet · row ${h.row}${h.merged.length ? ", " + h.merged.join(", ") : ""}</h2>
+        <section class="sec" data-sheet><h2>As written in the sheet · row ${h.row}${h.merged.length ? ", " + h.merged.join(", ") : ""}</h2>
           <table class="rawtab"><tr><th>Field</th><th>Sheet</th><th>Cleaned</th></tr>
           <tr><th>ID</th><td class="was">${esc(raw.id)}</td><td class="now">${h.id}</td></tr>
-          <tr><th>Name</th><td class="was">${esc(raw.name)}</td><td class="now">${esc(h.place)} · ${esc(L(h.type))}</td></tr>
-          <tr><th>Order</th><td class="was">${esc(raw.order ?? L("(empty)"))}</td><td class="now">${esc(h.orders.map(o => DATA.orders[o]).join(", "))}</td></tr>
+          <tr><th>Name</th><td class="was">${esc(raw.name)}</td><td class="now">${esc(h.place)} · ${esc(h.type)}</td></tr>
+          <tr><th>Order</th><td class="was">${esc(raw.order ?? "(empty)")}</td><td class="now">${esc(h.orders.map(o => ENG_ORDERS[o]).join(", "))}</td></tr>
           <tr><th>Latitude</th><td class="was">${esc(raw.lat)}</td><td class="now">${loc.lat}</td></tr>
           <tr><th>Longitude</th><td class="was">${esc(raw.lon)}</td><td class="now">${loc.lon}</td></tr>
-          <tr><th>Founded</th><td class="was">${esc(raw.founded ?? L("(empty)"))}</td><td class="now">${esc(h.start ?? "?")}</td></tr>
-          <tr><th>End</th><td class="was">${esc(raw.end ?? L("(empty)"))}</td><td class="now">${esc(h.endUnknown ? "?" : h.end ?? "?")}</td></tr>
+          <tr><th>Founded</th><td class="was">${esc(raw.founded ?? "(empty)")}</td><td class="now">${esc(h.start ?? "?")}</td></tr>
+          <tr><th>End</th><td class="was">${esc(raw.end ?? "(empty)")}</td><td class="now">${esc(h.endUnknown ? "?" : h.end ?? "?")}</td></tr>
           ${raw.mother ? `<tr><th>Mother house</th><td class="was">${esc(raw.mother)}</td><td class="now">${esc(mothers.map(l => l.mother).join(", "))}</td></tr>` : ""}
           </table></section>
       </aside>
