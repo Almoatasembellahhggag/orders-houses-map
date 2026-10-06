@@ -70,9 +70,9 @@ button, input, select { font: inherit; color: inherit; }
 .emblem { display: inline-block; vertical-align: middle; flex: none; }
 .emblem.unc { opacity: .5; }
 /* the theme switch: a candle standing in a small round-arched niche */
-.theme-btn { width: 40px; height: 46px; flex: none; display: grid; place-items: end center; padding: 0 0 8px; border: 1px solid var(--rule); border-radius: 15px 15px 3px 3px; background: var(--paper); color: var(--ink); cursor: var(--hand); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 3px var(--rule); }
+.theme-btn { width: 48px; height: 55px; flex: none; display: grid; place-items: end center; padding: 0 0 10px; border: 1px solid var(--rule); border-radius: 15px 15px 3px 3px; background: var(--paper); color: var(--ink); cursor: var(--hand); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 3px var(--rule); }
 .theme-btn:hover { border-color: var(--accent); }
-.theme-btn svg:not(.gable) { width: 25px; height: 30px; display: block; overflow: visible; }
+.theme-btn svg:not(.gable) { width: 30px; height: 36px; display: block; overflow: visible; }
 /* The flame flickers while it burns, shrinks into the wick when snuffed and leaves a thread of smoke; lighting it
    makes it spring back up and warms the niche. */
 .theme-btn { position: relative; overflow: hidden; }
@@ -105,16 +105,15 @@ button, input, select { font: inherit; color: inherit; }
 .lang:hover { border-color: var(--accent); }
 .lang::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 55%, rgba(248, 214, 130, .45), transparent 75%); pointer-events: none; }
 .lang .reel { position: absolute; left: 0; right: 0; top: 0; height: 200%; display: flex; flex-direction: column; transition: transform .6s cubic-bezier(.5, -0.4, .3, 1.35); }
-.lang .reel > span { flex: 1; display: grid; place-items: center; padding-top: 9px; font: 700 25px/1 var(--display); filter: drop-shadow(0 1.5px 1px rgba(30, 18, 5, .45)); color: #e2bd62; -webkit-text-stroke: 1.6px #2a2018; paint-order: stroke fill; }
+.lang .reel > span { flex: 1; display: grid; place-items: center; padding-top: 11px; font: 700 30px/1 var(--display); filter: drop-shadow(0 1.5px 1px rgba(30, 18, 5, .45)); color: #e2bd62; -webkit-text-stroke: 1.6px #2a2018; paint-order: stroke fill; }
 .lang.shuffle .reel > span { animation: lang-shuffle .6s ease-in-out; }
 @keyframes lang-shuffle { 0%, 100% { rotate: 0deg; } 30% { rotate: -9deg; } 65% { rotate: 7deg; } }
 @media (prefers-reduced-motion: reduce) { .lang .reel { transition: none; } .lang.shuffle .reel > span { animation: none; } }
 /* the music switch: a niche like the language ones, holding a note; it rings when the music plays */
 .music-btn { position: relative; overflow: hidden; width: 32px; height: 34px; flex: none; display: grid; place-items: center; padding: 3px 0 0; border: 1px solid var(--rule); border-radius: 16px 16px 3px 3px; background: var(--paper); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 3px var(--rule); color: var(--ink); cursor: var(--hand); }
 .music-btn:hover { border-color: var(--accent); }
-.music-btn > svg:first-child { width: 22px; height: 24px; margin-top: 12px; translate: 1px 0; filter: drop-shadow(0 1.5px 1px rgba(30, 18, 5, .45)); display: block; opacity: .95; color: #2a2018; }
+.music-btn > svg:first-child { width: 27px; height: 29px; margin-top: 15px; translate: 1px 0; filter: drop-shadow(0 1.5px 1px rgba(30, 18, 5, .45)); display: block; opacity: .95; color: #2a2018; }
 .music-btn { overflow: visible; }
-.music-btn[aria-pressed="false"] > svg:first-child { opacity: .95; }
 /* while the music plays, notes drift up out of the harp and fade */
 .music-btn .note { position: absolute; left: 50%; bottom: 50%; width: 11px; height: 16px; opacity: 0; pointer-events: none; color: var(--gold); }
 .music-btn[aria-pressed="true"] .note { animation: note-rise 3.6s ease-out infinite; }
@@ -123,18 +122,19 @@ button, input, select { font: inherit; color: inherit; }
 @keyframes note-rise { 0% { opacity: 0; transform: translate(0, 4px) scale(.6) rotate(0); } 20% { opacity: 1; } 70% { opacity: .9; } 100% { opacity: 0; transform: translate(-30px, -16px) scale(1.1) rotate(-18deg); } }
 @keyframes note-fade { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .music-btn[aria-pressed="true"] .note { animation-name: note-fade; } }
-.music-btn[aria-pressed="true"] { color: var(--rubric); border: 2px solid var(--rubric); }
 .music-btn[aria-pressed="true"] > svg:first-child { opacity: 1; }
 #ytHolder { position: fixed; width: 1px; height: 1px; left: -9999px; top: 0; overflow: hidden; }
 /* The three little niches take the gabled front of the Torhalle at Lorsch: a pointed pediment over square shoulders. */
-.theme-btn, .lang, .music-btn { position: relative; isolation: isolate; overflow: hidden; width: 40px; height: 46px; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.theme-btn, .lang, .music-btn { position: relative; isolation: isolate; overflow: hidden; width: 48px; height: 55px; border: 0; border-radius: 0; background: none; box-shadow: none; }
 .music-btn { overflow: visible; }
 .theme-btn:hover, .lang:hover, .music-btn:hover { border-color: transparent; }
 .gable { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: visible; }
 .gable .o { fill: var(--paper); stroke: var(--rule); stroke-width: 1.3; stroke-linejoin: miter; }
 .gable .i { fill: none; stroke: var(--rule); stroke-width: 1; }
 .theme-btn:hover .gable .o, .lang:hover .gable .o, .music-btn:hover .gable .o { stroke: var(--accent); }
-.music-btn[aria-pressed="true"] .gable .o { stroke: var(--rubric); stroke-width: 2; }
+.music-btn .slash { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.music-btn[aria-pressed="true"] .slash { display: none; }
+.music-btn[aria-pressed="false"] > svg:first-child { opacity: .55; }
 .crumbs { margin-right: auto; }
 
 /* Layout: the plan of the "Incipit argumentum" page of the Lorsch Gospels. A beam across the top; under it two
@@ -623,26 +623,32 @@ $("#orders").innerHTML = ORDER_KEYS.map(o => {
   return `<div class="ord">${emblem(o, 34)}<b>${DATA.orders[o]}</b><span>${n} house${n === 1 ? "" : "s"}</span></div>`;
 }).join("");
 initThemeToggle($("#themeBtn"));
-// Music: browsers only start sound after a click, so a button in the corner loads the YouTube player and plays or pauses it.
+// Music: on by default. Browsers refuse sound before a click, so it starts as soon as the reader first clicks, taps or presses a key
+// anywhere on the page; the harp switches it off and on, and the choice is remembered.
 (() => {
-  const VIDEO = "WIx4srqU3BE";
+  const VIDEO = "WIx4srqU3BE", KEY = "orders-map:music";
+  let want = true;
+  try { want = localStorage.getItem(KEY) !== "off"; } catch {}
   const btn = document.createElement("button");
-  btn.className = "music-btn"; btn.type = "button"; btn.setAttribute("aria-pressed", "false");
+  btn.className = "music-btn"; btn.type = "button";
   btn.innerHTML = '<svg viewBox="0 0 28 30" aria-hidden="true"><path d="M3.500 11.500C7 5.200 14 2.800 22 4.800" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><path d="M3.500 11.500C7 5.200 14 2.800 22 4.800" fill="none" stroke="#f4ecd6" stroke-width="2.200" stroke-linecap="round"/><path d="M2.500 12.500L5 10.200 24 25 21 27.800z" fill="#f4ecd6" stroke="currentColor" stroke-width="1.100" stroke-linejoin="round"/><g fill="#c9a55a"><circle cx="9" cy="16" r=".9"/><circle cx="13" cy="19.200" r=".9"/><circle cx="17" cy="22.400" r=".9"/></g><rect x="21.400" y="4" width="2.800" height="23.500" fill="#f4ecd6" stroke="currentColor" stroke-width="1"/><circle cx="22.800" cy="3.600" r="2.200" fill="#c9a55a" stroke="currentColor" stroke-width="1"/><rect x="19.500" y="27" width="6.600" height="2" fill="#c9a55a" stroke="currentColor" stroke-width="1"/><path d="M7 8.5V12.1M10 6.7V14.5M13 5.7V16.9M16 5.3V19.4M19 5.4V21.8" stroke="var(--ink)" stroke-width=".9" fill="none"/><circle cx="7" cy="7.3" r=".9" fill="var(--paper)" stroke="currentColor" stroke-width=".6"/><circle cx="10" cy="5.5" r=".9" fill="var(--paper)" stroke="currentColor" stroke-width=".6"/><circle cx="13" cy="4.5" r=".9" fill="var(--paper)" stroke="currentColor" stroke-width=".6"/><circle cx="16" cy="4.1" r=".9" fill="var(--paper)" stroke="currentColor" stroke-width=".6"/><circle cx="19" cy="4.2" r=".9" fill="var(--paper)" stroke="currentColor" stroke-width=".6"/></svg><svg class="note n1" viewBox="0 0 8 12" aria-hidden="true"><path d="M5.200 0h1.100v8.300A2.300 1.800 0 1 1 5.200 6.900zM6.300 0C6.300 2.300 8.200 3 8.200 5.400c-.8-1.100-1.100-1.600-1.900-1.900z" fill="currentColor"/></svg><svg class="note n2" viewBox="0 0 8 12" aria-hidden="true"><path d="M5.200 0h1.100v8.300A2.300 1.800 0 1 1 5.200 6.900zM6.300 0C6.300 2.300 8.200 3 8.200 5.400c-.8-1.100-1.100-1.600-1.900-1.900z" fill="currentColor"/></svg><svg class="note n3" viewBox="0 0 8 12" aria-hidden="true"><path d="M5.200 0h1.100v8.300A2.300 1.800 0 1 1 5.200 6.900zM6.300 0C6.300 2.300 8.200 3 8.200 5.400c-.8-1.100-1.100-1.600-1.900-1.900z" fill="currentColor"/></svg>';
-  const label = on => { btn.title = LANG === "de" ? (on ? "Musik anhalten" : "Musik spielen") : (on ? "Pause the music" : "Play music"); btn.setAttribute("aria-label", btn.title); };
+  btn.insertAdjacentHTML("beforeend", '<svg class="slash" viewBox="0 0 40 46" aria-hidden="true"><path d="M10 39L30 14" stroke="var(--paper)" stroke-width="5" stroke-linecap="round"/><path d="M10 39L30 14" stroke="var(--rubric)" stroke-width="2.600" stroke-linecap="round"/></svg>');
+  const paint = () => { btn.setAttribute("aria-pressed", want); btn.title = LANG === "de" ? (want ? "Musik ausschalten" : "Musik einschalten") : (want ? "Turn the music off" : "Turn the music on"); btn.setAttribute("aria-label", btn.title); };
   addGable(btn);
-  label(false);
+  paint();
   document.querySelector(".lang").insertAdjacentElement("beforebegin", btn);
   document.body.insertAdjacentHTML("beforeend", '<div id="ytHolder"><div id="ytPlayer"></div></div>');
-  let player = null, loading = false, playing = false;
-  const set = on => { playing = on; btn.setAttribute("aria-pressed", on); label(on); };
-  const make = () => { player = new YT.Player("ytPlayer", { videoId: VIDEO, playerVars: { loop: 1, playlist: VIDEO, playsinline: 1 },
-    events: { onReady: e => { e.target.playVideo(); set(true); }, onStateChange: e => { if (e.data === 1) set(true); else if (e.data === 2) set(false); } } }); };
-  btn.onclick = () => {
-    if (player && player.playVideo) { playing ? player.pauseVideo() : player.playVideo(); set(!playing); return; }
-    if (loading) return; loading = true; set(true);
-    window.onYouTubeIframeAPIReady = make;
-    const t = document.createElement("script"); t.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(t);
+  let player = null, ready = false, started = false;
+  const sync = () => { if (!ready) return; if (want) player.playVideo(); else player.pauseVideo(); };
+  window.onYouTubeIframeAPIReady = () => { player = new YT.Player("ytPlayer", { videoId: VIDEO, playerVars: { loop: 1, playlist: VIDEO, playsinline: 1, autoplay: want ? 1 : 0 },
+    events: { onReady: () => { ready = true; sync(); }, onStateChange: e => { if (e.data === 1) started = true; if (e.data === -1 || e.data === 5 || e.data === 2) { /* blocked or paused */ } } } }); };
+  const t = document.createElement("script"); t.src = "https://www.youtube.com/iframe_api"; document.head.appendChild(t);
+  // the first gesture anywhere lets the browser play the sound
+  const first = () => { if (want && ready && !started) player.playVideo(); };
+  ["pointerdown", "keydown", "touchstart"].forEach(ev => addEventListener(ev, first, { passive: true }));
+  btn.onclick = e => {
+    e.stopPropagation(); want = !want; try { localStorage.setItem(KEY, want ? "on" : "off"); } catch {}
+    paint(); sync(); if (!want) started = false;
   };
 })();
 </script>
