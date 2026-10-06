@@ -112,10 +112,18 @@ button, input, select { font: inherit; color: inherit; }
 /* the music switch: a niche like the language ones, holding a note; it rings when the music plays */
 .music-btn { position: relative; overflow: hidden; width: 32px; height: 36px; flex: none; display: grid; place-items: center; padding: 0 0 2px; border: 1px solid var(--rule); border-radius: 15px 15px 3px 3px; background: var(--paper); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 3px var(--rule); color: var(--ink); cursor: var(--hand); margin-right: 6px; }
 .music-btn:hover { border-color: var(--accent); }
-.music-btn svg { width: 20px; height: 22px; display: block; opacity: .6; }
-.music-btn[aria-pressed="false"] svg { opacity: .5; }
+.music-btn > svg:first-child { width: 20px; height: 22px; display: block; opacity: .6; }
+.music-btn { overflow: visible; }
+.music-btn[aria-pressed="false"] > svg:first-child { opacity: .5; }
+/* while the music plays, notes drift up out of the harp and fade */
+.music-btn .note { position: absolute; left: 50%; bottom: 50%; width: 11px; height: 16px; opacity: 0; pointer-events: none; color: var(--gold); }
+.music-btn[aria-pressed="true"] .note { animation: note-rise 3.6s ease-out infinite; }
+.music-btn .n2 { margin-left: -9px; animation-delay: 1.2s !important; }
+.music-btn .n3 { margin-left: 5px; animation-delay: 2.4s !important; }
+@keyframes note-rise { 0% { opacity: 0; transform: translate(0, 4px) scale(.6) rotate(0); } 20% { opacity: 1; } 70% { opacity: .9; } 100% { opacity: 0; transform: translate(-30px, -16px) scale(1.1) rotate(-18deg); } }
+@media (prefers-reduced-motion: reduce) { .music-btn[aria-pressed="true"] .note { animation: none; opacity: 0; } }
 .music-btn[aria-pressed="true"] { color: var(--rubric); border: 2px solid var(--rubric); }
-.music-btn[aria-pressed="true"] svg { opacity: 1; }
+.music-btn[aria-pressed="true"] > svg:first-child { opacity: 1; }
 #ytHolder { position: fixed; width: 1px; height: 1px; left: -9999px; top: 0; overflow: hidden; }
 .crumbs { margin-right: auto; }
 
@@ -596,7 +604,7 @@ initThemeToggle($("#themeBtn"));
   const VIDEO = "WIx4srqU3BE";
   const btn = document.createElement("button");
   btn.className = "music-btn"; btn.type = "button"; btn.setAttribute("aria-pressed", "false");
-  btn.innerHTML = '<svg viewBox="0 0 20 22" aria-hidden="true"><path d="M16 2C9 1 3.500 3.500 3.500 8.500c0 4 .8 8 1.800 11.500h10.700z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M16 2v18" stroke="currentColor" stroke-width="2.2"/><path d="M5.800 5.600v10M8.600 4.200v13M11.400 3.200v15.500M14 2.600v16.800" stroke="currentColor" stroke-width=".9"/></svg>';
+  btn.innerHTML = '<svg viewBox="0 0 20 22" aria-hidden="true"><path d="M16 2C9 1 3.500 3.500 3.500 8.500c0 4 .8 8 1.800 11.500h10.700z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M16 2v18" stroke="currentColor" stroke-width="2.2"/><path d="M5.800 5.600v10M8.600 4.200v13M11.400 3.200v15.500M14 2.600v16.800" stroke="currentColor" stroke-width=".9"/></svg><svg class="note n1" viewBox="0 0 8 12" aria-hidden="true"><path d="M5.200 0h1.100v8.300A2.300 1.800 0 1 1 5.200 6.900zM6.300 0C6.300 2.300 8.200 3 8.200 5.400c-.8-1.100-1.100-1.600-1.900-1.900z" fill="currentColor"/></svg><svg class="note n2" viewBox="0 0 8 12" aria-hidden="true"><path d="M5.200 0h1.100v8.300A2.300 1.800 0 1 1 5.200 6.900zM6.300 0C6.300 2.300 8.200 3 8.200 5.400c-.8-1.100-1.100-1.600-1.900-1.900z" fill="currentColor"/></svg><svg class="note n3" viewBox="0 0 8 12" aria-hidden="true"><path d="M5.200 0h1.100v8.300A2.300 1.800 0 1 1 5.200 6.900zM6.300 0C6.300 2.300 8.200 3 8.200 5.400c-.8-1.100-1.100-1.600-1.900-1.900z" fill="currentColor"/></svg>';
   const label = on => { btn.title = LANG === "de" ? (on ? "Musik anhalten" : "Musik spielen") : (on ? "Pause the music" : "Play music"); btn.setAttribute("aria-label", btn.title); };
   label(false);
   document.querySelector(".lang").insertAdjacentElement("beforebegin", btn);

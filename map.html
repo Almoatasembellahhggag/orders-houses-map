@@ -114,10 +114,18 @@ button, input, select { font: inherit; color: inherit; }
 /* the music switch: a niche like the language ones, holding a note; it rings when the music plays */
 .music-btn { position: relative; overflow: hidden; width: 32px; height: 36px; flex: none; display: grid; place-items: center; padding: 0 0 2px; border: 1px solid var(--rule); border-radius: 15px 15px 3px 3px; background: var(--paper); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 3px var(--rule); color: var(--ink); cursor: var(--hand); margin-right: 6px; }
 .music-btn:hover { border-color: var(--accent); }
-.music-btn svg { width: 20px; height: 22px; display: block; opacity: .6; }
-.music-btn[aria-pressed="false"] svg { opacity: .5; }
+.music-btn > svg:first-child { width: 20px; height: 22px; display: block; opacity: .6; }
+.music-btn { overflow: visible; }
+.music-btn[aria-pressed="false"] > svg:first-child { opacity: .5; }
+/* while the music plays, notes drift up out of the harp and fade */
+.music-btn .note { position: absolute; left: 50%; bottom: 50%; width: 11px; height: 16px; opacity: 0; pointer-events: none; color: var(--gold); }
+.music-btn[aria-pressed="true"] .note { animation: note-rise 3.6s ease-out infinite; }
+.music-btn .n2 { margin-left: -9px; animation-delay: 1.2s !important; }
+.music-btn .n3 { margin-left: 5px; animation-delay: 2.4s !important; }
+@keyframes note-rise { 0% { opacity: 0; transform: translate(0, 4px) scale(.6) rotate(0); } 20% { opacity: 1; } 70% { opacity: .9; } 100% { opacity: 0; transform: translate(-30px, -16px) scale(1.1) rotate(-18deg); } }
+@media (prefers-reduced-motion: reduce) { .music-btn[aria-pressed="true"] .note { animation: none; opacity: 0; } }
 .music-btn[aria-pressed="true"] { color: var(--rubric); border: 2px solid var(--rubric); }
-.music-btn[aria-pressed="true"] svg { opacity: 1; }
+.music-btn[aria-pressed="true"] > svg:first-child { opacity: 1; }
 #ytHolder { position: fixed; width: 1px; height: 1px; left: -9999px; top: 0; overflow: hidden; }
 .crumbs { margin-right: auto; }
 
