@@ -105,7 +105,8 @@ button, input, select { font: inherit; color: inherit; }
 .lang button { position: relative; overflow: hidden; width: 28px; height: 34px; display: grid; place-items: center; padding: 0 0 4px; border: 1px solid var(--rule); border-radius: 14px 14px 3px 3px; background: var(--paper); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 3px var(--rule); font: 700 20px/1 var(--display); color: var(--ink); opacity: 1; cursor: var(--hand); }
 .lang button::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(248, 214, 130, .4), transparent 75%); opacity: 0; transition: opacity .4s; }
 .lang button:hover { border-color: var(--accent); opacity: 1; }
-.lang button[aria-pressed="false"] > span { opacity: .8; }
+.lang button > span { color: #f4ecd6; -webkit-text-stroke: 1.6px #2a2018; paint-order: stroke fill; }
+.lang button[aria-pressed="true"] > span { color: #e2bd62; }
 .lang button[aria-pressed="true"] { color: var(--rubric); opacity: 1; border-color: var(--rubric); border-width: 2px; }
 .lang button[aria-pressed="true"]::before { opacity: 1; }
 .lang button > span { position: relative; }
