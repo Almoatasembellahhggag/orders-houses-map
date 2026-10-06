@@ -72,15 +72,15 @@ button, input, select { font: inherit; color: inherit; }
 .emblem { display: inline-block; vertical-align: middle; flex: none; }
 .emblem.unc { opacity: .5; }
 /* the theme switch: a candle standing in a small round-arched niche */
-.theme-btn { width: 30px; height: 36px; flex: none; display: grid; place-items: end center; padding: 0 0 3px; border: 1px solid var(--rule); border-radius: 15px 15px 3px 3px; background: var(--paper); color: var(--ink); cursor: var(--hand); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 3px var(--rule); }
+.theme-btn { width: 40px; height: 46px; flex: none; display: grid; place-items: end center; padding: 0 0 8px; border: 1px solid var(--rule); border-radius: 15px 15px 3px 3px; background: var(--paper); color: var(--ink); cursor: var(--hand); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 3px var(--rule); }
 .theme-btn:hover { border-color: var(--accent); }
-.theme-btn svg:not(.gable) { width: 20px; height: 24px; display: block; overflow: visible; }
+.theme-btn svg:not(.gable) { width: 25px; height: 30px; display: block; overflow: visible; }
 /* The flame flickers while it burns, shrinks into the wick when snuffed and leaves a thread of smoke; lighting it
    makes it spring back up and warms the niche. */
 .theme-btn { position: relative; overflow: hidden; }
 .theme-btn::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 36%, rgba(248, 214, 130, .75), transparent 62%); transition: opacity .5s; }
 .theme-btn.snuffed::before { opacity: 0; }
-.theme-btn svg:not(.gable) { position: relative; }
+.theme-btn svg:not(.gable) { position: relative; filter: drop-shadow(0 1.5px 1px rgba(30, 18, 5, .4)); }
 .theme-btn .flame { transform-box: view-box; transform-origin: 10px 10.6px; transition: transform .38s cubic-bezier(.3, 1.6, .5, 1), opacity .2s; animation: candle-flicker 8s ease-in-out infinite; }
 .theme-btn.snuffed .flame { transform: scale(0); opacity: 0; animation: none; transition: transform .28s ease-in, opacity .28s; }
 .theme-btn .smoke { stroke-dasharray: 1; stroke-dashoffset: 1; opacity: 0; }
@@ -107,14 +107,14 @@ button, input, select { font: inherit; color: inherit; }
 .lang:hover { border-color: var(--accent); }
 .lang::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 55%, rgba(248, 214, 130, .45), transparent 75%); pointer-events: none; }
 .lang .reel { position: absolute; left: 0; right: 0; top: 0; height: 200%; display: flex; flex-direction: column; transition: transform .6s cubic-bezier(.5, -0.4, .3, 1.35); }
-.lang .reel > span { flex: 1; display: grid; place-items: center; padding-top: 6px; font: 700 20px/1 var(--display); color: #e2bd62; -webkit-text-stroke: 1.6px #2a2018; paint-order: stroke fill; }
+.lang .reel > span { flex: 1; display: grid; place-items: center; padding-top: 9px; font: 700 25px/1 var(--display); filter: drop-shadow(0 1.5px 1px rgba(30, 18, 5, .45)); color: #e2bd62; -webkit-text-stroke: 1.6px #2a2018; paint-order: stroke fill; }
 .lang.shuffle .reel > span { animation: lang-shuffle .6s ease-in-out; }
 @keyframes lang-shuffle { 0%, 100% { rotate: 0deg; } 30% { rotate: -9deg; } 65% { rotate: 7deg; } }
 @media (prefers-reduced-motion: reduce) { .lang .reel { transition: none; } .lang.shuffle .reel > span { animation: none; } }
 /* the music switch: a niche like the language ones, holding a note; it rings when the music plays */
 .music-btn { position: relative; overflow: hidden; width: 32px; height: 34px; flex: none; display: grid; place-items: center; padding: 3px 0 0; border: 1px solid var(--rule); border-radius: 16px 16px 3px 3px; background: var(--paper); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 3px var(--rule); color: var(--ink); cursor: var(--hand); }
 .music-btn:hover { border-color: var(--accent); }
-.music-btn > svg:first-child { width: 21px; height: 23px; margin-top: 8px; display: block; opacity: .95; color: #2a2018; }
+.music-btn > svg:first-child { width: 26px; height: 28px; margin-top: 4px; filter: drop-shadow(0 1.5px 1px rgba(30, 18, 5, .45)); display: block; opacity: .95; color: #2a2018; }
 .music-btn { overflow: visible; }
 .music-btn[aria-pressed="false"] > svg:first-child { opacity: .95; }
 /* while the music plays, notes drift up out of the harp and fade */
@@ -129,7 +129,7 @@ button, input, select { font: inherit; color: inherit; }
 .music-btn[aria-pressed="true"] > svg:first-child { opacity: 1; }
 #ytHolder { position: fixed; width: 1px; height: 1px; left: -9999px; top: 0; overflow: hidden; }
 /* The three little niches take the gabled front of the Torhalle at Lorsch: a pointed pediment over square shoulders. */
-.theme-btn, .lang, .music-btn { position: relative; isolation: isolate; overflow: hidden; width: 32px; height: 36px; border: 0; border-radius: 0; background: none; box-shadow: none; }
+.theme-btn, .lang, .music-btn { position: relative; isolation: isolate; overflow: hidden; width: 40px; height: 46px; border: 0; border-radius: 0; background: none; box-shadow: none; }
 .music-btn { overflow: visible; }
 .theme-btn:hover, .lang:hover, .music-btn:hover { border-color: transparent; }
 .gable { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; overflow: visible; }
@@ -661,7 +661,7 @@ try { const t = localStorage.getItem(THEME_KEY); if (t === "light" || t === "dar
 const currentTheme = () => document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 // The gabled frame shared by the corner buttons (candle, language, music), after the Torhalle at Lorsch.
 function addGable(btn) {
-  btn.insertAdjacentHTML("beforeend", '<svg class="gable" viewBox="0 0 32 36" preserveAspectRatio="none" aria-hidden="true"><polygon class="o" points="16,1 31,11.500 31,35 1,35 1,11.500"/><polygon class="i" points="16,4.500 28,12.800 28,32 4,32 4,12.800"/></svg>');
+  btn.insertAdjacentHTML("beforeend", '<svg class="gable" viewBox="0 0 40 46" preserveAspectRatio="none" aria-hidden="true"><defs><linearGradient id="gRecess" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1a08" stop-opacity=".42"/><stop offset=".55" stop-color="#2a1a08" stop-opacity=".12"/><stop offset="1" stop-color="#2a1a08" stop-opacity=".02"/></linearGradient><linearGradient id="gSide" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a1a08" stop-opacity=".3"/><stop offset=".22" stop-color="#2a1a08" stop-opacity="0"/><stop offset=".85" stop-color="#2a1a08" stop-opacity="0"/><stop offset="1" stop-color="#2a1a08" stop-opacity=".16"/></linearGradient></defs><polygon class="o" points="20,1 39,14 39,45 1,45 1,14"/><polygon class="i" points="20,6.500 35,16.800 35,41 5,41 5,16.800"/><polygon points="20,6.500 35,16.800 35,41 5,41 5,16.800" fill="url(#gRecess)"/><polygon points="20,6.500 35,16.800 35,41 5,41 5,16.800" fill="url(#gSide)"/><path d="M5.600 41h28.800" stroke="#f4ecd6" stroke-opacity=".55" stroke-width="1.2"/></svg>');
 }
 function initThemeToggle(btn) {
   // A candle in a small arched niche: burning while the page is light, snuffed (a thread of smoke) while it is dark.
