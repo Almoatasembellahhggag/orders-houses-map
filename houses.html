@@ -105,16 +105,16 @@ button, input, select { font: inherit; color: inherit; }
 .lang button { position: relative; overflow: hidden; width: 28px; height: 34px; display: grid; place-items: center; padding: 0 0 4px; border: 1px solid var(--rule); border-radius: 14px 14px 3px 3px; background: var(--paper); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 3px var(--rule); font: 700 20px/1 var(--display); color: var(--ink); opacity: 1; cursor: var(--hand); }
 .lang button::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(248, 214, 130, .4), transparent 75%); opacity: 0; transition: opacity .4s; }
 .lang button:hover { border-color: var(--accent); opacity: 1; }
-.lang button[aria-pressed="false"] > span { opacity: .6; }
+.lang button[aria-pressed="false"] > span { opacity: .8; }
 .lang button[aria-pressed="true"] { color: var(--rubric); opacity: 1; border-color: var(--rubric); border-width: 2px; }
 .lang button[aria-pressed="true"]::before { opacity: 1; }
 .lang button > span { position: relative; }
 /* the music switch: a niche like the language ones, holding a note; it rings when the music plays */
 .music-btn { position: relative; overflow: hidden; width: 32px; height: 34px; flex: none; display: grid; place-items: center; padding: 1px 0 0; border: 1px solid var(--rule); border-radius: 16px 16px 3px 3px; background: var(--paper); box-shadow: inset 0 0 0 2px var(--panel), inset 0 0 0 3px var(--rule); color: var(--ink); cursor: var(--hand); margin-right: 6px; }
 .music-btn:hover { border-color: var(--accent); }
-.music-btn > svg:first-child { width: 25px; height: 27px; display: block; opacity: .6; }
+.music-btn > svg:first-child { width: 25px; height: 27px; display: block; opacity: .95; color: #2a2018; }
 .music-btn { overflow: visible; }
-.music-btn[aria-pressed="false"] > svg:first-child { opacity: .5; }
+.music-btn[aria-pressed="false"] > svg:first-child { opacity: .95; }
 /* while the music plays, notes drift up out of the harp and fade */
 .music-btn .note { position: absolute; left: 50%; bottom: 50%; width: 11px; height: 16px; opacity: 0; pointer-events: none; color: var(--gold); }
 .music-btn[aria-pressed="true"] .note { animation: note-rise 3.6s ease-out infinite; }
